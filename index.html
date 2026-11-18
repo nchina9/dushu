@@ -28,7 +28,7 @@
     z-index: 100;
   }
   .header-inner {
-    max-width: 1280px;
+    max-width: 1240px;
     margin: 0 auto;
     display: flex;
     flex-wrap: wrap;
@@ -36,15 +36,15 @@
     align-items: center;
     gap: 0.8rem;
   }
-  .header-title h1 { font-size: 1.32rem; font-weight: 700; letter-spacing: -0.5px; }
-  .header-title p { font-size: 0.81rem; color: #cbd5e1; margin-top: 2px; }
-  .nav-btns { display: flex; gap: 0.42rem; flex-wrap: wrap; }
+  .header-title h1 { font-size: 1.35rem; font-weight: 700; letter-spacing: -0.5px; }
+  .header-title p { font-size: 0.82rem; color: #cbd5e1; margin-top: 2px; }
+  .nav-btns { display: flex; gap: 0.45rem; flex-wrap: wrap; }
   .btn {
-    padding: 0.48rem 0.85rem;
+    padding: 0.5rem 0.9rem;
     border-radius: 8px;
     border: none;
     font-weight: 600;
-    font-size: 0.84rem;
+    font-size: 0.86rem;
     cursor: pointer;
     transition: all 0.2s;
     display: inline-flex;
@@ -60,6 +60,7 @@
   .btn-mysheet { background: #0284c7; color: white; }
   .btn-mysheet:hover { background: #0369a1; }
   .btn-setting { background: #f59e0b; color: #0f172a; }
+  body.student-mode .teacher-only { display: none !important; }
 
   main { max-width: 1240px; margin: 1.8rem auto; padding: 0 1.5rem; }
   .section { display: none; }
@@ -219,6 +220,9 @@
     box-shadow: 0 8px 20px rgba(0,0,0,0.04);
   }
   .form-row { display: grid; grid-template-columns: 1.15fr 0.95fr 1.2fr; gap: 1rem; margin-bottom: 1.2rem; }
+  .id-preview-hint { font-size: 0.78rem; color: #0369a1; font-weight: 600; margin-top: 4px; min-height: 1.1rem; }
+  .student-link-box { background: #eff6ff; border: 1.5px solid #93c5fd; border-radius: 10px; padding: 0.85rem 1rem; margin-bottom: 1rem; word-break: break-all; }
+  .student-link-box a { color: #1d4ed8; font-weight: 700; font-size: 0.9rem; text-decoration: underline; }
   @media (max-width: 640px) { .form-row { grid-template-columns: 1fr; } }
   .form-group { margin-bottom: 1.2rem; }
   .form-group label { display: block; font-weight: 700; margin-bottom: 0.4rem; font-size: 0.92rem; color: #1e293b; }
@@ -230,13 +234,6 @@
     font-size: 0.94rem;
   }
   .form-control:focus { outline: none; border-color: var(--primary-light); box-shadow: 0 0 0 3px rgba(59,130,246,0.15); }
-  .id-preview-hint {
-    font-size: 0.78rem;
-    color: #0369a1;
-    font-weight: 600;
-    margin-top: 4px;
-    min-height: 1.1rem;
-  }
 
   /* 과목 연관 도서 추천 패널 */
   .subject-recommend-panel {
@@ -343,20 +340,6 @@
     border: 1px solid var(--border);
     font-size: 0.85rem;
   }
-  .student-link-box {
-    background: #eff6ff;
-    border: 1.5px solid #93c5fd;
-    border-radius: 10px;
-    padding: 0.85rem 1rem;
-    margin-bottom: 1rem;
-    word-break: break-all;
-  }
-  .student-link-box a {
-    color: #1d4ed8;
-    font-weight: 700;
-    font-size: 0.9rem;
-    text-decoration: underline;
-  }
 
   footer {
     text-align: center;
@@ -383,11 +366,11 @@
     <div class="nav-btns">
       <button class="btn btn-tab active" id="nav-viewer" onclick="switchTab('viewer')">📖 도서 1PAGE 소개</button>
       <button class="btn btn-tab" id="nav-submit" onclick="switchTab('submit')">✍️ 과목별 추천 & 소감 제출</button>
-      <button class="btn" style="background:#06b6d4; color:#0f172a;" onclick="openQrModal()">📱 학생 배포용 QR·링크</button>
-      <button class="btn btn-add" onclick="openAddBookModal()">➕ 교사 도서 1PAGE 추가</button>
-      <button class="btn btn-copy" onclick="copyTeacherSheet()" title="타 교사용 사본 만들기">📑 시트 사본 만들기</button>
-      <button class="btn btn-mysheet" onclick="openMySheet()" title="사본 복사한 내 구글 시트 바로 열기">📊 내 시트 가기</button>
-      <button class="btn btn-setting" onclick="openSettings()">⚙️ 교사 설정</button>
+      <button class="btn teacher-only" style="background:#06b6d4; color:#0f172a;" onclick="openQrModal()">📱 학생 배포용 QR·링크</button>
+      <button class="btn btn-add teacher-only" onclick="openAddBookModal()">➕ 교사 도서 1PAGE 추가</button>
+      <button class="btn btn-copy teacher-only" onclick="copyTeacherSheet()" title="타 교사용 사본 만들기">📑 시트 사본 만들기</button>
+      <button class="btn btn-mysheet teacher-only" onclick="openMySheet()" title="사본 복사한 내 구글 시트 바로 열기">📊 내 시트 가기</button>
+      <button class="btn btn-setting teacher-only" onclick="openSettings()">⚙️ 교사 설정</button>
     </div>
   </div>
 </header>
@@ -469,7 +452,7 @@
             <span id="recPanelTitle">📚 선택한 과목과 연관된 추천 도서</span>
             <span id="recCountBadge" style="font-size:0.8rem; background:#dbeafe; padding:2px 8px; border-radius:12px;"></span>
           </h4>
-          <p style="font-size:0.8rem; color:#334155; margin-bottom:0.6rem;">아래 추천 도서 카드를 클릭하면 바로 선택됩니다.</p>
+          <p style="font-size:0.8rem; color:#334155; margin-bottom:0.6rem;">아래 추천 도서 카드를 클릭하면 바로 선택됩니다. (1PAGE 소개를 보려면 우측 [소개보기] 클릭)</p>
           <div id="recChipList" class="rec-chip-list"></div>
         </div>
 
@@ -605,30 +588,29 @@
   </div>
 </div>
 
-<!-- 모달 3: 학생 배포용 QR 코드 및 직접 접속 링크 모달 -->
+<!-- 모달 3: 학생 배포용 QR 코드 모달 -->
 <div id="qrModal" class="modal">
   <div class="modal-content" style="text-align:center;">
-    <h3 style="margin-bottom:0.4rem; color:var(--primary);">📱 학생 배포용 접속 QR 코드 & 링크</h3>
+    <h3 style="margin-bottom:0.4rem; color:var(--primary);">📱 학생 배포용 접속 QR 코드</h3>
     <p style="font-size:0.85rem; color:var(--muted); margin-bottom:1rem;">
-      학생들이 QR 코드를 스캔하거나 아래 <strong>학생 접속용 링크</strong>를 클릭하면 즉시 접속하여 소감문을 제출할 수 있습니다.
+      학생들이 스마트폰이나 태블릿 카메라로 아래 QR 코드를 스캔하면 즉시 접속하여 도서를 선택하고 소감문을 작성할 수 있습니다.
     </p>
     <div style="background:#f8fafc; border:1px solid var(--border); border-radius:12px; padding:1.1rem; display:inline-block; margin-bottom:0.9rem;">
       <img id="qrCodeImg" src="" alt="학생 배포용 QR 코드" style="width:210px; height:210px; display:block; margin:0 auto;">
     </div>
 
     <div class="student-link-box" style="text-align:left;">
-      <div style="font-size:0.8rem; font-weight:700; color:#1e3a8a; margin-bottom:4px;">🔗 학생 접속용 링크 (클릭 시 새 창 이동 / 공유용):</div>
+      <div style="font-size:0.8rem; font-weight:700; color:#1e3a8a; margin-bottom:4px;">🔗 학생 전용 접속 링크 (교사 관리 버튼 숨김 적용):</div>
       <a id="studentDirectLink" href="#" target="_blank" rel="noopener noreferrer"></a>
     </div>
-
     <div class="form-group" style="text-align:left;">
-      <label style="font-size:0.84rem;">배포 URL 확인 및 수정 (GitHub Pages 주소 등)</label>
+      <label style="font-size:0.84rem;">배포 URL 확인 및 수정 (GitHub Pages / 웹 앱 주소)</label>
       <div style="display:flex; gap:0.4rem;">
         <input type="url" id="qrTargetUrl" class="form-control" style="font-size:0.85rem;" oninput="updateQrImage()">
-        <button type="button" class="btn" style="background:#e2e8f0; white-space:nowrap;" onclick="copyQrUrl()">링크 복사</button>
+        <button type="button" class="btn" style="background:#e2e8f0; white-space:nowrap;" onclick="copyQrUrl()">주소 복사</button>
       </div>
       <small id="qrLocalWarning" style="color:#b45309; display:none; margin-top:4px;">
-        ⚠️ 현재 로컬 파일(file://)로 열려 있습니다. <code>https://nchina9.github.io/dushu/</code> 주소를 입력하면 학생 배포용 QR과 링크가 자동 생성됩니다.
+        ⚠️ 현재 내 컴퓨터 파일(file://)로 열려 있습니다. GitHub Pages 등에 올린 후 해당 <code>https://...</code> 주소를 입력하면 학생들이 접속할 수 있는 QR이 생성됩니다.
       </small>
     </div>
     <div style="display:flex; justify-content:center; gap:0.6rem; margin-top:1rem;">
@@ -647,9 +629,9 @@
       <input type="url" id="gasUrlInput" class="form-control" placeholder="https://script.google.com/macros/s/.../exec">
     </div>
     <div class="form-group">
-      <label>2. 내 구글 스프레드시트 URL (사본 복사한 내 시트 & 사본 배포용)</label>
+      <label>2. 선생님 원본 구글 스프레드시트 URL (타 교사 사본 만들기 지원용)</label>
       <input type="url" id="sheetUrlInput" class="form-control" placeholder="https://docs.google.com/spreadsheets/d/시트ID/edit">
-      <small style="color:var(--muted);">* 여기에 본인 구글 시트 주소를 저장해 두시면 상단의 <strong>[📊 내 시트 가기]</strong> 버튼으로 수합된 학급별 시트를 즉시 열 수 있고, <strong>[📑 시트 사본 만들기]</strong> 버튼으로 타 교사에게 사본 복사를 안내할 수 있습니다.</small>
+      <small style="color:var(--muted);">* 원본 시트 주소를 입력해 두면 상단 [시트 사본 만들기] 버튼 클릭 시 자동으로 <code>/copy</code> 주소가 열려 타 교사가 사본을 생성할 수 있습니다.</small>
     </div>
     <div style="display:flex; justify-content:flex-end; gap:0.5rem; margin-top:1.5rem;">
       <button class="btn" style="background:#e2e8f0;" onclick="closeSettings()">닫기</button>
@@ -778,6 +760,7 @@ let ALL_BOOKS = [];
 let currentBookIndex = 0;
 let currentFilter = 'ALL';
 
+// 초기 로드
 window.addEventListener('DOMContentLoaded', () => {
   loadAllBooks();
   populateDropdown();
@@ -791,6 +774,7 @@ function loadAllBooks() {
   ALL_BOOKS = [...DEFAULT_BOOKS_DATA, ...customBooks];
 }
 
+// 탭 전환
 function switchTab(tabName) {
   document.querySelectorAll('.section').forEach(el => el.classList.remove('active'));
   document.querySelectorAll('.btn-tab').forEach(el => el.classList.remove('active'));
@@ -798,7 +782,6 @@ function switchTab(tabName) {
   document.getElementById(`nav-${tabName}`).classList.add('active');
 }
 
-// 학번 정규화 (4자리 -> 5자리: 예 9999 -> 90999)
 function normalizeStudentId(raw) {
   const digits = String(raw || '').replace(/\D/g, '');
   if (digits.length === 4) {
@@ -825,6 +808,7 @@ function previewStudentId() {
   }
 }
 
+// ㄱㄴㄷ순 드롭다운 채우기
 function populateDropdown() {
   const select = document.getElementById('bookSelect');
   const sortedBooks = [...ALL_BOOKS].sort((a, b) => a.title.localeCompare(b.title, 'ko'));
@@ -849,11 +833,13 @@ function toggleCustomBook() {
     group.style.display = 'none';
     input.required = false;
   }
+  // 추천 칩 선택 표시 동기화
   document.querySelectorAll('.rec-chip').forEach(chip => {
     chip.classList.toggle('selected', chip.dataset.title === val);
   });
 }
 
+// 학생 과목 선택 시 연관 도서 자동 분류 및 제시
 function handleSubjectChange() {
   const subVal = document.getElementById('subjectSelect').value;
   const customGroup = document.getElementById('customSubjectGroup');
@@ -878,12 +864,14 @@ function handleSubjectChange() {
   renderSubjectRecommendations(subVal, matched);
 }
 
+// 직접 입력한 과목명 키워드 기반 연관 도서 분류
 function filterBooksByCustomSubject() {
   const kw = document.getElementById('customSubjectInput').value.trim().toLowerCase();
   if (!kw) {
     document.getElementById('subjectRecommendPanel').style.display = 'none';
     return;
   }
+  // 키워드 매핑 보조
   let targetTag = "";
   if (kw.includes("중국") || kw.includes("한문") || kw.includes("외국어") || kw.includes("세계")) targetTag = "중국어·세계문화";
   else if (kw.includes("국어") || kw.includes("문학") || kw.includes("독서") || kw.includes("작문")) targetTag = "국어·문학";
@@ -934,6 +922,7 @@ function pickRecommendedBook(title) {
   toggleCustomBook();
 }
 
+// 한 장 그림 SVG 생성기
 function generateBookSVG(book) {
   const colors = {
     "인문사회": { bg: "#eff6ff", main: "#1d4ed8", sub: "#60a5fa", accent: "#f59e0b" },
@@ -981,6 +970,7 @@ function generateBookSVG(book) {
   `;
 }
 
+// 1PAGE 단일 도서 상세 렌더링
 function renderOnePageByIndex(idx) {
   if (idx < 0) idx = ALL_BOOKS.length - 1;
   if (idx >= ALL_BOOKS.length) idx = 0;
@@ -1081,7 +1071,9 @@ function renderBookList() {
   `).join('');
 }
 
+// =========================================================================
 // 교사 맞춤형 도서 1PAGE 추가 모달 제어
+// =========================================================================
 function openAddBookModal() { document.getElementById('addBookModal').classList.add('open'); }
 function closeAddBookModal() { document.getElementById('addBookModal').classList.remove('open'); }
 
@@ -1132,7 +1124,9 @@ function clearTeacherBooks() {
   closeAddBookModal();
 }
 
+// =========================================================================
 // 학생 폼 검증, AI 피드백 선행(보완 후 제출) 및 피드백 없이 즉시 제출 로직
+// =========================================================================
 let cachedAiResult = { saenggibu: '', inquiry: '' };
 
 function collectAndValidateForm() {
@@ -1145,10 +1139,9 @@ function collectAndValidateForm() {
   const bookTitle = selectVal === 'CUSTOM' ? document.getElementById('customBookTitle').value.trim() : selectVal;
   const subSel = document.getElementById('subjectSelect').value;
   const subject = subSel === 'CUSTOM_SUBJECT' ? document.getElementById('customSubjectInput').value.trim() : subSel;
-  const normalizedStudentId = normalizeStudentId(document.getElementById('studentId').value.trim());
 
   return {
-    studentId: normalizedStudentId,
+    studentId: normalizeStudentId(document.getElementById('studentId').value.trim()),
     studentName: document.getElementById('studentName').value.trim(),
     subject: subject,
     bookTitle: bookTitle,
@@ -1161,6 +1154,7 @@ function handleFormSubmit(e) {
   e.preventDefault();
 }
 
+// 1) AI 피드백 먼저 받기 (구글 시트 저장 전, 학생이 피드백을 보고 내용을 추가할 수 있도록 단계 분리)
 async function requestAiFeedback() {
   const baseData = collectAndValidateForm();
   if (!baseData) return;
@@ -1201,6 +1195,7 @@ async function requestAiFeedback() {
   }
 }
 
+// 2) 최종 구글 시트 제출 (withAiFeedback = true면 AI 피드백 + 추가 작성 내용 포함, false면 피드백 없이 원문 그대로 제출)
 async function submitFinalToSheet(withAiFeedback) {
   const baseData = collectAndValidateForm();
   if (!baseData) return;
@@ -1227,7 +1222,7 @@ async function submitFinalToSheet(withAiFeedback) {
   try {
     if (!gasUrl) {
       await new Promise(r => setTimeout(r, 500));
-      showFinalComplete(withAiFeedback, additionalText.length > 0, true, baseData.studentId);
+      showFinalComplete(withAiFeedback, additionalText.length > 0, true);
     } else {
       const response = await fetch(gasUrl, {
         method: 'POST',
@@ -1235,7 +1230,7 @@ async function submitFinalToSheet(withAiFeedback) {
       });
       const result = await response.json();
       if (result.status === 'success') {
-        showFinalComplete(withAiFeedback, additionalText.length > 0, false, result.normalizedId || baseData.studentId, result.classSheetName);
+        showFinalComplete(withAiFeedback, additionalText.length > 0, false);
       } else {
         alert("제출 중 오류가 발생했습니다: " + result.message);
       }
@@ -1248,13 +1243,12 @@ async function submitFinalToSheet(withAiFeedback) {
   }
 }
 
-function showFinalComplete(withAi, hasAddition, isDemo, normId, classSheetName) {
+function showFinalComplete(withAi, hasAddition, isDemo) {
   const banner = document.getElementById('finalCompleteBanner');
   const msg = document.getElementById('finalCompleteMsg');
-  const sheetInfo = classSheetName ? ` [${classSheetName} 시트 · 학번 ${normId}]` : ` [학번 ${normId}]`;
   let detail = withAi
-    ? (hasAddition ? `AI 피드백과 추가로 작성한 심화 성찰 내용이 모두 반영되어${sheetInfo}에 제출되었습니다.` : `AI 피드백이 반영된 상태로${sheetInfo}에 제출되었습니다.`)
-    : `AI 피드백 단계 없이 작성한 소감문 원문 그대로${sheetInfo}에 제출되었습니다.`;
+    ? (hasAddition ? "AI 피드백과 추가로 작성한 심화 성찰 내용이 모두 반영되어 제출되었습니다." : "AI 피드백이 반영된 상태로 제출되었습니다.")
+    : "AI 피드백 단계 없이 작성한 소감문 원문 그대로 선생님 시트에 제출되었습니다.";
   if (isDemo) {
     detail += " (※ 현재 교사 설정에 Apps Script URL이 미등록된 미리보기 상태입니다.)";
   }
@@ -1272,7 +1266,7 @@ function showAIResult(saenggibu, inquiry) {
 }
 
 // =========================================================================
-// 학생 배포용 QR 코드 및 직접 접속 링크 모달 제어
+// 학생 배포용 QR 코드 모달 제어 (URL 파라미터로 gas/sheet 자동 전달 지원)
 // =========================================================================
 function openQrModal() {
   const modal = document.getElementById('qrModal');
@@ -1281,7 +1275,6 @@ function openQrModal() {
 
   let baseUrl = window.location.href.split('?')[0];
   const gasUrl = localStorage.getItem('gasUrl') || '';
-  const sheetUrl = localStorage.getItem('sheetUrl') || '';
 
   if (baseUrl.startsWith('file://')) {
     warning.style.display = 'block';
@@ -1290,10 +1283,11 @@ function openQrModal() {
     warning.style.display = 'none';
   }
 
+  // 학생 전용 주소에는 ?mode=student (및 교사 설정 gas 파라미터)를 부여하여 교사용 버튼(사본 만들기/설정 등)을 숨김
   const params = new URLSearchParams();
+  params.set('mode', 'student');
   if (gasUrl) params.set('gas', gasUrl);
-  if (sheetUrl) params.set('sheet', sheetUrl);
-  const fullShareUrl = params.toString() ? `${baseUrl}?${params.toString()}` : baseUrl;
+  const fullShareUrl = `${baseUrl}?${params.toString()}`;
 
   urlInput.value = fullShareUrl;
   updateQrImage();
@@ -1305,20 +1299,22 @@ function closeQrModal() {
 }
 
 function updateQrImage() {
-  const targetUrl = document.getElementById('qrTargetUrl').value.trim() || 'https://nchina9.github.io/dushu/';
+  const targetUrl = document.getElementById('qrTargetUrl').value.trim() || 'https://nchina9.github.io/dushu/?mode=student';
   const qrApi = `https://api.qrserver.com/v1/create-qr-code/?size=240x240&margin=10&data=${encodeURIComponent(targetUrl)}`;
   document.getElementById('qrCodeImg').src = qrApi;
 
   const linkEl = document.getElementById('studentDirectLink');
-  linkEl.href = targetUrl;
-  linkEl.textContent = targetUrl;
+  if (linkEl) {
+    linkEl.href = targetUrl;
+    linkEl.textContent = targetUrl;
+  }
 }
 
 function copyQrUrl() {
   const urlInput = document.getElementById('qrTargetUrl');
   urlInput.select();
   navigator.clipboard.writeText(urlInput.value).then(() => {
-    alert("학생 배포용 접속 링크가 클립보드에 복사되었습니다!");
+    alert("학생 배포용 접속 주소가 클립보드에 복사되었습니다!");
   });
 }
 
@@ -1331,7 +1327,7 @@ function downloadQrImage() {
   link.click();
 }
 
-// 교사 설정, 시트 사본 만들기 및 내 시트 바로 가기
+// 교사 설정 및 시트 사본 만들기
 function openSettings() { document.getElementById('settingsModal').classList.add('open'); }
 function closeSettings() { document.getElementById('settingsModal').classList.remove('open'); }
 
@@ -1342,6 +1338,10 @@ function loadSavedSettings() {
   }
   if (params.get('sheet')) {
     localStorage.setItem('sheetUrl', params.get('sheet'));
+  }
+  // 학생 전용 링크(?mode=student 또는 ?gas=...)로 접속 시 교사용 관리 버튼 전체 숨김
+  if (params.get('mode') === 'student' || params.get('gas')) {
+    document.body.classList.add('student-mode');
   }
   document.getElementById('gasUrlInput').value = localStorage.getItem('gasUrl') || '';
   document.getElementById('sheetUrlInput').value = localStorage.getItem('sheetUrl') || '';
