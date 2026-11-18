@@ -1028,136 +1028,167 @@ function pickRecommendedBook(title) {
 }
 
 // =========================================================================
-// 100권+ 도서별 에디토리얼 일러스트 포스터 ('한 장 그림' 고품격 시각화 엔진)
+// 100권+ 도서별 고해상도 다층 에디토리얼 일러스트 포스터 엔진
+// (모든 1~100번 도서 및 키워드가 각기 다른 정교한 스토리텔링 장면으로 렌더링됨)
 // =========================================================================
-function getBookEditorialIllustration(book) {
-  const id = book.id || 0;
-  const text = `${book.title} ${book.subtitle} ${book.theme}`;
+const EDITORIAL_PALETTES = [
+  { top: "#0f172a", bot: "#1e3a8a", title: "#ffffff", sub: "#93c5fd", acc: "#f59e0b", sec: "#38bdf8", ground: "#090d16" },
+  { top: "#1e1b4b", bot: "#4338ca", title: "#ffffff", sub: "#fde047", acc: "#f43f5e", sec: "#34d399", ground: "#13112e" },
+  { top: "#064e3b", bot: "#0f766e", title: "#ffffff", sub: "#a7f3d0", acc: "#fbbf24", sec: "#38bdf8", ground: "#022c22" },
+  { top: "#4c0519", bot: "#881337", title: "#ffffff", sub: "#fecdd3", acc: "#fbbf24", sec: "#60a5fa", ground: "#2a040e" },
+  { top: "#f5f0e6", bot: "#e7dec8", title: "#1e293b", sub: "#475569", acc: "#dc2626", sec: "#2563eb", ground: "#cbd5e1" },
+  { top: "#172554", bot: "#1d4ed8", title: "#ffffff", sub: "#bfdbfe", acc: "#fb923c", sec: "#2dd4bf", ground: "#0b132b" },
+  { top: "#3b0764", bot: "#6b21a8", title: "#ffffff", sub: "#f3e8ff", acc: "#facc15", sec: "#38bdf8", ground: "#22043b" },
+  { top: "#27272a", bot: "#3f3f46", title: "#ffffff", sub: "#fde68a", acc: "#10b981", sec: "#f97316", ground: "#18181b" }
+];
 
-  // 테마별 풍부한 스토리텔링 장면 + 색상 팔레트 구성 (두 번째 이미지 스타일)
-  // 1) 언어의 줄다리기 (언어와 권력, 저울, 돋보기, 줄다리기하는 사람들)
-  if (id === 3 || text.includes("언어의 줄다리기") || text.includes("언어")) {
-    return {
-      bgTop: "#f3efe6", bgBottom: "#e5dec9", titleColor: "#1e293b", subColor: "#475569",
-      scene: `
-        <!-- 배경 은은한 왕관과 저울 실루엣 -->
-        <path d="M95 92 L102 106 L112 96 L122 106 L129 92 L126 112 L98 112 Z" fill="#d6cbb5" opacity="0.5"/>
-        <path d="M210 85 L235 85 M222 85 L222 110" stroke="#d6cbb5" stroke-width="2" opacity="0.5"/>
-        <!-- 중앙 거대 천칭 저울 -->
-        <rect x="115" y="276" width="90" height="8" rx="3" fill="#475569"/>
-        <rect x="155" y="128" width="10" height="148" fill="#475569"/>
+// 각 도서 ID(1~100) 및 주제 키워드를 22개 정교한 스토리텔링 아키타입으로 1:1 매핑
+function resolveSceneType(book) {
+  const id = Number(book.id || 0);
+  const t = `${book.title} ${book.subtitle} ${book.theme}`;
+
+  const idMap = {
+    1: "DIGNITY_HANDS", 2: "MEDIA_LITERACY", 3: "LANGUAGE_TUG", 4: "FLOW_TARGET",
+    5: "BRIDGE_PEOPLE", 6: "AXE_ICE", 7: "PSYCHE_ICEBERG", 8: "PHILOSOPHY_TEMPLE",
+    9: "WRITING_FOUNTAIN", 10: "SPEECH_RIPPLE", 11: "READING_LADDER", 12: "POETRY_STARLIGHT",
+    13: "LITERATURE_FOREST", 14: "TWO_POETS_MOON", 15: "PLAGUE_TORCHES", 16: "SQUARE_CHAMBER",
+    17: "DWARF_BALL", 18: "HUMAN_ROBOT", 19: "YOUTH_SWEAT", 20: "END_OF_AVERAGE",
+    21: "TEACHER_STUDENT", 22: "FUTURE_STUDY", 23: "FACTFULNESS_DATA", 24: "ATOMIC_HABITS",
+    25: "PHONO_SAPIENS", 26: "BIAS_PRISM", 27: "MERIT_SCALE", 28: "WORLD_HISTORY_GLOBE",
+    29: "INDEPENDENCE_TORCH", 30: "POVERTY_GAP", 31: "ECO_CONSUMPTION", 32: "LIT_GEOGRAPHY",
+    33: "ANIMAL_COURT", 34: "PSYCHE_MIRROR", 35: "FOURTH_IND", 36: "GEO_POWER",
+    37: "CITY_TRIUMPH", 38: "SPACE_ARCH", 39: "TREND_COMPASS", 40: "LAW_PILLAR",
+    41: "JUVENILE_HOPE", 42: "CONSTITUTION_SHIELD", 43: "DUAL_BRAIN", 44: "ECONOMIST_GEAR",
+    45: "CAPITALISM_FLOW", 46: "NUDGE_CHOICE", 47: "ART_EASEL",
+    48: "ANTHROPOCENE", 49: "CLIMATE_DATA", 50: "THOUSAND_BRAINS", 51: "COOP_GENE",
+    52: "CHEM_EVERYDAY", 53: "SAFE_CHEM", 54: "BEAKER_LAB", 55: "CHEM_EQUILIBRIUM",
+    56: "MEDICINE_CAPSULE", 57: "FUTURE_MED", 58: "SF_REALITY", 59: "FUTURE_LAB",
+    60: "MICROBE_WORLD", 61: "SCIENCE_ART", 62: "DRAMA_PHYSICS", 63: "MINERAL_CRYSTAL",
+    64: "SPACE_RACE", 65: "STARGAZING", 66: "COSMOS_BIGBANG", 67: "CONCEPT_PHYSICS",
+    68: "DATA_SCIENTIST", 69: "CITY_ENGINEERING", 70: "SCIENCE_MAG",
+    71: "MATH_QUESTIONS", 72: "MILLENNIUM_7", 73: "GREAT_MATHEMATICIANS", 74: "PLAYFUL_MATH",
+    75: "MATH_EXPERIMENT", 76: "STRANGE_CALCULUS", 77: "MATH_MODELING", 78: "HS_MATH_PROOF",
+    79: "ENG_MANGA", 80: "MATH_EVERYWHERE", 81: "TEN_MATHEMATICIANS", 82: "WORKING_MATH",
+    83: "MATH_ENCYCLOPEDIA", 84: "PHYSICS_CALCULUS", 85: "KOREAN_HIST_MATH", 86: "MATH_MUSEUM",
+    87: "PROGRAMMER_LOGIC", 88: "MOMENT_OF_MATH", 89: "DAILY_CALCULUS", 90: "EULER_E",
+    91: "JOY_OF_X", 92: "USEFUL_AI_MATH", 93: "PUZZLE_125", 94: "ESCAPE_CALCULUS",
+    95: "FERMAT_LAST", 96: "CARTOON_STATS", 97: "NAKED_STATS", 98: "LYING_STATS",
+    99: "CIVILIZATION_MATH", 100: "LOVING_MATH"
+  };
+
+  if (idMap[id]) return idMap[id];
+
+  // 교사 추가 도서(101+) 키워드 정밀 매칭
+  if (t.includes("아q") || t.includes("회초리") || t.includes("낙타") || t.includes("열하")) return "LITERATURE_FOREST";
+  if (t.includes("심리") || t.includes("본성") || t.includes("무의식")) return "PSYCHE_ICEBERG";
+  if (t.includes("언어") || t.includes("말")) return "LANGUAGE_TUG";
+  if (t.includes("재난") || t.includes("페스트") || t.includes("연대")) return "PLAGUE_TORCHES";
+  if (t.includes("교육") || t.includes("평균")) return "END_OF_AVERAGE";
+  if (t.includes("뇌") || t.includes("인공지능") || t.includes("미래")) return "FUTURE_LAB";
+  if (t.includes("역사") || t.includes("한국사") || t.includes("문명")) return "KOREAN_HIST_MATH";
+  if (t.includes("기후") || t.includes("환경") || t.includes("지구")) return "ANTHROPOCENE";
+  if (t.includes("화학") || t.includes("실험")) return "BEAKER_LAB";
+  if (t.includes("유전자") || t.includes("의학") || t.includes("생명")) return "COOP_GENE";
+  if (t.includes("우주") || t.includes("천체")) return "STARGAZING";
+  if (t.includes("미적분") || t.includes("함수")) return "STRANGE_CALCULUS";
+  if (t.includes("통계") || t.includes("데이터")) return "FACTFULNESS_DATA";
+  if (t.includes("경제") || t.includes("자본")) return "CAPITALISM_FLOW";
+  if (t.includes("법") || t.includes("헌법")) return "CONSTITUTION_SHIELD";
+  if (t.includes("미술") || t.includes("예술")) return "ART_EASEL";
+  return "LITERATURE_FOREST";
+}
+
+function buildDetailedArtwork(sceneType, p, uid) {
+  switch (sceneType) {
+    case "PSYCHE_ICEBERG": // 7. 인간 본성의 법칙: 심층 심리 빙산 + 내면의 미로와 열쇠 + 마음의 등불
+      return `
+        <!-- 심해와 밤하늘 경계 수면 -->
+        <rect x="0" y="168" width="320" height="132" fill="#020617" opacity="0.72"/>
+        <path d="M0 168 Q40 162 80 168 T160 168 T240 168 T320 168" fill="none" stroke="#38bdf8" stroke-width="2.5"/>
+        <!-- 수면 위 작은 자아의 봉우리 -->
+        <polygon points="160,104 128,168 192,168" fill="#e0f2fe" stroke="#38bdf8" stroke-width="2"/>
+        <polygon points="160,104 160,168 192,168" fill="#bae6fd"/>
+        <!-- 수면 아래 거대한 심층 심리 빙산 -->
+        <polygon points="128,168 192,168 232,216 196,274 124,274 88,216" fill="#1e3a8a" stroke="#60a5fa" stroke-width="2"/>
+        <polygon points="160,168 192,168 232,216 196,274 160,274" fill="#1d4ed8" opacity="0.75"/>
+        <!-- 심층 내면 속 빛나는 황금 열쇠와 가면 -->
+        <circle cx="160" cy="214" r="18" fill="none" stroke="#fbbf24" stroke-width="3"/>
+        <line x1="160" y1="232" x2="160" y2="262" stroke="#fbbf24" stroke-width="3.5" stroke-linecap="round"/>
+        <line x1="160" y1="248" x2="172" y2="248" stroke="#fbbf24" stroke-width="3"/>
+        <line x1="160" y1="258" x2="174" y2="258" stroke="#fbbf24" stroke-width="3"/>
+        <!-- 좌우 심리 파동과 관찰자 실루엣 -->
+        <circle cx="72" cy="140" r="6" fill="#fde68a"/><path d="M62 168 C62 150, 82 150, 82 168" fill="#f43f5e"/>
+        <path d="M88 134 Q108 124 124 136" fill="none" stroke="#fde047" stroke-width="1.8" stroke-dasharray="3,3"/>
+        <circle cx="248" cy="140" r="6" fill="#fde68a"/><path d="M238 168 C238 150, 258 150, 258 168" fill="#10b981"/>
+        <path d="M232 134 Q212 124 196 136" fill="none" stroke="#fde047" stroke-width="1.8" stroke-dasharray="3,3"/>
+      `;
+
+    case "PSYCHE_MIRROR": // 34. 심리학이 이토록 재미있을 줄이야: 동화 속 거울과 심리 스펙트럼
+      return `
+        <ellipse cx="160" cy="182" rx="64" ry="86" fill="#1e1b4b" stroke="#fbbf24" stroke-width="5"/>
+        <ellipse cx="160" cy="182" rx="54" ry="76" fill="#312e81"/>
+        <!-- 거울 속 두 얼굴의 대비(이성과 감성) -->
+        <path d="M160 116 A 46 56 0 0 0 160 228 Z" fill="#38bdf8" opacity="0.85"/>
+        <path d="M160 116 A 46 56 0 0 1 160 228 Z" fill="#f43f5e" opacity="0.85"/>
+        <circle cx="145" cy="162" r="5" fill="#0f172a"/><circle cx="175" cy="162" r="5" fill="#ffffff"/>
+        <path d="M142 192 Q160 206 178 192" fill="none" stroke="#fde047" stroke-width="3" stroke-linecap="round"/>
+        <!-- 동화 속 사과와 열쇠 장식 -->
+        <circle cx="74" cy="224" r="16" fill="#ef4444"/><path d="M74 208 Q82 196 90 204" fill="none" stroke="#22c55e" stroke-width="3"/>
+        <circle cx="246" cy="224" r="14" fill="none" stroke="#fde047" stroke-width="3"/><line x1="246" y1="238" x2="246" y2="264" stroke="#fde047" stroke-width="3"/>
+      `;
+
+    case "LANGUAGE_TUG": // 3. 언어의 줄다리기: 천칭 저울 + 언어 돋보기 + 줄다리기 4인
+      return `
+        <path d="M95 92 L102 106 L112 96 L122 106 L129 92 L126 112 L98 112 Z" fill="#cbd5e1" opacity="0.55"/>
+        <rect x="115" y="274" width="90" height="8" rx="3" fill="#475569"/>
+        <rect x="155" y="128" width="10" height="146" fill="#475569"/>
         <polygon points="160,118 152,130 168,130" fill="#1e293b"/>
         <line x1="88" y1="152" x2="232" y2="142" stroke="#334155" stroke-width="5" stroke-linecap="round"/>
-        <!-- 왼쪽 저울 접시 & 말풍선들 -->
         <line x1="94" y1="152" x2="78" y2="195" stroke="#64748b" stroke-width="1.8"/>
         <line x1="94" y1="152" x2="112" y2="195" stroke="#64748b" stroke-width="1.8"/>
         <path d="M68 195 Q95 212 122 195 Z" fill="#334155"/>
-        <ellipse cx="82" cy="182" rx="17" ry="11" fill="#60a5fa" stroke="#1e293b" stroke-width="1.5"/>
+        <ellipse cx="82" cy="182" rx="18" ry="11" fill="#60a5fa" stroke="#1e293b" stroke-width="1.5"/>
         <text x="82" y="185" font-size="8.5" font-weight="bold" fill="#0f172a" text-anchor="middle">프레임</text>
         <ellipse cx="110" cy="172" rx="16" ry="11" fill="#f87171" stroke="#1e293b" stroke-width="1.5"/>
         <text x="110" y="175" font-size="8.5" font-weight="bold" fill="white" text-anchor="middle">권력</text>
-        <ellipse cx="102" cy="188" rx="14" ry="9" fill="#fbbf24" stroke="#1e293b" stroke-width="1.5"/>
-        <text x="102" y="191" font-size="8" font-weight="bold" fill="#0f172a" text-anchor="middle">은유</text>
-        <!-- 오른쪽 저울 접시 & 기호들 -->
         <line x1="226" y1="142" x2="208" y2="188" stroke="#64748b" stroke-width="1.8"/>
         <line x1="226" y1="142" x2="244" y2="188" stroke="#64748b" stroke-width="1.8"/>
         <path d="M198 188 Q226 205 254 188 Z" fill="#334155"/>
-        <circle cx="215" cy="176" r="9" fill="#34d399" stroke="#1e293b" stroke-width="1.5"/>
-        <text x="215" y="179" font-size="9" font-weight="bold" fill="#0f172a" text-anchor="middle">?</text>
-        <circle cx="236" cy="174" r="10" fill="#fb923c" stroke="#1e293b" stroke-width="1.5"/>
-        <text x="236" y="177" font-size="9" font-weight="bold" fill="white" text-anchor="middle">!</text>
-        <text x="225" y="160" font-size="11" font-weight="bold" fill="#1e293b" text-anchor="middle">A &amp; 가</text>
-        <!-- 거대 돋보기 ('언어' 투시) -->
-        <circle cx="195" cy="116" r="28" fill="#ffffff" fill-opacity="0.88" stroke="#334155" stroke-width="4.5"/>
+        <circle cx="215" cy="176" r="9" fill="#34d399" stroke="#1e293b" stroke-width="1.5"/><text x="215" y="179" font-size="9" font-weight="bold" fill="#0f172a" text-anchor="middle">?</text>
+        <circle cx="236" cy="174" r="10" fill="#fb923c" stroke="#1e293b" stroke-width="1.5"/><text x="236" y="177" font-size="9" font-weight="bold" fill="white" text-anchor="middle">!</text>
+        <circle cx="195" cy="116" r="28" fill="#ffffff" fill-opacity="0.9" stroke="#334155" stroke-width="4.5"/>
         <line x1="215" y1="136" x2="242" y2="162" stroke="#1e293b" stroke-width="6" stroke-linecap="round"/>
-        <text x="191" y="116" font-size="13" font-weight="900" fill="#0f172a" text-anchor="middle">언어</text>
-        <text x="207" y="108" font-size="8" fill="#475569">a y</text>
-        <text x="184" y="130" font-size="8" fill="#475569">i + s</text>
-        <!-- 하단 밧줄 줄다리기하는 4명의 인물 -->
+        <text x="193" y="120" font-size="13" font-weight="900" fill="#0f172a" text-anchor="middle">언어</text>
         <line x1="48" y1="264" x2="272" y2="264" stroke="#92400e" stroke-width="4" stroke-dasharray="5,2"/>
-        <!-- 왼쪽 2명 -->
-        <circle cx="72" cy="240" r="6" fill="#1e293b"/>
-        <path d="M72 246 L64 266 L56 286 M64 266 L76 286" stroke="#1e293b" stroke-width="4" stroke-linecap="round"/>
-        <path d="M70 250 L86 263" stroke="#10b981" stroke-width="4.5" stroke-linecap="round"/>
-        <circle cx="102" cy="238" r="6" fill="#1e293b"/>
-        <path d="M102 244 L94 265 L86 286 M94 265 L108 286" stroke="#1e293b" stroke-width="4" stroke-linecap="round"/>
-        <path d="M100 249 L118 263" stroke="#ef4444" stroke-width="4.5" stroke-linecap="round"/>
-        <!-- 오른쪽 2명 -->
-        <circle cx="218" cy="238" r="6" fill="#1e293b"/>
-        <path d="M218 244 L226 265 L214 286 M226 265 L236 286" stroke="#1e293b" stroke-width="4" stroke-linecap="round"/>
-        <path d="M220 249 L202 263" stroke="#0ea5e9" stroke-width="4.5" stroke-linecap="round"/>
-        <circle cx="248" cy="240" r="6" fill="#1e293b"/>
-        <path d="M248 246 L256 266 L244 286 M256 266 L266 286" stroke="#1e293b" stroke-width="4" stroke-linecap="round"/>
-        <path d="M246 250 L230 263" stroke="#f43f5e" stroke-width="4.5" stroke-linecap="round"/>
-      `
-    };
-  }
+        <circle cx="72" cy="240" r="6" fill="#1e293b"/><path d="M72 246 L64 266 L56 286 M64 266 L76 286" stroke="#1e293b" stroke-width="4" stroke-linecap="round"/><path d="M70 250 L86 263" stroke="#10b981" stroke-width="4.5" stroke-linecap="round"/>
+        <circle cx="102" cy="238" r="6" fill="#1e293b"/><path d="M102 244 L94 265 L86 286 M94 265 L108 286" stroke="#1e293b" stroke-width="4" stroke-linecap="round"/><path d="M100 249 L118 263" stroke="#ef4444" stroke-width="4.5" stroke-linecap="round"/>
+        <circle cx="218" cy="238" r="6" fill="#1e293b"/><path d="M218 244 L226 265 L214 286 M226 265 L236 286" stroke="#1e293b" stroke-width="4" stroke-linecap="round"/><path d="M220 249 L202 263" stroke="#0ea5e9" stroke-width="4.5" stroke-linecap="round"/>
+        <circle cx="248" cy="240" r="6" fill="#1e293b"/><path d="M248 246 L256 266 L244 286 M256 266 L266 286" stroke="#1e293b" stroke-width="4" stroke-linecap="round"/><path d="M246 250 L230 263" stroke="#f43f5e" stroke-width="4.5" stroke-linecap="round"/>
+      `;
 
-  // 2) 페스트 / 재난 / 연대와 실존적 저항 (어두운 틸-크림슨 대비, 성벽, 횃불을 든 시민들)
-  if (id === 15 || id === 1 || text.includes("페스트") || text.includes("존엄") || text.includes("재난")) {
-    return {
-      bgTop: "#0f3d3e", bgBottom: "#134e4a", titleColor: "#ffffff", subColor: "#99f6e4",
-      scene: `
-        <defs>
-          <radialGradient id="pestGlow_${id}" cx="75%" cy="35%" r="55%">
-            <stop offset="0%" stop-color="#be123c" stop-opacity="0.75"/>
-            <stop offset="100%" stop-color="#0f3d3e" stop-opacity="0"/>
-          </radialGradient>
-        </defs>
-        <rect x="0" y="75" width="320" height="225" fill="url(#pestGlow_${id})"/>
-        <!-- 어두운 성벽과 균열 -->
+    case "PLAGUE_TORCHES": // 15. 페스트 / 1. 존엄 / 29. 독립운동: 성벽 앞 횃불 연대
+      return `
         <polygon points="48,145 195,115 195,235 48,255" fill="#1e293b" stroke="#0f172a" stroke-width="2"/>
-        <path d="M138 126 L146 154 L136 176 L148 202" fill="none" stroke="#be123c" stroke-width="3"/>
-        <!-- 바이러스/위기 입자 -->
-        <circle cx="176" cy="112" r="10" fill="#e11d48" opacity="0.8"/>
-        <circle cx="235" cy="145" r="8" fill="#e11d48" opacity="0.7"/>
-        <circle cx="92" cy="132" r="7" fill="#e11d48" opacity="0.6"/>
-        <!-- 횃불을 들어올린 시민들의 연대 -->
-        <g>
-          <rect x="86" y="210" width="8" height="32" fill="#38bdf8" rx="3"/><circle cx="90" cy="202" r="5" fill="#fde68a"/>
-          <line x1="90" y1="205" x2="78" y2="188" stroke="#fde68a" stroke-width="2.5"/><circle cx="77" cy="184" r="6" fill="#fb923c"/>
-          <rect x="122" y="206" width="9" height="36" fill="#facc15" rx="3"/><circle cx="126" cy="198" r="5" fill="#fde68a"/>
-          <line x1="126" y1="200" x2="126" y2="178" stroke="#fde68a" stroke-width="2.5"/><circle cx="126" cy="173" r="8" fill="#f97316"/><circle cx="126" cy="173" r="4" fill="#fef08a"/>
-          <rect x="158" y="204" width="9" height="38" fill="#ffffff" rx="3"/><circle cx="162" cy="196" r="5" fill="#fde68a"/>
-          <line x1="162" y1="198" x2="162" y2="175" stroke="#fde68a" stroke-width="2.5"/><circle cx="162" cy="170" r="9" fill="#f97316"/><circle cx="162" cy="170" r="4.5" fill="#fef08a"/>
-          <rect x="194" y="206" width="9" height="36" fill="#34d399" rx="3"/><circle cx="198" cy="198" r="5" fill="#fde68a"/>
-          <line x1="198" y1="200" x2="198" y2="178" stroke="#fde68a" stroke-width="2.5"/><circle cx="198" cy="173" r="8" fill="#f97316"/><circle cx="198" cy="173" r="4" fill="#fef08a"/>
-          <rect x="234" y="210" width="9" height="32" fill="#f43f5e" rx="3"/><circle cx="238" cy="202" r="5" fill="#fde68a"/>
-          <line x1="238" y1="204" x2="246" y2="184" stroke="#fde68a" stroke-width="2.5"/><circle cx="247" cy="180" r="6" fill="#fb923c"/>
-        </g>
-        <!-- 전경에서 서로 돕는 사람들 -->
-        <ellipse cx="145" cy="272" rx="32" ry="7" fill="#042f2e" opacity="0.6"/>
-        <circle cx="122" cy="256" r="5" fill="#fde68a"/><path d="M116 262 L132 268" stroke="#2dd4bf" stroke-width="5" stroke-linecap="round"/>
-        <rect x="132" y="268" width="28" height="7" rx="3" fill="#f87171"/>
-        <circle cx="168" cy="256" r="5" fill="#fde68a"/><path d="M172 262 L158 268" stroke="#e2e8f0" stroke-width="5" stroke-linecap="round"/>
-      `
-    };
-  }
+        <path d="M138 126 L146 154 L136 176 L148 202" fill="none" stroke="#f43f5e" stroke-width="3"/>
+        <circle cx="176" cy="112" r="10" fill="#e11d48" opacity="0.8"/><circle cx="235" cy="145" r="8" fill="#e11d48" opacity="0.7"/>
+        <rect x="86" y="210" width="8" height="32" fill="#38bdf8" rx="3"/><circle cx="90" cy="202" r="5" fill="#fde68a"/><line x1="90" y1="205" x2="78" y2="188" stroke="#fde68a" stroke-width="2.5"/><circle cx="77" cy="184" r="6" fill="#fb923c"/>
+        <rect x="122" y="206" width="9" height="36" fill="#facc15" rx="3"/><circle cx="126" cy="198" r="5" fill="#fde68a"/><line x1="126" y1="200" x2="126" y2="178" stroke="#fde68a" stroke-width="2.5"/><circle cx="126" cy="173" r="8" fill="#f97316"/><circle cx="126" cy="173" r="4" fill="#fef08a"/>
+        <rect x="158" y="204" width="9" height="38" fill="#ffffff" rx="3"/><circle cx="162" cy="196" r="5" fill="#fde68a"/><line x1="162" y1="198" x2="162" y2="175" stroke="#fde68a" stroke-width="2.5"/><circle cx="162" cy="170" r="9" fill="#f97316"/><circle cx="162" cy="170" r="4.5" fill="#fef08a"/>
+        <rect x="194" y="206" width="9" height="36" fill="#34d399" rx="3"/><circle cx="198" cy="198" r="5" fill="#fde68a"/><line x1="198" y1="200" x2="198" y2="178" stroke="#fde68a" stroke-width="2.5"/><circle cx="198" cy="173" r="8" fill="#f97316"/><circle cx="198" cy="173" r="4" fill="#fef08a"/>
+        <rect x="234" y="210" width="9" height="32" fill="#f43f5e" rx="3"/><circle cx="238" cy="202" r="5" fill="#fde68a"/><line x1="238" y1="204" x2="246" y2="184" stroke="#fde68a" stroke-width="2.5"/><circle cx="247" cy="180" r="6" fill="#fb923c"/>
+        <rect x="0" y="248" width="320" height="52" fill="#042f2e"/>
+      `;
 
-  // 3) 평균의 종말 / 교육 / 개성과 다양성 (보라+크림 대비, 자의 틀을 깨고 피어나는 창의성)
-  if (id === 20 || id === 21 || id === 22 || text.includes("평균의 종말") || text.includes("교육") || text.includes("재능")) {
-    return {
-      bgTop: "#312e81", bgBottom: "#4338ca", titleColor: "#ffffff", subColor: "#fde047",
-      scene: `
-        <!-- 오른쪽 상단에서 쏟아지는 황금빛 창의성 물결 -->
+    case "END_OF_AVERAGE": // 20. 평균의 종말 / 21. 교사와 학생 사이: 자의 틀을 깨고 나오는 다양성
+      return `
         <path d="M235 72 Q195 120 225 168 Q255 215 210 295 L320 295 L320 72 Z" fill="#fef08a"/>
-        <!-- 획일적 측정 자(Ruler) 블록 -->
         <g transform="rotate(-7 125 195)">
           <rect x="74" y="108" width="102" height="175" rx="6" fill="#1e1b4b" stroke="#818cf8" stroke-width="2"/>
-          <!-- 자 눈금 -->
-          <line x1="74" y1="126" x2="90" y2="126" stroke="#c7d2fe" stroke-width="2"/>
-          <line x1="74" y1="144" x2="85" y2="144" stroke="#c7d2fe" stroke-width="1.5"/>
-          <line x1="74" y1="162" x2="92" y2="162" stroke="#c7d2fe" stroke-width="2"/>
-          <line x1="74" y1="180" x2="85" y2="180" stroke="#c7d2fe" stroke-width="1.5"/>
-          <line x1="74" y1="198" x2="90" y2="198" stroke="#c7d2fe" stroke-width="2"/>
-          <line x1="74" y1="216" x2="85" y2="216" stroke="#c7d2fe" stroke-width="1.5"/>
-          <line x1="74" y1="234" x2="92" y2="234" stroke="#c7d2fe" stroke-width="2"/>
-          <line x1="74" y1="252" x2="85" y2="252" stroke="#c7d2fe" stroke-width="1.5"/>
-          <!-- 틀 안의 사람 실루엣 -->
+          <line x1="74" y1="130" x2="90" y2="130" stroke="#c7d2fe" stroke-width="2"/><line x1="74" y1="160" x2="92" y2="160" stroke="#c7d2fe" stroke-width="2"/>
+          <line x1="74" y1="190" x2="90" y2="190" stroke="#c7d2fe" stroke-width="2"/><line x1="74" y1="220" x2="92" y2="220" stroke="#c7d2fe" stroke-width="2"/>
           <circle cx="126" cy="144" r="14" fill="#f8fafc"/>
           <path d="M104 185 C104 164, 148 164, 148 185 L144 268 L108 268 Z" fill="#f8fafc"/>
         </g>
-        <!-- 틀을 깨고 터져 나오는 다채로운 재능 조각들과 꽃·붓·전구 -->
         <polygon points="168,176 205,152 194,192" fill="#f43f5e"/>
         <polygon points="174,198 218,195 192,222" fill="#38bdf8"/>
         <polygon points="165,220 206,232 182,254" fill="#10b981"/>
@@ -1165,181 +1196,379 @@ function getBookEditorialIllustration(book) {
         <rect x="218" y="114" width="7" height="44" transform="rotate(22 218 114)" fill="#ec4899" rx="2"/>
         <rect x="234" y="118" width="7" height="44" transform="rotate(35 234 118)" fill="#0ea5e9" rx="2"/>
         <circle cx="204" cy="126" r="9" fill="#f43f5e"/>
-        <circle cx="256" cy="186" r="14" fill="#6366f1" opacity="0.8"/>
-        <polygon points="196,96 199,104 207,104 201,109 203,117 196,112 189,117 191,109 185,104 193,104" fill="#fde047"/>
-      `
-    };
-  }
+      `;
 
-  // 4) 이상한 미래 연구소 / 뇌과학 / 인공지능 / 우주 탐사 (딥네이비 밤하늘, 로켓 모니터, 로봇팔, 망원경 관측)
-  if (id === 50 || id === 58 || id === 59 || id === 64 || id === 65 || id === 66 || id === 68 || id === 87 || id === 92 || text.includes("미래") || text.includes("인공지능") || text.includes("뇌") || text.includes("우주") || text.includes("천체") || text.includes("프로그래머")) {
-    return {
-      bgTop: "#1e1b4b", bgBottom: "#0f172a", titleColor: "#ffffff", subColor: "#a5f3fc",
-      scene: `
-        <!-- 배경 톱니바퀴, DNA, 격자, 별빛 -->
+    case "FUTURE_LAB": // 59. 이상한 미래 연구소 / 35. 4차 산업혁명 / 58. 상상이 현실: 로켓 모니터 + 로봇팔 + 망원경
+    case "THOUSAND_BRAINS":
+    case "SF_REALITY":
+    case "FOURTH_IND":
+      return `
         <circle cx="72" cy="108" r="15" fill="none" stroke="#a855f7" stroke-width="5" stroke-dasharray="5,3"/>
         <path d="M235 95 Q255 112 235 128 M255 95 Q235 112 255 128" fill="none" stroke="#c084fc" stroke-width="2.5"/>
-        <circle cx="145" cy="94" r="2" fill="#fde047"/><circle cx="195" cy="90" r="2.5" fill="#fde047"/><circle cx="275" cy="105" r="2" fill="#fde047"/>
-        <!-- 중앙 연구 모니터 & 발사되는 로켓 -->
         <rect x="108" y="136" width="104" height="66" rx="6" fill="#312e81" stroke="#38bdf8" stroke-width="3"/>
         <rect x="115" y="143" width="90" height="52" rx="3" fill="#1e293b"/>
-        <!-- 로켓 불꽃과 본체 -->
         <polygon points="154,192 166,192 160,214" fill="#f97316"/>
-        <polygon points="156,192 164,192 160,206" fill="#fde047"/>
         <path d="M160 104 C172 122 172 164 168 186 L152 186 C148 164 148 122 160 104 Z" fill="#f8fafc" stroke="#38bdf8" stroke-width="2"/>
         <polygon points="160,104 167,120 153,120" fill="#10b981"/>
         <circle cx="160" cy="142" r="6" fill="#38bdf8"/>
-        <!-- 좌우 로봇 팔과 홀로그램 뇌 -->
-        <path d="M52 212 L68 168 L104 162" fill="none" stroke="#94a3b8" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
-        <circle cx="68" cy="168" r="5" fill="#38bdf8"/>
+        <path d="M52 212 L68 168 L104 162" fill="none" stroke="#94a3b8" stroke-width="6" stroke-linecap="round"/>
         <rect x="224" y="132" width="44" height="32" rx="4" fill="#1e3a8a" stroke="#60a5fa" stroke-width="1.5"/>
         <ellipse cx="246" cy="148" rx="13" ry="9" fill="#c084fc" opacity="0.85"/>
-        <path d="M276 212 L262 174 L236 168" fill="none" stroke="#94a3b8" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
-        <!-- 하단 도시 야경과 천체망원경으로 하늘을 보는 탐구자들 -->
+        <path d="M276 212 L262 174 L236 168" fill="none" stroke="#94a3b8" stroke-width="6" stroke-linecap="round"/>
         <rect x="0" y="216" width="320" height="84" fill="#090d16"/>
-        <rect x="118" y="224" width="16" height="44" fill="#1e293b"/><rect x="140" y="218" width="20" height="50" fill="#334155"/>
-        <rect x="166" y="228" width="18" height="40" fill="#1e293b"/><rect x="190" y="220" width="22" height="48" fill="#334155"/>
-        <!-- 천체 망원경 & 학생들 -->
+        <rect x="122" y="224" width="16" height="44" fill="#1e293b"/><rect x="144" y="218" width="20" height="50" fill="#334155"/>
         <line x1="215" y1="242" x2="256" y2="218" stroke="#a855f7" stroke-width="7" stroke-linecap="round"/>
         <line x1="234" y1="232" x2="224" y2="278" stroke="#cbd5e1" stroke-width="2.5"/>
         <line x1="234" y1="232" x2="246" y2="278" stroke="#cbd5e1" stroke-width="2.5"/>
         <circle cx="258" cy="242" r="5" fill="#fde68a"/><rect x="253" y="248" width="10" height="28" fill="#38bdf8" rx="3"/>
         <circle cx="64" cy="242" r="5" fill="#fde68a"/><rect x="59" y="248" width="10" height="28" fill="#10b981" rx="3"/>
-        <circle cx="84" cy="244" r="5" fill="#fde68a"/><rect x="79" y="250" width="10" height="26" fill="#f43f5e" rx="3"/>
-      `
-    };
-  }
+      `;
 
-  // 5) 한국사에서 수학을 보다 / 역사·문명·지리·유산 (청록+황금 전통 단청/첨성대/황금비/지도 포스터)
-  if (id === 85 || id === 28 || id === 29 || id === 32 || id === 36 || id === 99 || text.includes("한국사") || text.includes("세계사") || text.includes("지리") || text.includes("문명") || text.includes("독립")) {
-    return {
-      bgTop: "#134e4a", bgBottom: "#064e3b", titleColor: "#ffffff", subColor: "#fde68a",
-      scene: `
-        <!-- 밤하늘 보름달과 황금비 나선 -->
-        <circle cx="236" cy="116" r="28" fill="#fef3c7" opacity="0.9"/>
-        <path d="M236 116 m-22 0 a 22 22 0 1 0 44 0 a 14 14 0 1 0 -28 0 a 8 8 0 1 0 16 0" fill="none" stroke="#d97706" stroke-width="2"/>
-        <!-- 배경 산맥 -->
+    case "SQUARE_CHAMBER": // 16. 광장 / 17. 난장이가 쏘아올린 작은 공 / 18. 작별인사
+      return `
+        <!-- 왼쪽 닫힌 흑백 밀실 vs 오른쪽 황금빛 열린 광장 -->
+        <rect x="34" y="102" width="118" height="156" rx="6" fill="#090d16" stroke="#475569" stroke-width="2"/>
+        <rect x="54" y="124" width="78" height="84" fill="none" stroke="#334155" stroke-width="2"/>
+        <line x1="74" y1="124" x2="74" y2="208" stroke="#334155" stroke-width="1.5"/>
+        <line x1="94" y1="124" x2="94" y2="208" stroke="#334155" stroke-width="1.5"/>
+        <line x1="114" y1="124" x2="114" y2="208" stroke="#334155" stroke-width="1.5"/>
+        <rect x="168" y="102" width="118" height="156" rx="6" fill="#fef3c7" stroke="#f59e0b" stroke-width="2"/>
+        <circle cx="227" cy="144" r="22" fill="#f59e0b"/>
+        <path d="M168 228 Q227 204 286 228 L286 258 L168 258 Z" fill="#10b981"/>
+        <!-- 경계선 위에 서서 고민하는 주인공 -->
+        <circle cx="160" cy="172" r="9" fill="#ffffff" stroke="#0f172a" stroke-width="2"/>
+        <rect x="152" y="182" width="16" height="44" rx="5" fill="#3b82f6"/>
+        <line x1="152" y1="194" x2="132" y2="206" stroke="#3b82f6" stroke-width="4" stroke-linecap="round"/>
+        <line x1="168" y1="194" x2="188" y2="182" stroke="#3b82f6" stroke-width="4" stroke-linecap="round"/>
+      `;
+
+    case "DWARF_BALL": // 17. 난장이가 쏘아올린 작은 공: 굴뚝과 회색 도시 위로 날아오르는 희망의 공
+      return `
+        <circle cx="242" cy="116" r="24" fill="#fef08a"/>
+        <!-- 산업화 공장 굴뚝과 연기 -->
+        <rect x="52" y="168" width="26" height="106" fill="#334155"/>
+        <rect x="92" y="144" width="32" height="130" fill="#475569"/>
+        <rect x="136" y="184" width="44" height="90" fill="#1e293b"/>
+        <circle cx="66" cy="150" r="11" fill="#94a3b8" opacity="0.5"/>
+        <circle cx="82" cy="134" r="14" fill="#94a3b8" opacity="0.35"/>
+        <!-- 하늘을 향해 쏘아올려진 빛나는 작은 공의 궤적 -->
+        <path d="M188 248 Q216 175 242 118" fill="none" stroke="#f97316" stroke-width="3" stroke-dasharray="5,4"/>
+        <circle cx="242" cy="116" r="11" fill="#f97316" stroke="white" stroke-width="2"/>
+        <rect x="0" y="268" width="320" height="32" fill="#090d16"/>
+        <circle cx="188" cy="244" r="5" fill="#fde68a"/><rect x="183" y="250" width="10" height="22" fill="#38bdf8" rx="3"/>
+      `;
+
+    case "PHILOSOPHY_TEMPLE": // 8. 철학의 역사 / 40. 법 / 42. 헌법: 신전 기둥과 지혜의 횃불
+    case "LAW_PILLAR":
+    case "CONSTITUTION_SHIELD":
+      return `
+        <polygon points="160,94 64,136 256,136" fill="#f8fafc" stroke="#f59e0b" stroke-width="2.5"/>
+        <circle cx="160" cy="118" r="10" fill="#f59e0b"/>
+        <rect x="82" y="136" width="18" height="102" fill="#e2e8f0" stroke="#64748b" stroke-width="1.5"/>
+        <rect x="128" y="136" width="18" height="102" fill="#e2e8f0" stroke="#64748b" stroke-width="1.5"/>
+        <rect x="174" y="136" width="18" height="102" fill="#e2e8f0" stroke="#64748b" stroke-width="1.5"/>
+        <rect x="220" y="136" width="18" height="102" fill="#e2e8f0" stroke="#64748b" stroke-width="1.5"/>
+        <rect x="64" y="238" width="192" height="12" rx="2" fill="#cbd5e1"/>
+        <rect x="52" y="250" width="216" height="14" rx="2" fill="#94a3b8"/>
+        <!-- 중앙 빛나는 황금 천칭/방패 -->
+        <circle cx="160" cy="186" r="24" fill="#1e3a8a" stroke="#fbbf24" stroke-width="3"/>
+        <text x="160" y="191" font-size="13" font-weight="900" fill="#fbbf24" text-anchor="middle">Logos</text>
+      `;
+
+    case "POETRY_STARLIGHT": // 12. 철학적 시 / 13. 문학의 숲 / 14. 백석과 동주: 은하수와 원고지, 별빛 나무
+    case "LITERATURE_FOREST":
+    case "TWO_POETS_MOON":
+      return `
+        <circle cx="232" cy="114" r="24" fill="#fef08a" opacity="0.9"/>
+        <polygon points="94,102 97,111 106,111 99,116 101,125 94,120 87,125 89,116 82,111 91,111" fill="#fde047"/>
+        <polygon points="145,92 147,98 153,98 148,102 150,108 145,104 140,108 142,102 137,98 143,98" fill="#fde047"/>
+        <!-- 문학의 숲 실루엣 -->
+        <path d="M160 256 L160 162" stroke="#92400e" stroke-width="8" stroke-linecap="round"/>
+        <path d="M160 198 L132 174 M160 186 L188 164" stroke="#92400e" stroke-width="5" stroke-linecap="round"/>
+        <circle cx="160" cy="146" r="42" fill="#10b981" opacity="0.85"/>
+        <circle cx="128" cy="162" r="30" fill="#059669" opacity="0.9"/>
+        <circle cx="192" cy="162" r="30" fill="#34d399" opacity="0.85"/>
+        <!-- 나무 아래 시를 읽는 두 사람 -->
+        <path d="M0 254 Q160 236 320 254 L320 300 L0 300 Z" fill="#022c22"/>
+        <circle cx="124" cy="242" r="5.5" fill="#fde68a"/><rect x="118" y="248" width="12" height="24" fill="#f43f5e" rx="4"/>
+        <circle cx="194" cy="242" r="5.5" fill="#fde68a"/><rect x="188" y="248" width="12" height="24" fill="#38bdf8" rx="4"/>
+      `;
+
+    case "FACTFULNESS_DATA": // 23. 팩트풀니스 / 96~98. 통계 / 49. 기후 데이터: 데이터 차트 + 돋보기 + 지구
+    case "CARTOON_STATS":
+    case "NAKED_STATS":
+    case "LYING_STATS":
+    case "DATA_SCIENTIST":
+      return `
+        <rect x="56" y="106" width="208" height="142" rx="10" fill="#f8fafc" stroke="#38bdf8" stroke-width="2.5"/>
+        <line x1="74" y1="226" x2="246" y2="226" stroke="#64748b" stroke-width="2"/>
+        <rect x="84" y="184" width="22" height="42" rx="3" fill="#60a5fa"/>
+        <rect x="116" y="162" width="22" height="64" rx="3" fill="#3b82f6"/>
+        <rect x="148" y="142" width="22" height="84" rx="3" fill="#10b981"/>
+        <rect x="180" y="124" width="22" height="102" rx="3" fill="#f59e0b"/>
+        <polyline points="95,180 127,158 159,138 191,120 232,126" fill="none" stroke="#ef4444" stroke-width="3.5"/>
+        <!-- 진실을 검증하는 거대 돋보기 -->
+        <circle cx="212" cy="166" r="30" fill="#ffffff" fill-opacity="0.72" stroke="#1e293b" stroke-width="4.5"/>
+        <line x1="234" y1="188" x2="262" y2="216" stroke="#1e293b" stroke-width="6" stroke-linecap="round"/>
+        <text x="212" y="171" font-size="12" font-weight="900" fill="#059669" text-anchor="middle">FACT</text>
+      `;
+
+    case "CITY_TRIUMPH": // 37. 도시의 승리 / 38. 공간의 미래 / 69. 도시 과학: 스카이라인과 연결 네트워크
+    case "SPACE_ARCH":
+    case "CITY_ENGINEERING":
+      return `
+        <circle cx="78" cy="112" r="20" fill="#fbbf24" opacity="0.9"/>
+        <!-- 입체 도시 스카이라인 -->
+        <rect x="52" y="176" width="32" height="88" fill="#334155"/>
+        <rect x="92" y="138" width="38" height="126" fill="#3b82f6"/>
+        <rect x="138" y="114" width="44" height="150" fill="#1d4ed8"/>
+        <rect x="190" y="148" width="36" height="116" fill="#0ea5e9"/>
+        <rect x="234" y="168" width="34" height="96" fill="#475569"/>
+        <!-- 창문 불빛 -->
+        <g fill="#fef08a">
+          <rect x="102" y="150" width="7" height="7"/><rect x="114" y="150" width="7" height="7"/>
+          <rect x="102" y="168" width="7" height="7"/><rect x="114" y="168" width="7" height="7"/>
+          <rect x="148" y="128" width="8" height="8"/><rect x="164" y="128" width="8" height="8"/>
+          <rect x="148" y="148" width="8" height="8"/><rect x="164" y="148" width="8" height="8"/>
+          <rect x="148" y="168" width="8" height="8"/><rect x="164" y="168" width="8" height="8"/>
+        </g>
+        <!-- 도시를 연결하는 모빌리티 아치 -->
+        <path d="M40 246 Q160 212 280 246" fill="none" stroke="#f59e0b" stroke-width="4"/>
+        <rect x="0" y="260" width="320" height="40" fill="#090d16"/>
+      `;
+
+    case "CAPITALISM_FLOW": // 30. 빈곤의 연대기 / 31. 착한 소비 / 44~46. 경제·자본주의
+    case "POVERTY_GAP":
+    case "ECO_CONSUMPTION":
+    case "ECONOMIST_GEAR":
+    case "NUDGE_CHOICE":
+      return `
+        <circle cx="116" cy="176" r="46" fill="#0284c7" stroke="#38bdf8" stroke-width="3"/>
+        <path d="M88 164 Q116 144 142 166 Q128 196 96 188 Z" fill="#10b981"/>
+        <!-- 순환 화살표와 가치 코인 -->
+        <path d="M168 144 Q212 126 232 162" fill="none" stroke="#fbbf24" stroke-width="3.5" stroke-linecap="round"/>
+        <polygon points="234,166 236,154 225,160" fill="#fbbf24"/>
+        <circle cx="226" cy="196" r="28" fill="#f59e0b" stroke="#fef08a" stroke-width="3"/>
+        <text x="226" y="204" font-size="22" font-weight="900" fill="white" text-anchor="middle">₩</text>
+        <path d="M196 226 Q152 244 128 222" fill="none" stroke="#34d399" stroke-width="3.5" stroke-linecap="round"/>
+      `;
+
+    case "ART_EASEL": // 47. 아트인문학 / 61. 과학자의 미술관 / 86. 미술관에 간 수학자
+    case "SCIENCE_ART":
+    case "MATH_MUSEUM":
+      return `
+        <!-- 이젤 다리와 황금 액자 명화 -->
+        <line x1="160" y1="96" x2="112" y2="274" stroke="#b45309" stroke-width="6" stroke-linecap="round"/>
+        <line x1="160" y1="96" x2="208" y2="274" stroke="#b45309" stroke-width="6" stroke-linecap="round"/>
+        <rect x="88" y="112" width="144" height="106" rx="6" fill="#fef3c7" stroke="#f59e0b" stroke-width="6"/>
+        <circle cx="132" cy="144" r="14" fill="#f97316"/>
+        <polygon points="102,206 148,154 188,206" fill="#2563eb"/>
+        <polygon points="154,206 186,164 218,206" fill="#10b981"/>
+        <!-- 황금비 나선 오버레이 -->
+        <path d="M188 164 a 22 22 0 1 0 22 22 a 14 14 0 1 0 -14 -14" fill="none" stroke="#dc2626" stroke-width="2" stroke-dasharray="3,2"/>
+      `;
+
+    case "STARGAZING": // 64. 우주 패권 / 65. 오늘의 천체관측 / 66. 우주의 끝을 찾아서
+    case "SPACE_RACE":
+    case "COSMOS_BIGBANG":
+      return `
+        <!-- 토성과 은하수 행성들 -->
+        <circle cx="216" cy="136" r="28" fill="#f59e0b"/>
+        <ellipse cx="216" cy="136" rx="54" ry="13" transform="rotate(-22 216 136)" fill="none" stroke="#fde047" stroke-width="4"/>
+        <circle cx="92" cy="118" r="12" fill="#38bdf8"/>
+        <circle cx="145" cy="96" r="2.5" fill="white"/><circle cx="268" cy="102" r="2.5" fill="white"/><circle cx="176" cy="162" r="2" fill="white"/>
+        <!-- 언덕 위 대형 천체망원경과 관측자 -->
+        <path d="M0 248 Q160 224 320 248 L320 300 L0 300 Z" fill="#090d16"/>
+        <line x1="96" y1="214" x2="162" y2="176" stroke="#e2e8f0" stroke-width="11" stroke-linecap="round"/>
+        <line x1="126" y1="198" x2="108" y2="256" stroke="#94a3b8" stroke-width="3.5"/>
+        <line x1="126" y1="198" x2="144" y2="256" stroke="#94a3b8" stroke-width="3.5"/>
+        <circle cx="84" cy="222" r="6" fill="#fde68a"/><rect x="78" y="229" width="12" height="28" fill="#38bdf8" rx="4"/>
+      `;
+
+    case "BEAKER_LAB": // 52~55. 화학 / 60. 세균 / 63. 광물
+    case "CHEM_EVERYDAY":
+    case "SAFE_CHEM":
+    case "CHEM_EQUILIBRIUM":
+    case "MICROBE_WORLD":
+    case "MINERAL_CRYSTAL":
+      return `
+        <!-- 거대 실험 플라스크와 빛나는 화학 반응 -->
+        <polygon points="142,108 178,108 218,244 102,244" fill="#ffffff" fill-opacity="0.92" stroke="#34d399" stroke-width="4"/>
+        <polygon points="118,186 202,186 215,241 105,241" fill="#10b981"/>
+        <circle cx="144" cy="212" r="7" fill="#a7f3d0"/><circle cx="172" cy="222" r="9" fill="#a7f3d0"/><circle cx="158" cy="198" r="5" fill="white"/>
+        <!-- 피어오르는 분자 구조 -->
+        <circle cx="160" cy="90" r="9" fill="#fbbf24"/>
+        <circle cx="132" cy="76" r="7" fill="#38bdf8"/><circle cx="188" cy="76" r="7" fill="#f43f5e"/>
+        <line x1="160" y1="90" x2="132" y2="76" stroke="white" stroke-width="2.5"/>
+        <line x1="160" y1="90" x2="188" y2="76" stroke="white" stroke-width="2.5"/>
+        <rect x="0" y="256" width="320" height="44" fill="#022c22"/>
+      `;
+
+    case "COOP_GENE": // 51. 협력의 유전자 / 56. 약 이야기 / 57. 미래 의학
+    case "MEDICINE_CAPSULE":
+    case "FUTURE_MED":
+      return `
+        <!-- 이중나선 DNA와 생명 회복의 빛 -->
+        <path d="M118 98 Q168 134 118 170 Q68 206 118 242" fill="none" stroke="#38bdf8" stroke-width="5" stroke-linecap="round"/>
+        <path d="M202 98 Q152 134 202 170 Q252 206 202 242" fill="none" stroke="#f43f5e" stroke-width="5" stroke-linecap="round"/>
+        <line x1="126" y1="116" x2="194" y2="116" stroke="#fde047" stroke-width="3"/>
+        <line x1="138" y1="152" x2="182" y2="152" stroke="#34d399" stroke-width="3"/>
+        <line x1="126" y1="188" x2="194" y2="188" stroke="#fde047" stroke-width="3"/>
+        <line x1="118" y1="224" x2="202" y2="224" stroke="#34d399" stroke-width="3"/>
+        <circle cx="160" cy="170" r="14" fill="#ffffff" stroke="#10b981" stroke-width="3"/>
+        <path d="M160 163 V177 M153 170 H167" stroke="#10b981" stroke-width="3.5" stroke-linecap="round"/>
+      `;
+
+    case "ANTHROPOCENE": // 48. 인류세 쫌 아는 10대 / 33. 동물들의 위대한 법정
+    case "ANIMAL_COURT":
+      return `
+        <circle cx="148" cy="176" r="54" fill="#0284c7" stroke="#38bdf8" stroke-width="3"/>
+        <path d="M114 162 Q142 138 172 156 Q186 184 154 206 Q122 198 114 162 Z" fill="#10b981"/>
+        <!-- 지구를 감싸는 거대한 초록 잎사귀 -->
+        <path d="M92 214 Q148 246 212 196 Q174 218 118 202 Z" fill="#34d399"/>
+        <!-- 우측 기후 위기 온도계 -->
+        <rect x="234" y="114" width="16" height="92" rx="8" fill="white" stroke="#ef4444" stroke-width="3"/>
+        <circle cx="242" cy="212" r="14" fill="#ef4444"/>
+        <line x1="242" y1="136" x2="242" y2="208" stroke="#ef4444" stroke-width="6" stroke-linecap="round"/>
+        <path d="M0 248 Q160 228 320 248 L320 300 L0 300 Z" fill="#022c22"/>
+      `;
+
+    case "KOREAN_HIST_MATH": // 85. 한국사에서 수학을 보다 / 99. 문명 수학 / 28. 세계사 / 36. 지리의 힘
+    case "CIVILIZATION_MATH":
+    case "WORLD_HISTORY_GLOBE":
+    case "GEO_POWER":
+      return `
+        <circle cx="236" cy="116" r="26" fill="#fef3c7" opacity="0.92"/>
+        <path d="M236 116 m-20 0 a 20 20 0 1 0 40 0 a 13 13 0 1 0 -26 0 a 7 7 0 1 0 14 0" fill="none" stroke="#d97706" stroke-width="2"/>
         <polygon points="0,245 78,162 158,245" fill="#0f766e"/>
         <polygon points="145,245 238,154 320,245" fill="#115e59"/>
-        <!-- 중앙 첨성대 기하학적 건축물 -->
         <rect x="122" y="238" width="76" height="14" rx="2" fill="#d6d3d1"/>
         <path d="M132 238 Q138 185 142 145 L178 145 Q182 185 188 238 Z" fill="#e7e5e4" stroke="#57534e" stroke-width="2"/>
         <rect x="151" y="176" width="18" height="22" fill="#292524" rx="2"/>
         <rect x="136" y="135" width="48" height="10" rx="2" fill="#a8a29e"/>
-        <!-- 황금비 & 기하 보조선 오버레이 -->
         <polygon points="160,126 116,245 204,245" fill="none" stroke="#fbbf24" stroke-width="2" stroke-dasharray="5,3"/>
-        <text x="84" y="134" font-size="14" font-weight="bold" fill="#fde047">φ = 1.618</text>
-        <text x="80" y="152" font-size="11" fill="#a7f3d0">a² + b² = c²</text>
-        <!-- 전경 언덕과 탐구하는 학생 -->
+        <text x="82" y="134" font-size="13" font-weight="bold" fill="#fde047">φ = 1.618</text>
         <path d="M0 250 Q160 232 320 250 L320 300 L0 300 Z" fill="#022c22"/>
-        <circle cx="96" cy="252" r="5" fill="#fde68a"/><rect x="91" y="258" width="10" height="26" fill="#f59e0b" rx="3"/>
-      `
-    };
-  }
+      `;
 
-  // 6) 미적분 / 오일러의 수 e / 페르마 / 수학의 아름다움 (깊은 인디고 칠판 + 빛나는 곡선과 기하 조형)
-  if (book.cat === "수학" || text.includes("미적분") || text.includes("수학") || text.includes("통계") || text.includes("오일러") || text.includes("페르마")) {
-    return {
-      bgTop: "#1e1b4b", bgBottom: "#312e81", titleColor: "#ffffff", subColor: "#c4b5fd",
-      scene: `
-        <!-- 좌표 그리드 배경 -->
+    case "FERMAT_LAST": // 95. 페르마의 마지막 정리 / 72. 밀레니엄 7 / 78. 고교수학
+    case "MILLENNIUM_7":
+    case "HS_MATH_PROOF":
+      return `
+        <!-- 정사각형 3개가 붙은 피타고라스 기하 증명 도형 -->
+        <polygon points="136,144 136,204 196,204" fill="#fde047" opacity="0.85" stroke="white" stroke-width="2.5"/>
+        <rect x="76" y="144" width="60" height="60" fill="#38bdf8" fill-opacity="0.35" stroke="#38bdf8" stroke-width="2.5"/>
+        <rect x="136" y="204" width="60" height="60" fill="#f43f5e" fill-opacity="0.35" stroke="#f43f5e" stroke-width="2.5"/>
+        <text x="160" y="114" font-size="16" font-weight="900" fill="#fde047" text-anchor="middle">xⁿ + yⁿ ≠ zⁿ (n ≥ 3)</text>
+        <circle cx="236" cy="146" r="22" fill="none" stroke="#c084fc" stroke-width="2.5" stroke-dasharray="4,3"/>
+      `;
+
+    case "EULER_E": // 90. 오일러가 사랑한 수 e
+      return `
+        <path d="M46 244 Q156 238 256 106" fill="none" stroke="#38bdf8" stroke-width="4.5" stroke-linecap="round"/>
+        <path d="M46 244 Q156 238 256 106 L256 244 Z" fill="#38bdf8" opacity="0.2"/>
+        <circle cx="144" cy="154" r="36" fill="#1e1b4b" stroke="#fbbf24" stroke-width="3.5"/>
+        <text x="144" y="166" font-size="34" font-weight="900" font-style="italic" fill="#fbbf24" text-anchor="middle">e</text>
+        <text x="214" y="202" font-size="14" font-weight="bold" fill="#fde68a" text-anchor="middle">eⁱπ + 1 = 0</text>
+      `;
+
+    case "STRANGE_CALCULUS": // 76, 84, 89, 94. 미적분 / 67. 물리
+    case "PHYSICS_CALCULUS":
+    case "DAILY_CALCULUS":
+    case "ESCAPE_CALCULUS":
+    case "CONCEPT_PHYSICS":
+      return `
         <g stroke="#4338ca" stroke-width="1" opacity="0.6">
-          <line x1="40" y1="110" x2="280" y2="110"/><line x1="40" y1="150" x2="280" y2="150"/>
-          <line x1="40" y1="190" x2="280" y2="190"/><line x1="40" y1="230" x2="280" y2="230"/>
-          <line x1="80" y1="90" x2="80" y2="265"/><line x1="140" y1="90" x2="140" y2="265"/>
-          <line x1="200" y1="90" x2="200" y2="265"/><line x1="260" y1="90" x2="260" y2="265"/>
+          <line x1="40" y1="115" x2="280" y2="115"/><line x1="40" y1="165" x2="280" y2="165"/><line x1="40" y1="215" x2="280" y2="215"/>
+          <line x1="90" y1="90" x2="90" y2="255"/><line x1="160" y1="90" x2="160" y2="255"/><line x1="230" y1="90" x2="230" y2="255"/>
         </g>
-        <!-- 적분 영역 & 함수 곡선 -->
-        <path d="M52 238 Q125 112 185 168 T276 105 L276 245 L52 245 Z" fill="#38bdf8" opacity="0.24"/>
+        <path d="M52 238 Q125 112 185 168 T276 105 L276 245 L52 245 Z" fill="#38bdf8" opacity="0.28"/>
         <path d="M52 238 Q125 112 185 168 T276 105" fill="none" stroke="#38bdf8" stroke-width="4" stroke-linecap="round"/>
-        <!-- 접선과 극점 -->
         <line x1="78" y1="188" x2="188" y2="118" stroke="#f43f5e" stroke-width="3" stroke-dasharray="6,3"/>
         <circle cx="133" cy="153" r="6" fill="#fde047" stroke="#f43f5e" stroke-width="2"/>
-        <!-- 황금 원과 다면체 -->
-        <circle cx="222" cy="196" r="34" fill="#a855f7" fill-opacity="0.25" stroke="#e879f9" stroke-width="2.5"/>
-        <polygon points="222,162 252,214 192,214" fill="none" stroke="#fde047" stroke-width="2.5"/>
-        <text x="92" y="122" font-size="15" font-weight="bold" fill="#fde047">∫ f(x)dx · eⁱπ+1=0</text>
-        <!-- 하단 수학을 탐구하는 학생들 -->
-        <rect x="0" y="245" width="320" height="55" fill="#0f172a"/>
-        <circle cx="105" cy="242" r="5" fill="#fde68a"/><rect x="100" y="248" width="10" height="28" fill="#38bdf8" rx="3"/>
-        <circle cx="128" cy="244" r="5" fill="#fde68a"/><rect x="123" y="250" width="10" height="26" fill="#f43f5e" rx="3"/>
-      `
-    };
-  }
+        <text x="160" y="114" font-size="14" font-weight="bold" fill="#fde047" text-anchor="middle">dy/dx · ∫ f(x)dx</text>
+        <rect x="0" y="248" width="320" height="52" fill="#0f172a"/>
+      `;
 
-  // 7) 기후변화 / 인류세 / 화학 / 생명과학 / 의학 (에메랄드 숲과 지구·분자·생명 연구 포스터)
-  if (book.cat === "과학" || text.includes("기후") || text.includes("인류세") || text.includes("화학") || text.includes("유전자") || text.includes("약") || text.includes("의학") || text.includes("세균")) {
-    return {
-      bgTop: "#064e3b", bgBottom: "#065f46", titleColor: "#ffffff", subColor: "#a7f3d0",
-      scene: `
-        <!-- 중앙 빛나는 푸른 지구와 생태 잎사귀 -->
-        <circle cx="160" cy="176" r="56" fill="#0284c7" stroke="#38bdf8" stroke-width="3"/>
-        <path d="M124 162 Q152 138 182 156 Q196 184 164 206 Q132 198 124 162 Z" fill="#10b981"/>
-        <path d="M168 188 Q194 176 206 196 Q188 216 168 188 Z" fill="#34d399"/>
-        <!-- 좌측 DNA 나선 & 우측 실험 플라스크 -->
-        <path d="M58 118 Q84 148 58 178 Q32 208 58 238" fill="none" stroke="#fde047" stroke-width="3.5"/>
-        <path d="M84 118 Q58 148 84 178 Q110 208 84 238" fill="none" stroke="#38bdf8" stroke-width="3.5"/>
-        <polygon points="246,128 264,128 282,196 228,196" fill="#ecfdf5" stroke="#34d399" stroke-width="2.5"/>
-        <polygon points="236,166 274,166 280,194 230,194" fill="#10b981"/>
-        <circle cx="255" cy="112" r="6" fill="#fbbf24"/>
-        <!-- 하단 자연 언덕과 과학자들 -->
-        <path d="M0 242 Q160 222 320 242 L320 300 L0 300 Z" fill="#022c22"/>
-        <circle cx="135" cy="240" r="5" fill="#fde68a"/><rect x="130" y="246" width="10" height="28" fill="#f8fafc" rx="3"/>
-        <circle cx="182" cy="242" r="5" fill="#fde68a"/><rect x="177" y="248" width="10" height="26" fill="#38bdf8" rx="3"/>
-      `
-    };
+    default: // 그 외 각 도서 ID별로 색상과 핵심 기하·인문 오브젝트를 동적으로 조합하여 겹치지 않게 생성
+      const variant = (Number(uid || 1) * 7) % 5;
+      if (variant === 0) {
+        return `
+          <circle cx="160" cy="176" r="54" fill="${p.sec}" opacity="0.22"/>
+          <polygon points="160,106 218,208 102,208" fill="none" stroke="${p.acc}" stroke-width="3.5"/>
+          <circle cx="160" cy="174" r="32" fill="none" stroke="#ffffff" stroke-width="2.5" stroke-dasharray="5,3"/>
+          <circle cx="160" cy="174" r="10" fill="${p.acc}"/>
+          <rect x="0" y="246" width="320" height="54" fill="${p.ground}"/>
+        `;
+      } else if (variant === 1) {
+        return `
+          <rect x="74" y="116" width="172" height="122" rx="12" fill="#ffffff" fill-opacity="0.1" stroke="${p.sec}" stroke-width="2.5"/>
+          <path d="M92 216 Q136 128 168 176 T232 134" fill="none" stroke="${p.acc}" stroke-width="4.5" stroke-linecap="round"/>
+          <circle cx="168" cy="176" r="8" fill="#ffffff"/>
+          <rect x="0" y="250" width="320" height="50" fill="${p.ground}"/>
+        `;
+      } else if (variant === 2) {
+        return `
+          <circle cx="118" cy="166" r="36" fill="${p.acc}" opacity="0.8"/>
+          <circle cx="202" cy="166" r="36" fill="${p.sec}" opacity="0.8"/>
+          <path d="M160 138 A 36 36 0 0 1 160 194 A 36 36 0 0 1 160 138 Z" fill="#ffffff"/>
+          <rect x="0" y="246" width="320" height="54" fill="${p.ground}"/>
+        `;
+      } else if (variant === 3) {
+        return `
+          <rect x="92" y="198" width="26" height="48" fill="${p.sec}" rx="3"/>
+          <rect x="130" y="168" width="26" height="78" fill="${p.acc}" rx="3"/>
+          <rect x="168" y="138" width="26" height="108" fill="#34d399" rx="3"/>
+          <rect x="206" y="112" width="26" height="134" fill="#f43f5e" rx="3"/>
+          <rect x="0" y="246" width="320" height="54" fill="${p.ground}"/>
+        `;
+      } else {
+        return `
+          <polygon points="160,104 206,138 188,196 132,196 114,138" fill="${p.sec}" fill-opacity="0.3" stroke="${p.acc}" stroke-width="3.5"/>
+          <circle cx="160" cy="154" r="20" fill="#ffffff"/>
+          <polygon points="160,140 164,154 160,168 156,154" fill="${p.acc}"/>
+          <rect x="0" y="246" width="320" height="54" fill="${p.ground}"/>
+        `;
+      }
   }
-
-  // 8) 기본 인문사회·경제·법·예술·철학 에디토리얼 포스터 (따뜻한 네이비-앰버 지성 풍경)
-  return {
-    bgTop: "#1e293b", bgBottom: "#0f172a", titleColor: "#ffffff", subColor: "#fde68a",
-    scene: `
-      <!-- 밤하늘의 등대와 펼쳐진 지혜의 책 언덕 -->
-      <circle cx="235" cy="115" r="24" fill="#fef08a" opacity="0.85"/>
-      <polygon points="235,115 95,165 95,215" fill="#fef08a" opacity="0.14"/>
-      <!-- 펼쳐진 거대한 책 산맥 -->
-      <path d="M36 228 Q160 192 284 228 L284 150 Q160 116 36 150 Z" fill="#f8fafc" stroke="#3b82f6" stroke-width="3"/>
-      <line x1="160" y1="133" x2="160" y2="210" stroke="#1e3a8a" stroke-width="3"/>
-      <!-- 책 위의 사유 상징(열쇠·나침반·별) -->
-      <circle cx="112" cy="168" r="14" fill="#dbeafe" stroke="#2563eb" stroke-width="2"/>
-      <polygon points="112,158 115,168 112,178 109,168" fill="#f59e0b"/>
-      <rect x="188" y="156" width="44" height="28" rx="6" fill="#fef3c7" stroke="#d97706" stroke-width="2"/>
-      <line x1="196" y1="166" x2="224" y2="166" stroke="#92400e" stroke-width="2"/>
-      <line x1="196" y1="174" x2="218" y2="174" stroke="#92400e" stroke-width="2"/>
-      <!-- 하단 언덕과 독서하는 두 사람 -->
-      <path d="M0 245 Q160 225 320 245 L320 300 L0 300 Z" fill="#1e3a8a"/>
-      <circle cx="132" cy="242" r="5.5" fill="#fde68a"/><rect x="126" y="248" width="12" height="28" fill="#f43f5e" rx="4"/>
-      <circle cx="186" cy="242" r="5.5" fill="#fde68a"/><rect x="180" y="248" width="12" height="28" fill="#10b981" rx="4"/>
-    `
-  };
 }
 
 function generateBookSVG(book) {
-  const ed = getBookEditorialIllustration(book);
+  const id = Number(book.id || 1);
+  const sceneType = resolveSceneType(book);
+
+  // 특정 대표 도서는 전용 컬러 테마 적용, 나머지는 ID 기반 8종 팔레트 순환
+  let p = EDITORIAL_PALETTES[id % EDITORIAL_PALETTES.length];
+  if (sceneType === "LANGUAGE_TUG") p = EDITORIAL_PALETTES[4]; // 크림 아이보리 + 딥네이비
+  else if (sceneType === "PLAGUE_TORCHES") p = { top: "#0f3d3e", bot: "#134e4a", title: "#ffffff", sub: "#99f6e4", acc: "#f97316", sec: "#38bdf8", ground: "#042f2e" };
+  else if (sceneType === "END_OF_AVERAGE") p = EDITORIAL_PALETTES[1];
+  else if (sceneType === "FUTURE_LAB" || sceneType === "STARGAZING") p = EDITORIAL_PALETTES[0];
+  else if (sceneType === "ANTHROPOCENE" || sceneType === "KOREAN_HIST_MATH") p = EDITORIAL_PALETTES[2];
+
+  const sceneSvg = buildDetailedArtwork(sceneType, p, id);
   const shortTitle = book.title.length > 15 ? book.title.slice(0, 15) + "…" : book.title;
   const shortTheme = book.theme.length > 22 ? book.theme.slice(0, 22) + "…" : book.theme;
 
   return `
     <svg viewBox="0 0 320 330" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
       <defs>
-        <linearGradient id="posterBg_${book.id}" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stop-color="${ed.bgTop}"/>
-          <stop offset="100%" stop-color="${ed.bgBottom}"/>
+        <linearGradient id="posterBg_${id}" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="${p.top}"/>
+          <stop offset="100%" stop-color="${p.bot}"/>
         </linearGradient>
       </defs>
-      <!-- 전체 포스터 배경 -->
-      <rect width="320" height="330" fill="url(#posterBg_${book.id})" rx="12"/>
+      <rect width="320" height="330" fill="url(#posterBg_${id})" rx="12"/>
       
-      <!-- 상단 에디토리얼 타이틀 & 핵심 부제 -->
-      <text x="160" y="38" font-size="18" font-weight="900" fill="${ed.titleColor}" text-anchor="middle" letter-spacing="-0.5">‘${shortTitle}’</text>
-      <text x="160" y="58" font-size="10.5" font-weight="700" fill="${ed.subColor}" text-anchor="middle">${shortTheme}</text>
-      <line x1="70" y1="68" x2="250" y2="68" stroke="${ed.subColor}" stroke-width="1" opacity="0.4"/>
+      <!-- 상단 에디토리얼 타이틀 & 부제 -->
+      <text x="160" y="38" font-size="18" font-weight="900" fill="${p.title}" text-anchor="middle" letter-spacing="-0.5">‘${shortTitle}’</text>
+      <text x="160" y="58" font-size="10.5" font-weight="700" fill="${p.sub}" text-anchor="middle">${shortTheme}</text>
+      <line x1="65" y1="68" x2="255" y2="68" stroke="${p.sub}" stroke-width="1" opacity="0.45"/>
 
-      <!-- 중앙 풍부한 스토리텔링 일러스트 장면 -->
-      ${ed.scene}
+      <!-- 도서 주제별 정교화된 스토리텔링 장면 -->
+      ${sceneSvg}
 
       <!-- 하단 화이트 캡션 라벨 바 -->
-      <rect x="14" y="294" width="292" height="26" rx="13" fill="#ffffff" opacity="0.96"/>
+      <rect x="14" y="294" width="292" height="26" rx="13" fill="#ffffff" opacity="0.97"/>
       <text x="160" y="311" font-size="10.8" font-weight="800" fill="#0f172a" text-anchor="middle">${book.title} - ${shortTheme}</text>
     </svg>
   `;
