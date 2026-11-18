@@ -60,7 +60,10 @@
   .btn-mysheet { background: #0284c7; color: white; }
   .btn-mysheet:hover { background: #0369a1; }
   .btn-setting { background: #f59e0b; color: #0f172a; }
+  .btn-shared { background: #ec4899; color: white; }
+  .btn-shared:hover { background: #db2777; }
   body.student-mode .teacher-only { display: none !important; }
+  body.peer-teacher-mode .admin-only { display: none !important; }
 
   main { max-width: 1240px; margin: 1.8rem auto; padding: 0 1.5rem; }
   .section { display: none; }
@@ -367,11 +370,12 @@
     <div class="nav-btns">
       <button class="btn btn-tab active" id="nav-viewer" onclick="switchTab('viewer')">📖 도서 1PAGE 소개</button>
       <button class="btn btn-tab" id="nav-submit" onclick="switchTab('submit')">✍️ 과목별 추천 & 소감 제출</button>
+      <button class="btn btn-shared" onclick="openSharedBooksModal()">📚 타교사 자료</button>
       <button class="btn teacher-only" style="background:#06b6d4; color:#0f172a;" onclick="openQrModal()">📱 학생 배포용 QR·링크</button>
       <button class="btn btn-add teacher-only" onclick="openAddBookModal()">➕ 교사 도서 1PAGE 추가</button>
       <button class="btn btn-copy teacher-only" onclick="copyTeacherSheet()" title="타 교사용 사본 만들기">📑 시트 사본 만들기</button>
       <button class="btn btn-mysheet teacher-only" onclick="openMySheet()" title="사본 복사한 내 구글 시트 바로 열기">📊 내 시트 가기</button>
-      <button class="btn btn-setting teacher-only" onclick="openSettings()">⚙️ 교사 설정</button>
+      <button class="btn btn-setting teacher-only admin-only" onclick="openSettings()">⚙️ 교사 설정</button>
     </div>
   </div>
 </header>
@@ -538,9 +542,15 @@
     <p style="font-size:0.84rem; color:var(--muted); margin-bottom:1rem;">선생님께서 수업에 활용하고 싶은 도서를 추가하면 1PAGE 소개 카드가 자동 생성되고 학생 선택 목록에 반영됩니다.</p>
     
     <form id="addBookForm" onsubmit="handleAddCustomBook(event)">
-      <div class="form-group">
-        <label>도서 제목 *</label>
-        <input type="text" id="newBookTitle" class="form-control" placeholder="예: 아Q정전, 열하일기, 사피엔스 등" required>
+      <div class="form-row" style="grid-template-columns: 1.4fr 1fr; margin-bottom:0;">
+        <div class="form-group">
+          <label>도서 제목 *</label>
+          <input type="text" id="newBookTitle" class="form-control" placeholder="예: 아Q정전, 열하일기, 사피엔스 등" required>
+        </div>
+        <div class="form-group">
+          <label>추천 교사명 (선택)</label>
+          <input type="text" id="newBookTeacher" class="form-control" placeholder="예: 신윤기 수석 / 김OO 교사">
+        </div>
       </div>
       <div class="form-group">
         <label>핵심 부제 (한 줄 소개) *</label>
@@ -621,6 +631,55 @@
     <div style="display:flex; justify-content:center; gap:0.6rem; margin-top:1rem;">
       <button type="button" class="btn" style="background:#0ea5e9; color:white;" onclick="downloadQrImage()">💾 QR 이미지 저장</button>
       <button type="button" class="btn" style="background:#e2e8f0;" onclick="closeQrModal()">닫기</button>
+    </div>
+  </div>
+</div>
+
+<!-- 모달 4: 타교사 추천도서 누적 자료 조회 및 분류별 검색 모달 -->
+<div id="sharedBooksModal" class="modal">
+  <div class="modal-content" style="max-width:760px;">
+    <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:0.5rem; margin-bottom:0.6rem;">
+      <h3 style="color:#be185d; margin:0;">📚 교사 추천도서 누적 자료실 (타교사 공유 자료 검색)</h3>
+      <button type="button" class="btn" style="background:#f1f5f9; font-size:0.8rem;" onclick="syncSharedBooksFromSheet()">🔄 시트에서 최신 자료 불러오기</button>
+    </div>
+    <p style="font-size:0.84rem; color:var(--muted); margin-bottom:1rem;">
+      선생님과 동료 교사들이 추가한 추천도서가 누적 저장됩니다. 교과 분류나 키워드로 검색한 뒤 카드를 클릭하면 <strong>1PAGE 소개자료</strong>로 바로 열립니다.
+    </p>
+
+    <!-- 교과 분류별 필터 및 검색창 -->
+    <div style="background:#fdf2f8; border:1px solid #fbcfe8; border-radius:10px; padding:0.9rem; margin-bottom:1rem;">
+      <div style="display:grid; grid-template-columns: 1fr 1.5fr; gap:0.6rem; margin-bottom:0.6rem;">
+        <select id="sharedSubjectFilter" class="form-control" onchange="renderSharedBooksList()">
+          <option value="ALL">📂 전체 교과 분류 보기</option>
+          <option value="국어·문학">국어·문학</option>
+          <option value="수학">수학</option>
+          <option value="사회·역사·지리">사회·역사·지리</option>
+          <option value="윤리·철학·심리">윤리·철학·심리</option>
+          <option value="경제·정치·법">경제·정치·법</option>
+          <option value="물리·지구과학">물리·지구과학</option>
+          <option value="화학·생명과학">화학·생명과학</option>
+          <option value="정보·AI">정보·AI</option>
+          <option value="중국어·세계문화">중국어·세계문화</option>
+          <option value="미술·예술·진로">미술·예술·진로</option>
+        </select>
+        <input type="text" id="sharedSearchInput" class="form-control" placeholder="도서명, 주제, 추천 교사명 검색..." oninput="renderSharedBooksList()">
+      </div>
+      <div style="display:flex; justify-content:space-between; align-items:center; font-size:0.8rem; color:#831843;">
+        <span id="sharedCountLabel">누적 교사 추천도서: 0권</span>
+        <div style="display:flex; gap:0.4rem;">
+          <button type="button" class="btn" style="background:white; border:1px solid #f9a8d4; padding:0.3rem 0.65rem; font-size:0.78rem;" onclick="exportSharedBooksJson()">📤 목록 내보내기</button>
+          <label class="btn" style="background:white; border:1px solid #f9a8d4; padding:0.3rem 0.65rem; font-size:0.78rem; margin:0; cursor:pointer;">
+            📥 목록 합치기 <input type="file" accept=".json" style="display:none;" onchange="importSharedBooksJson(event)">
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <div id="sharedBooksContainer" style="display:grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap:0.8rem; max-height:360px; overflow-y:auto; padding:2px;"></div>
+
+    <div style="display:flex; justify-content:flex-end; gap:0.5rem; margin-top:1.2rem;">
+      <button type="button" class="btn btn-add" onclick="closeSharedBooksModal(); openAddBookModal();">➕ 새 추천도서 추가하기</button>
+      <button type="button" class="btn" style="background:#e2e8f0;" onclick="closeSharedBooksModal()">닫기</button>
     </div>
   </div>
 </div>
@@ -1314,11 +1373,34 @@ function renderOnePageByIndex(idx) {
     </div>
 
     <div class="page-nav">
-      <button class="btn" style="background:#e2e8f0;" onclick="renderOnePageByIndex(${idx - 1})">◀ 이전 도서</button>
-      <span style="font-weight:700; color:var(--primary);">1PAGE 도서 카드 (${idx + 1} / ${ALL_BOOKS.length})</span>
-      <button class="btn" style="background:#e2e8f0;" onclick="renderOnePageByIndex(${idx + 1})">다음 도서 ▶</button>
+      <button class="btn" style="background:#e2e8f0;" onclick="navigateFilteredBook(-1)">◀ 이전 도서</button>
+      <span style="font-weight:700; color:var(--primary);" id="onePagePosLabel">1PAGE 도서 카드 (${idx + 1} / ${ALL_BOOKS.length})</span>
+      <button class="btn" style="background:#e2e8f0;" onclick="navigateFilteredBook(1)">다음 도서 ▶</button>
     </div>
   `;
+}
+
+function getCurrentFilteredBooks() {
+  const keyword = (document.getElementById('searchInput')?.value || '').trim().toLowerCase();
+  return ALL_BOOKS.map((b, index) => ({ ...b, globalIndex: index })).filter(b => {
+    const matchCat = currentFilter === 'ALL' ||
+                     (currentFilter === '교사추가' ? Boolean(b.isCustom) : b.cat === currentFilter);
+    const subStr = (b.subjects || []).join(' ').toLowerCase();
+    const matchKey = !keyword ||
+                     b.title.toLowerCase().includes(keyword) ||
+                     b.subtitle.toLowerCase().includes(keyword) ||
+                     b.theme.toLowerCase().includes(keyword) ||
+                     subStr.includes(keyword);
+    return matchCat && matchKey;
+  });
+}
+
+function navigateFilteredBook(delta) {
+  const list = getCurrentFilteredBooks();
+  if (list.length === 0) return;
+  const pos = list.findIndex(item => item.globalIndex === currentBookIndex);
+  let nextPos = pos === -1 ? 0 : (pos + delta + list.length) % list.length;
+  renderOnePageByIndex(list[nextPos].globalIndex);
 }
 
 function selectBookForSubmit(title) {
@@ -1332,30 +1414,43 @@ function selectBookForSubmit(title) {
 function filterCategory(cat, btn) {
   currentFilter = cat;
   document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
+  if (btn) btn.classList.add('active');
+  
+  // 선택한 계열에 해당하는 도서만 필터링하여 1PAGE 뷰어와 하단 그리드 모두 즉시 갱신
+  const matched = ALL_BOOKS.map((b, idx) => ({ ...b, globalIndex: idx })).filter(b => {
+    if (cat === 'ALL') return true;
+    if (cat === '교사추가') return Boolean(b.isCustom);
+    return b.cat === cat;
+  });
+
+  if (matched.length > 0) {
+    renderOnePageByIndex(matched[0].globalIndex);
+  }
   renderBookList();
 }
 
 function renderBookList() {
-  const keyword = document.getElementById('searchInput').value.trim().toLowerCase();
-  const filtered = ALL_BOOKS.map((b, index) => ({ ...b, globalIndex: index })).filter(b => {
-    const matchCat = currentFilter === 'ALL' || 
-                     (currentFilter === '교사추가' ? b.isCustom : b.cat === currentFilter);
-    const subStr = (b.subjects || []).join(' ').toLowerCase();
-    const matchKey = !keyword || 
-                     b.title.toLowerCase().includes(keyword) || 
-                     b.subtitle.toLowerCase().includes(keyword) || 
-                     b.theme.toLowerCase().includes(keyword) ||
-                     subStr.includes(keyword);
-    return matchCat && matchKey;
-  });
+  const filtered = getCurrentFilteredBooks();
+  const catLabel = currentFilter === 'ALL' ? '전체' : currentFilter;
+  document.getElementById('bookCountLabel').textContent = `[${catLabel}] 표시 중: ${filtered.length}권 (전체 ${ALL_BOOKS.length}권)`;
 
-  document.getElementById('bookCountLabel').textContent = `표시 중: ${filtered.length}권 (전체 ${ALL_BOOKS.length}권)`;
+  const posLabel = document.getElementById('onePagePosLabel');
+  if (posLabel && filtered.length > 0) {
+    const pos = filtered.findIndex(item => item.globalIndex === currentBookIndex);
+    if (pos !== -1) {
+      posLabel.textContent = `[${catLabel}] 1PAGE 도서 카드 (${pos + 1} / ${filtered.length})`;
+    }
+  }
 
   const grid = document.getElementById('bookGrid');
+  if (filtered.length === 0) {
+    grid.innerHTML = `<div style="grid-column:1/-1; text-align:center; padding:2rem; background:white; border-radius:12px; border:1px solid var(--border); color:var(--muted);">해당 분류에 등록된 도서가 없습니다. 상단 [➕ 교사 도서 1PAGE 추가] 버튼으로 도서를 등록해 보세요.</div>`;
+    return;
+  }
+
   grid.innerHTML = filtered.map(b => `
     <div class="mini-card ${b.isCustom ? 'custom-book' : ''}" onclick="renderOnePageByIndex(${b.globalIndex}); window.scrollTo({top:0, behavior:'smooth'});">
-      <div class="num">${b.isCustom ? '⭐ 교사 추가 도서' : 'BOOK ' + b.id} · ${b.cat}</div>
+      <div class="num">${b.isCustom ? '⭐ 교사 추가' + (b.teacherName ? ' (' + b.teacherName + ')' : '') : 'BOOK ' + b.id} · ${b.cat}</div>
       <div class="title">《${b.title}》</div>
       <div class="desc">${b.subtitle}</div>
       <div class="tags">${(b.subjects || []).map(s => '#' + s).join(' ')}</div>
@@ -1369,9 +1464,10 @@ function renderBookList() {
 function openAddBookModal() { document.getElementById('addBookModal').classList.add('open'); }
 function closeAddBookModal() { document.getElementById('addBookModal').classList.remove('open'); }
 
-function handleAddCustomBook(e) {
+async function handleAddCustomBook(e) {
   e.preventDefault();
   const title = document.getElementById('newBookTitle').value.trim();
+  const teacherName = (document.getElementById('newBookTeacher').value || '').trim();
   const subtitle = document.getElementById('newBookSubtitle').value.trim();
   const theme = document.getElementById('newBookTheme').value.trim();
   const customSummary = document.getElementById('newBookSummary').value.trim();
@@ -1387,15 +1483,36 @@ function handleAddCustomBook(e) {
     isCustom: true,
     cat,
     title,
+    teacherName,
     subtitle,
     theme,
     customSummary,
     customImageUrl,
-    subjects: subjects.length > 0 ? subjects : ["국어·문학"]
+    subjects: subjects.length > 0 ? subjects : ["국어·문학"],
+    createdAt: new Date().toISOString().slice(0, 10)
   };
 
-  customBooks.push(newBook);
+  // 중복 제목이 있으면 업데이트하고 없으면 누적 추가
+  const existIdx = customBooks.findIndex(b => b.title === title);
+  if (existIdx >= 0) {
+    customBooks[existIdx] = { ...customBooks[existIdx], ...newBook };
+  } else {
+    customBooks.push(newBook);
+  }
   localStorage.setItem('teacherCustomBooks', JSON.stringify(customBooks));
+
+  // 구글 시트(Apps Script)가 연결되어 있으면 시트의 '교사추천도서' 탭에도 영구 누적 저장
+  const gasUrl = localStorage.getItem('gasUrl') || '';
+  if (gasUrl) {
+    try {
+      await fetch(gasUrl, {
+        method: 'POST',
+        body: JSON.stringify({ action: 'save_teacher_book', book: newBook })
+      });
+    } catch (err) {
+      console.warn("시트 누적 저장 백그라운드 오류:", err);
+    }
+  }
 
   loadAllBooks();
   populateDropdown();
@@ -1405,7 +1522,140 @@ function handleAddCustomBook(e) {
   document.getElementById('addBookForm').reset();
   closeAddBookModal();
   switchTab('viewer');
-  alert(`《${title}》 1PAGE 도서 카드가 생성되었습니다!`);
+  alert(`《${title}》 1PAGE 도서 카드가 누적 저장되었습니다! ([📚 타교사 자료] 버튼에서도 검색 가능합니다)`);
+}
+
+// =========================================================================
+// 타교사 자료 모달 (누적 교사 추천도서 교과별 분류 검색 및 시트 동기화)
+// =========================================================================
+function openSharedBooksModal() {
+  document.getElementById('sharedBooksModal').classList.add('open');
+  renderSharedBooksList();
+}
+
+function closeSharedBooksModal() {
+  document.getElementById('sharedBooksModal').classList.remove('open');
+}
+
+function renderSharedBooksList() {
+  const subFilter = document.getElementById('sharedSubjectFilter').value;
+  const kw = document.getElementById('sharedSearchInput').value.trim().toLowerCase();
+  const customBooks = JSON.parse(localStorage.getItem('teacherCustomBooks') || '[]');
+
+  const filtered = customBooks.filter(b => {
+    const matchSub = subFilter === 'ALL' || (b.subjects && b.subjects.includes(subFilter));
+    const matchKw = !kw ||
+      b.title.toLowerCase().includes(kw) ||
+      (b.subtitle || '').toLowerCase().includes(kw) ||
+      (b.theme || '').toLowerCase().includes(kw) ||
+      (b.teacherName || '').toLowerCase().includes(kw);
+    return matchSub && matchKw;
+  });
+
+  document.getElementById('sharedCountLabel').textContent = `검색 결과: ${filtered.length}권 (전체 누적 ${customBooks.length}권)`;
+  const container = document.getElementById('sharedBooksContainer');
+
+  if (filtered.length === 0) {
+    container.innerHTML = `<div style="grid-column:1/-1; text-align:center; padding:2rem; color:var(--muted); font-size:0.9rem;">
+      조건에 맞는 교사 추천도서가 없습니다.<br>상단 <strong>[➕ 교사 도서 1PAGE 추가]</strong>로 도서를 등록하거나 <strong>[🔄 시트에서 최신 자료 불러오기]</strong>를 눌러주세요.
+    </div>`;
+    return;
+  }
+
+  container.innerHTML = filtered.map(b => {
+    const globalIdx = ALL_BOOKS.findIndex(item => item.title === b.title);
+    return `
+      <div class="mini-card custom-book" onclick="openSharedBookDetail(${globalIdx})">
+        <div class="num">⭐ ${b.teacherName ? b.teacherName + ' 추천' : '교사 추천도서'} · ${b.cat}</div>
+        <div class="title">《${b.title}》</div>
+        <div class="desc">${b.subtitle}</div>
+        <div class="tags">${(b.subjects || []).map(s => '#' + s).join(' ')}</div>
+      </div>
+    `;
+  }).join('');
+}
+
+function openSharedBookDetail(globalIdx) {
+  closeSharedBooksModal();
+  switchTab('viewer');
+  // 전체 도서 필터로 전환 후 해당 도서 1PAGE 카드 열기
+  currentFilter = 'ALL';
+  document.querySelectorAll('.filter-btn').forEach((btn, i) => btn.classList.toggle('active', i === 0));
+  renderBookList();
+  if (globalIdx >= 0) {
+    renderOnePageByIndex(globalIdx);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+}
+
+async function syncSharedBooksFromSheet() {
+  const gasUrl = localStorage.getItem('gasUrl') || '';
+  if (!gasUrl) {
+    alert("연결된 Google Apps Script URL이 없어 현재 기기에 누적 저장된 도서 목록을 표시합니다.");
+    renderSharedBooksList();
+    return;
+  }
+  try {
+    const response = await fetch(gasUrl, {
+      method: 'POST',
+      body: JSON.stringify({ action: 'get_teacher_books' })
+    });
+    const result = await response.json();
+    if (result.status === 'success' && Array.isArray(result.books)) {
+      const localBooks = JSON.parse(localStorage.getItem('teacherCustomBooks') || '[]');
+      const mergedMap = new Map();
+      localBooks.forEach(b => mergedMap.set(b.title, b));
+      result.books.forEach(b => mergedMap.set(b.title, { ...b, isCustom: true }));
+      const mergedList = Array.from(mergedMap.values()).map((b, i) => ({ ...b, id: 101 + i, isCustom: true }));
+      localStorage.setItem('teacherCustomBooks', JSON.stringify(mergedList));
+      loadAllBooks();
+      populateDropdown();
+      renderBookList();
+      renderSharedBooksList();
+      alert(`구글 시트에서 누적된 교사 추천도서 총 ${mergedList.length}권을 불러왔습니다!`);
+    }
+  } catch (err) {
+    alert("시트에서 추천도서를 불러오는 중 오류가 발생했습니다: " + err);
+  }
+}
+
+function exportSharedBooksJson() {
+  const customBooks = JSON.parse(localStorage.getItem('teacherCustomBooks') || '[]');
+  if (customBooks.length === 0) {
+    alert("내보낼 교사 추천도서가 아직 없습니다.");
+    return;
+  }
+  const blob = new Blob([JSON.stringify(customBooks, null, 2)], { type: 'application/json' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `교사추천도서_누적목록_${new Date().toISOString().slice(0,10)}.json`;
+  a.click();
+}
+
+function importSharedBooksJson(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = function(ev) {
+    try {
+      const imported = JSON.parse(ev.target.result);
+      if (!Array.isArray(imported)) throw new Error("올바른 JSON 배열 형식이 아닙니다.");
+      const localBooks = JSON.parse(localStorage.getItem('teacherCustomBooks') || '[]');
+      const mergedMap = new Map();
+      localBooks.forEach(b => mergedMap.set(b.title, b));
+      imported.forEach(b => mergedMap.set(b.title, { ...b, isCustom: true }));
+      const mergedList = Array.from(mergedMap.values()).map((b, i) => ({ ...b, id: 101 + i, isCustom: true }));
+      localStorage.setItem('teacherCustomBooks', JSON.stringify(mergedList));
+      loadAllBooks();
+      populateDropdown();
+      renderBookList();
+      renderSharedBooksList();
+      alert(`총 ${mergedList.length}권의 교사 추천도서가 누적 병합되었습니다!`);
+    } catch (err) {
+      alert("파일 불러오기 오류: " + err.message);
+    }
+  };
+  reader.readAsText(file);
 }
 
 function clearTeacherBooks() {
@@ -1633,9 +1883,16 @@ function loadSavedSettings() {
   if (params.get('sheet')) {
     localStorage.setItem('sheetUrl', params.get('sheet'));
   }
-  // 학생 전용 링크(?mode=student 또는 ?gas=...)로 접속 시 교사용 관리 버튼 전체 숨김
-  if (params.get('mode') === 'student' || params.get('gas')) {
+  // 학생 전용 링크(?mode=student)로 접속 시 교사용 관리 버튼 전체 숨김
+  if (params.get('mode') === 'student') {
     document.body.classList.add('student-mode');
+  } else {
+    // 타 교사 사이트에는 '⚙️ 교사 설정' 버튼이 나타나지 않도록 기본 숨김
+    // (원작자/관리자 모드: 주소 뒤에 ?admin=1 을 붙이거나 로컬 파일로 열 때만 표시)
+    const isAdmin = params.get('admin') === '1' || window.location.protocol === 'file:';
+    if (!isAdmin) {
+      document.body.classList.add('peer-teacher-mode');
+    }
   }
   document.getElementById('gasUrlInput').value = localStorage.getItem('gasUrl') || '';
   document.getElementById('sheetUrlInput').value = localStorage.getItem('sheetUrl') || '';
