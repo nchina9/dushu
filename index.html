@@ -334,6 +334,20 @@
     border: 1px solid var(--border);
     font-size: 0.85rem;
   }
+  .student-link-box {
+    background: #eff6ff;
+    border: 1.5px solid #93c5fd;
+    border-radius: 10px;
+    padding: 0.85rem 1rem;
+    margin-bottom: 1rem;
+    word-break: break-all;
+  }
+  .student-link-box a {
+    color: #1d4ed8;
+    font-weight: 700;
+    font-size: 0.9rem;
+    text-decoration: underline;
+  }
 
   footer {
     text-align: center;
@@ -360,7 +374,7 @@
     <div class="nav-btns">
       <button class="btn btn-tab active" id="nav-viewer" onclick="switchTab('viewer')">📖 도서 1PAGE 소개</button>
       <button class="btn btn-tab" id="nav-submit" onclick="switchTab('submit')">✍️ 과목별 추천 & 소감 제출</button>
-      <button class="btn" style="background:#06b6d4; color:#0f172a;" onclick="openQrModal()">📱 학생 배포용 QR</button>
+      <button class="btn" style="background:#06b6d4; color:#0f172a;" onclick="openQrModal()">📱 학생 배포용 QR·링크</button>
       <button class="btn btn-add" onclick="openAddBookModal()">➕ 교사 도서 1PAGE 추가</button>
       <button class="btn btn-copy" onclick="copyTeacherSheet()" title="타 교사용 사본 만들기">📑 시트 사본 만들기</button>
       <button class="btn btn-setting" onclick="openSettings()">⚙️ 교사 설정</button>
@@ -444,7 +458,7 @@
             <span id="recPanelTitle">📚 선택한 과목과 연관된 추천 도서</span>
             <span id="recCountBadge" style="font-size:0.8rem; background:#dbeafe; padding:2px 8px; border-radius:12px;"></span>
           </h4>
-          <p style="font-size:0.8rem; color:#334155; margin-bottom:0.6rem;">아래 추천 도서 카드를 클릭하면 바로 선택됩니다. (1PAGE 소개를 보려면 우측 [소개보기] 클릭)</p>
+          <p style="font-size:0.8rem; color:#334155; margin-bottom:0.6rem;">아래 추천 도서 카드를 클릭하면 바로 선택됩니다.</p>
           <div id="recChipList" class="rec-chip-list"></div>
         </div>
 
@@ -580,24 +594,31 @@
   </div>
 </div>
 
-<!-- 모달 3: 학생 배포용 QR 코드 모달 -->
+<!-- 모달 3: 학생 배포용 QR 코드 및 직접 접속 링크 모달 -->
 <div id="qrModal" class="modal">
   <div class="modal-content" style="text-align:center;">
-    <h3 style="margin-bottom:0.4rem; color:var(--primary);">📱 학생 배포용 접속 QR 코드</h3>
+    <h3 style="margin-bottom:0.4rem; color:var(--primary);">📱 학생 배포용 접속 QR 코드 & 링크</h3>
     <p style="font-size:0.85rem; color:var(--muted); margin-bottom:1rem;">
-      학생들이 스마트폰이나 태블릿 카메라로 아래 QR 코드를 스캔하면 즉시 접속하여 도서를 선택하고 소감문을 작성할 수 있습니다.
+      학생들이 QR 코드를 스캔하거나 아래 <strong>학생 접속용 링크</strong>를 클릭하면 즉시 접속하여 소감문을 제출할 수 있습니다.
     </p>
-    <div style="background:#f8fafc; border:1px solid var(--border); border-radius:12px; padding:1.2rem; display:inline-block; margin-bottom:1rem;">
-      <img id="qrCodeImg" src="" alt="학생 배포용 QR 코드" style="width:220px; height:220px; display:block; margin:0 auto;">
+    <div style="background:#f8fafc; border:1px solid var(--border); border-radius:12px; padding:1.1rem; display:inline-block; margin-bottom:0.9rem;">
+      <img id="qrCodeImg" src="" alt="학생 배포용 QR 코드" style="width:210px; height:210px; display:block; margin:0 auto;">
     </div>
+
+    <!-- QR 바로 아래 학생이 보는 클릭 가능한 링크 주소 표시 -->
+    <div class="student-link-box" style="text-align:left;">
+      <div style="font-size:0.8rem; font-weight:700; color:#1e3a8a; margin-bottom:4px;">🔗 학생 접속용 링크 (클릭 시 새 창 이동 / 공유용):</div>
+      <a id="studentDirectLink" href="#" target="_blank" rel="noopener noreferrer"></a>
+    </div>
+
     <div class="form-group" style="text-align:left;">
-      <label style="font-size:0.84rem;">배포 URL 확인 및 수정 (GitHub Pages / 웹 앱 주소)</label>
+      <label style="font-size:0.84rem;">배포 URL 확인 및 수정 (GitHub Pages 주소 등)</label>
       <div style="display:flex; gap:0.4rem;">
         <input type="url" id="qrTargetUrl" class="form-control" style="font-size:0.85rem;" oninput="updateQrImage()">
-        <button type="button" class="btn" style="background:#e2e8f0; white-space:nowrap;" onclick="copyQrUrl()">주소 복사</button>
+        <button type="button" class="btn" style="background:#e2e8f0; white-space:nowrap;" onclick="copyQrUrl()">링크 복사</button>
       </div>
       <small id="qrLocalWarning" style="color:#b45309; display:none; margin-top:4px;">
-        ⚠️ 현재 내 컴퓨터 파일(file://)로 열려 있습니다. GitHub Pages 등에 올린 후 해당 <code>https://...</code> 주소를 입력하면 학생들이 접속할 수 있는 QR이 생성됩니다.
+        ⚠️ 현재 로컬 파일(file://)로 열려 있습니다. <code>https://nchina9.github.io/dushu/</code> 주소를 입력하면 학생 배포용 QR과 링크가 자동 생성됩니다.
       </small>
     </div>
     <div style="display:flex; justify-content:center; gap:0.6rem; margin-top:1rem;">
@@ -747,7 +768,6 @@ let ALL_BOOKS = [];
 let currentBookIndex = 0;
 let currentFilter = 'ALL';
 
-// 초기 로드
 window.addEventListener('DOMContentLoaded', () => {
   loadAllBooks();
   populateDropdown();
@@ -761,7 +781,6 @@ function loadAllBooks() {
   ALL_BOOKS = [...DEFAULT_BOOKS_DATA, ...customBooks];
 }
 
-// 탭 전환
 function switchTab(tabName) {
   document.querySelectorAll('.section').forEach(el => el.classList.remove('active'));
   document.querySelectorAll('.btn-tab').forEach(el => el.classList.remove('active'));
@@ -769,7 +788,6 @@ function switchTab(tabName) {
   document.getElementById(`nav-${tabName}`).classList.add('active');
 }
 
-// ㄱㄴㄷ순 드롭다운 채우기
 function populateDropdown() {
   const select = document.getElementById('bookSelect');
   const sortedBooks = [...ALL_BOOKS].sort((a, b) => a.title.localeCompare(b.title, 'ko'));
@@ -794,13 +812,11 @@ function toggleCustomBook() {
     group.style.display = 'none';
     input.required = false;
   }
-  // 추천 칩 선택 표시 동기화
   document.querySelectorAll('.rec-chip').forEach(chip => {
     chip.classList.toggle('selected', chip.dataset.title === val);
   });
 }
 
-// 학생 과목 선택 시 연관 도서 자동 분류 및 제시
 function handleSubjectChange() {
   const subVal = document.getElementById('subjectSelect').value;
   const customGroup = document.getElementById('customSubjectGroup');
@@ -825,14 +841,12 @@ function handleSubjectChange() {
   renderSubjectRecommendations(subVal, matched);
 }
 
-// 직접 입력한 과목명 키워드 기반 연관 도서 분류
 function filterBooksByCustomSubject() {
   const kw = document.getElementById('customSubjectInput').value.trim().toLowerCase();
   if (!kw) {
     document.getElementById('subjectRecommendPanel').style.display = 'none';
     return;
   }
-  // 키워드 매핑 보조
   let targetTag = "";
   if (kw.includes("중국") || kw.includes("한문") || kw.includes("외국어") || kw.includes("세계")) targetTag = "중국어·세계문화";
   else if (kw.includes("국어") || kw.includes("문학") || kw.includes("독서") || kw.includes("작문")) targetTag = "국어·문학";
@@ -883,7 +897,6 @@ function pickRecommendedBook(title) {
   toggleCustomBook();
 }
 
-// 한 장 그림 SVG 생성기
 function generateBookSVG(book) {
   const colors = {
     "인문사회": { bg: "#eff6ff", main: "#1d4ed8", sub: "#60a5fa", accent: "#f59e0b" },
@@ -931,7 +944,6 @@ function generateBookSVG(book) {
   `;
 }
 
-// 1PAGE 단일 도서 상세 렌더링
 function renderOnePageByIndex(idx) {
   if (idx < 0) idx = ALL_BOOKS.length - 1;
   if (idx >= ALL_BOOKS.length) idx = 0;
@@ -1032,9 +1044,7 @@ function renderBookList() {
   `).join('');
 }
 
-// =========================================================================
 // 교사 맞춤형 도서 1PAGE 추가 모달 제어
-// =========================================================================
 function openAddBookModal() { document.getElementById('addBookModal').classList.add('open'); }
 function closeAddBookModal() { document.getElementById('addBookModal').classList.remove('open'); }
 
@@ -1085,9 +1095,7 @@ function clearTeacherBooks() {
   closeAddBookModal();
 }
 
-// =========================================================================
 // 학생 폼 검증, AI 피드백 선행(보완 후 제출) 및 피드백 없이 즉시 제출 로직
-// =========================================================================
 let cachedAiResult = { saenggibu: '', inquiry: '' };
 
 function collectAndValidateForm() {
@@ -1115,7 +1123,6 @@ function handleFormSubmit(e) {
   e.preventDefault();
 }
 
-// 1) AI 피드백 먼저 받기 (구글 시트 저장 전, 학생이 피드백을 보고 내용을 추가할 수 있도록 단계 분리)
 async function requestAiFeedback() {
   const baseData = collectAndValidateForm();
   if (!baseData) return;
@@ -1156,7 +1163,6 @@ async function requestAiFeedback() {
   }
 }
 
-// 2) 최종 구글 시트 제출 (withAiFeedback = true면 AI 피드백 + 추가 작성 내용 포함, false면 피드백 없이 원문 그대로 제출)
 async function submitFinalToSheet(withAiFeedback) {
   const baseData = collectAndValidateForm();
   if (!baseData) return;
@@ -1227,7 +1233,7 @@ function showAIResult(saenggibu, inquiry) {
 }
 
 // =========================================================================
-// 학생 배포용 QR 코드 모달 제어 (URL 파라미터로 gas/sheet 자동 전달 지원)
+// 학생 배포용 QR 코드 및 직접 접속 링크 모달 제어
 // =========================================================================
 function openQrModal() {
   const modal = document.getElementById('qrModal');
@@ -1240,11 +1246,11 @@ function openQrModal() {
 
   if (baseUrl.startsWith('file://')) {
     warning.style.display = 'block';
+    baseUrl = 'https://nchina9.github.io/dushu/';
   } else {
     warning.style.display = 'none';
   }
 
-  // 선생님이 설정한 gasUrl이 있으면 QR 링크에 자동 포함시켜 학생 기기에서 별도 설정 없이 바로 제출 가능하게 함
   const params = new URLSearchParams();
   if (gasUrl) params.set('gas', gasUrl);
   if (sheetUrl) params.set('sheet', sheetUrl);
@@ -1260,16 +1266,20 @@ function closeQrModal() {
 }
 
 function updateQrImage() {
-  const targetUrl = document.getElementById('qrTargetUrl').value.trim() || window.location.href;
+  const targetUrl = document.getElementById('qrTargetUrl').value.trim() || 'https://nchina9.github.io/dushu/';
   const qrApi = `https://api.qrserver.com/v1/create-qr-code/?size=240x240&margin=10&data=${encodeURIComponent(targetUrl)}`;
   document.getElementById('qrCodeImg').src = qrApi;
+
+  const linkEl = document.getElementById('studentDirectLink');
+  linkEl.href = targetUrl;
+  linkEl.textContent = targetUrl;
 }
 
 function copyQrUrl() {
   const urlInput = document.getElementById('qrTargetUrl');
   urlInput.select();
   navigator.clipboard.writeText(urlInput.value).then(() => {
-    alert("학생 배포용 접속 주소가 클립보드에 복사되었습니다!");
+    alert("학생 배포용 접속 링크가 클립보드에 복사되었습니다!");
   });
 }
 
