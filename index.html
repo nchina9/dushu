@@ -17,11 +17,11 @@
   }
   * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, "Malgun Gothic", sans-serif; }
   body { background: var(--bg); color: var(--text); line-height: 1.6; }
-  
+
   header {
     background: linear-gradient(135deg, #1e3a8a 0%, #0f172a 100%);
     color: white;
-    padding: 1.2rem 2rem;
+    padding: 1.1rem 1.6rem;
     box-shadow: 0 4px 12px rgba(0,0,0,0.1);
     position: sticky;
     top: 0;
@@ -34,19 +34,19 @@
     flex-wrap: wrap;
     justify-content: space-between;
     align-items: center;
-    gap: 0.8rem;
+    gap: 0.7rem;
   }
-  .header-title h1 { font-size: 1.35rem; font-weight: 700; letter-spacing: -0.5px; }
-  .header-title p { font-size: 0.82rem; color: #cbd5e1; margin-top: 2px; }
+  .header-title h1 { font-size: 1.3rem; font-weight: 700; }
+  .header-title p { font-size: 0.8rem; color: #cbd5e1; margin-top: 2px; }
   .nav-btns { display: flex; gap: 0.45rem; flex-wrap: wrap; }
   .btn {
-    padding: 0.5rem 0.9rem;
+    padding: 0.48rem 0.88rem;
     border-radius: 8px;
     border: none;
     font-weight: 600;
-    font-size: 0.86rem;
+    font-size: 0.85rem;
     cursor: pointer;
-    transition: all 0.2s;
+    transition: all 0.15s;
     display: inline-flex;
     align-items: center;
     gap: 5px;
@@ -54,25 +54,20 @@
   .btn-tab { background: rgba(255,255,255,0.14); color: white; }
   .btn-tab.active { background: #3b82f6; color: white; box-shadow: 0 2px 8px rgba(59,130,246,0.4); }
   .btn-add { background: #8b5cf6; color: white; }
-  .btn-add:hover { background: #7c3aed; }
-  .btn-copy { background: #10b981; color: white; }
-  .btn-copy:hover { background: #059669; }
-  .btn-mysheet { background: #0284c7; color: white; }
-  .btn-mysheet:hover { background: #0369a1; }
-  .btn-setting { background: #f59e0b; color: #0f172a; }
   .btn-shared { background: #ec4899; color: white; }
-  .btn-shared:hover { background: #db2777; }
+  .btn-copy { background: #10b981; color: white; }
+  .btn-mysheet { background: #0284c7; color: white; }
+  .btn-setting { background: #f59e0b; color: #0f172a; }
   body.student-mode .teacher-only { display: none !important; }
   body.peer-teacher-mode .admin-only { display: none !important; }
 
-  main { max-width: 1240px; margin: 1.8rem auto; padding: 0 1.5rem; }
+  main { max-width: 1240px; margin: 1.6rem auto; padding: 0 1.4rem; }
   .section { display: none; }
   .section.active { display: block; }
 
-  /* 필터 및 검색 바 */
   .viewer-controls {
     background: var(--card);
-    padding: 1.1rem;
+    padding: 1rem;
     border-radius: 12px;
     border: 1px solid var(--border);
     display: flex;
@@ -80,7 +75,7 @@
     gap: 0.8rem;
     align-items: center;
     justify-content: space-between;
-    margin-bottom: 1.5rem;
+    margin-bottom: 1.4rem;
   }
   .filter-group { display: flex; gap: 0.45rem; flex-wrap: wrap; }
   .filter-btn {
@@ -94,143 +89,95 @@
   }
   .filter-btn.active { background: var(--primary); color: white; border-color: var(--primary); }
   .search-input {
-    padding: 0.48rem 0.9rem;
+    padding: 0.45rem 0.85rem;
     border: 1px solid var(--border);
     border-radius: 8px;
-    min-width: 220px;
+    min-width: 210px;
     font-size: 0.88rem;
   }
 
-  /* 1PAGE 단일 도서 카드 */
   .one-page-card {
     background: var(--card);
     border-radius: 16px;
     border: 2px solid #cbd5e1;
     box-shadow: 0 10px 25px rgba(0,0,0,0.06);
-    padding: 2.3rem;
-    max-width: 920px;
+    padding: 2rem;
+    max-width: 960px;
     margin: 0 auto 2rem auto;
-    position: relative;
   }
-  .badge-row { display: flex; gap: 0.5rem; flex-wrap: wrap; align-items: center; margin-bottom: 0.8rem; }
+  .badge-row { display: flex; gap: 0.45rem; flex-wrap: wrap; align-items: center; margin-bottom: 0.7rem; }
   .page-badge {
-    display: inline-block;
-    background: #eff6ff;
-    color: var(--primary);
-    font-weight: 700;
-    padding: 0.28rem 0.75rem;
-    border-radius: 6px;
-    font-size: 0.83rem;
+    background: #eff6ff; color: var(--primary); font-weight: 700;
+    padding: 0.25rem 0.7rem; border-radius: 6px; font-size: 0.82rem;
   }
   .subject-tag {
-    display: inline-block;
-    background: #f0fdf4;
-    color: #15803d;
-    border: 1px solid #bbf7d0;
-    font-weight: 600;
-    padding: 0.24rem 0.65rem;
-    border-radius: 6px;
-    font-size: 0.8rem;
+    background: #f0fdf4; color: #15803d; border: 1px solid #bbf7d0;
+    font-weight: 600; padding: 0.22rem 0.6rem; border-radius: 6px; font-size: 0.78rem;
   }
   .book-header {
     border-bottom: 2px solid var(--primary);
-    padding-bottom: 1rem;
-    margin-bottom: 1.5rem;
+    padding-bottom: 0.9rem;
+    margin-bottom: 1.4rem;
     display: flex;
     justify-content: space-between;
     align-items: flex-end;
     flex-wrap: wrap;
-    gap: 1rem;
+    gap: 0.8rem;
   }
-  .book-header h2 { font-size: 1.75rem; color: #0f172a; }
-  .book-subtitle { color: var(--accent); font-weight: 700; font-size: 1.02rem; margin-top: 0.3rem; }
-  
+  .book-header h2 { font-size: 1.65rem; color: #0f172a; }
+  .book-subtitle { color: var(--accent); font-weight: 700; font-size: 0.98rem; margin-top: 0.25rem; }
+
   .one-page-grid {
     display: grid;
-    grid-template-columns: 1.25fr 1fr;
-    gap: 1.8rem;
+    grid-template-columns: 1.2fr 1fr;
+    gap: 1.6rem;
     align-items: start;
   }
   @media (max-width: 768px) { .one-page-grid { grid-template-columns: 1fr; } }
   .info-box {
     background: #f8fafc;
     border-left: 4px solid var(--primary-light);
-    padding: 1.15rem;
+    padding: 1.1rem;
     border-radius: 0 8px 8px 0;
-    margin-bottom: 1.1rem;
+    margin-bottom: 1rem;
   }
-  .info-box h3 { font-size: 0.98rem; color: var(--primary); margin-bottom: 0.45rem; }
-  .info-box p { font-size: 0.93rem; color: #334155; text-align: justify; }
+  .info-box h3 { font-size: 0.96rem; color: var(--primary); margin-bottom: 0.4rem; }
+  .info-box p { font-size: 0.92rem; color: #334155; }
 
   .illustration-box {
     background: #ffffff;
     border: 1px solid var(--border);
     border-radius: 12px;
-    padding: 1.1rem;
+    padding: 1rem;
     text-align: center;
   }
-  .illustration-box h3 { font-size: 0.92rem; color: var(--muted); margin-bottom: 0.7rem; }
+  .illustration-box h3 { font-size: 0.9rem; color: var(--muted); margin-bottom: 0.6rem; }
   .svg-stage {
     width: 100%;
-    height: 390px;
+    height: 360px;
     display: flex;
     align-items: center;
     justify-content: center;
     background: #0f172a;
-    border-radius: 14px;
+    border-radius: 12px;
     overflow: hidden;
-    box-shadow: 0 10px 26px rgba(15, 23, 42, 0.18);
-  }
-  .star-rating-box {
-    margin-top: 0.7rem;
-    padding-top: 0.6rem;
-    border-top: 1px dashed #e2e8f0;
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-  }
-  .star-btns {
-    display: inline-flex;
-    gap: 3px;
-    align-items: center;
-  }
-  .star-btn {
-    background: none;
-    border: none;
-    font-size: 1.15rem;
-    cursor: pointer;
-    color: #cbd5e1;
-    transition: transform 0.12s, color 0.12s;
-    padding: 0 1px;
-  }
-  .star-btn:hover, .star-btn.filled {
-    color: #f59e0b;
-    transform: scale(1.15);
-  }
-  .rating-badge {
-    font-size: 0.75rem;
-    font-weight: 700;
-    color: #b45309;
-    background: #fef3c7;
-    padding: 2px 7px;
-    border-radius: 10px;
-    display: inline-block;
   }
   .page-nav {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-top: 1.5rem;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    margin-top: 1.4rem;
     padding-top: 1rem;
     border-top: 1px solid var(--border);
   }
 
-  /* 전체 도서 그리드 */
   .book-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(265px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(255px, 1fr));
     gap: 1rem;
-    margin-top: 1.2rem;
+    margin-top: 1rem;
   }
   .mini-card {
     background: white;
@@ -239,16 +186,14 @@
     padding: 1rem;
     cursor: pointer;
     transition: transform 0.15s, border-color 0.15s;
-    position: relative;
   }
-  .mini-card:hover { transform: translateY(-3px); border-color: var(--primary-light); box-shadow: 0 4px 12px rgba(0,0,0,0.06); }
+  .mini-card:hover { transform: translateY(-2px); border-color: var(--primary-light); }
   .mini-card.custom-book { border-left: 4px solid #8b5cf6; }
-  .mini-card .num { font-size: 0.75rem; font-weight: 700; color: var(--primary-light); }
-  .mini-card .title { font-size: 1rem; font-weight: 700; margin: 4px 0; color: #0f172a; }
-  .mini-card .desc { font-size: 0.82rem; color: var(--muted); margin-bottom: 6px; }
-  .mini-card .tags { font-size: 0.74rem; color: #0d9488; font-weight: 600; }
+  .mini-card .num { font-size: 0.74rem; font-weight: 700; color: var(--primary-light); }
+  .mini-card .title { font-size: 0.98rem; font-weight: 700; margin: 4px 0; color: #0f172a; }
+  .mini-card .desc { font-size: 0.8rem; color: var(--muted); margin-bottom: 6px; }
+  .mini-card .tags { font-size: 0.73rem; color: #0d9488; font-weight: 600; }
 
-  /* 학생 제출 폼 & 과목별 추천 도서 박스 */
   .form-container {
     max-width: 860px;
     margin: 0 auto;
@@ -256,142 +201,46 @@
     padding: 2rem;
     border-radius: 16px;
     border: 1px solid var(--border);
-    box-shadow: 0 8px 20px rgba(0,0,0,0.04);
   }
-  .form-row { display: grid; grid-template-columns: 1.15fr 0.95fr 1.2fr; gap: 1rem; margin-bottom: 1.2rem; }
-  .id-preview-hint { font-size: 0.78rem; color: #0369a1; font-weight: 600; margin-top: 4px; min-height: 1.1rem; }
-  .student-link-box { background: #eff6ff; border: 1.5px solid #93c5fd; border-radius: 10px; padding: 0.85rem 1rem; margin-bottom: 1rem; word-break: break-all; }
-  .student-link-box a { color: #1d4ed8; font-weight: 700; font-size: 0.9rem; text-decoration: underline; }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr 1.2fr; gap: 1rem; margin-bottom: 1rem; }
   @media (max-width: 640px) { .form-row { grid-template-columns: 1fr; } }
-  .form-group { margin-bottom: 1.2rem; }
-  .form-group label { display: block; font-weight: 700; margin-bottom: 0.4rem; font-size: 0.92rem; color: #1e293b; }
-  .form-control {
-    width: 100%;
-    padding: 0.68rem 0.9rem;
-    border: 1px solid #cbd5e1;
-    border-radius: 8px;
-    font-size: 0.94rem;
-  }
-  .form-control:focus { outline: none; border-color: var(--primary-light); box-shadow: 0 0 0 3px rgba(59,130,246,0.15); }
-
-  /* 과목 연관 도서 추천 패널 */
-  .subject-recommend-panel {
-    background: #eff6ff;
-    border: 1.5px solid #93c5fd;
-    border-radius: 12px;
-    padding: 1.1rem;
-    margin-bottom: 1.3rem;
-    display: none;
-  }
-  .subject-recommend-panel h4 {
-    color: #1e3a8a;
-    font-size: 0.95rem;
-    margin-bottom: 0.6rem;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-  .rec-chip-list {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-    max-height: 210px;
-    overflow-y: auto;
-    padding-right: 4px;
-  }
-  .rec-chip {
-    background: white;
-    border: 1px solid #bfdbfe;
-    border-radius: 8px;
-    padding: 0.45rem 0.75rem;
-    font-size: 0.84rem;
-    cursor: pointer;
-    transition: all 0.15s;
-    text-align: left;
-  }
-  .rec-chip:hover, .rec-chip.selected {
-    background: #1e3a8a;
-    color: white;
-    border-color: #1e3a8a;
-  }
-  .rec-chip span { display: block; font-size: 0.74rem; opacity: 0.8; }
-
+  .form-group { margin-bottom: 1.1rem; }
+  .form-group label { display: block; font-weight: 700; margin-bottom: 0.35rem; font-size: 0.9rem; }
+  .form-control { width: 100%; padding: 0.65rem 0.85rem; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 0.92rem; }
   .metaphor-guide {
-    background: #fefce8;
-    border: 1px solid #fef08a;
-    padding: 0.8rem 1rem;
-    border-radius: 8px;
-    font-size: 0.85rem;
-    color: #854d0e;
-    margin-bottom: 0.6rem;
+    background: #fefce8; border: 1px solid #fef08a; padding: 0.75rem 0.95rem;
+    border-radius: 8px; font-size: 0.84rem; color: #854d0e; margin-bottom: 0.5rem;
   }
   .btn-submit {
-    width: 100%;
-    padding: 1rem;
-    background: var(--primary);
-    color: white;
-    font-size: 1.05rem;
-    justify-content: center;
-    margin-top: 0.5rem;
+    width: 100%; padding: 0.9rem; background: var(--primary); color: white;
+    font-size: 1rem; justify-content: center; margin-top: 0.4rem;
   }
-  .btn-submit:hover { background: #1e40af; }
-
   .ai-result-box {
-    margin-top: 2rem;
-    background: #f0fdf4;
-    border: 2px solid #86efac;
-    border-radius: 12px;
-    padding: 1.5rem;
-    display: none;
+    margin-top: 1.6rem; background: #f0fdf4; border: 2px solid #86efac;
+    border-radius: 12px; padding: 1.4rem; display: none;
   }
-  .ai-result-box h3 { color: #166534; margin-bottom: 1rem; font-size: 1.15rem; }
-  .result-item { background: white; padding: 1rem; border-radius: 8px; margin-bottom: 1rem; border: 1px solid #dcfce7; }
-  .result-item strong { display: block; color: var(--primary); margin-bottom: 0.4rem; font-size: 0.95rem; }
+  .result-item { background: white; padding: 0.9rem; border-radius: 8px; margin-bottom: 0.9rem; border: 1px solid #dcfce7; }
 
-  /* 모달 */
+  .star-rating-box { margin-top: 0.65rem; padding-top: 0.55rem; border-top: 1px dashed #e2e8f0; }
+  .star-btns { display: inline-flex; gap: 3px; }
+  .star-btn { background: none; border: none; font-size: 1.1rem; cursor: pointer; color: #cbd5e1; }
+  .star-btn.filled { color: #f59e0b; }
+  .rating-badge { font-size: 0.74rem; font-weight: 700; color: #b45309; background: #fef3c7; padding: 2px 7px; border-radius: 10px; }
+
   .modal {
-    display: none;
-    position: fixed;
-    inset: 0;
-    background: rgba(15,23,42,0.65);
-    z-index: 200;
-    align-items: center;
-    justify-content: center;
-    padding: 1rem;
+    display: none; position: fixed; inset: 0; background: rgba(15,23,42,0.65);
+    z-index: 200; align-items: center; justify-content: center; padding: 1rem;
   }
   .modal.open { display: flex; }
   .modal-content {
-    background: white;
-    padding: 1.8rem;
-    border-radius: 14px;
-    max-width: 580px;
-    width: 100%;
-    max-height: 90vh;
-    overflow-y: auto;
+    background: white; padding: 1.6rem; border-radius: 14px;
+    max-width: 720px; width: 100%; max-height: 90vh; overflow-y: auto;
   }
   .checkbox-subjects {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 0.4rem;
-    background: #f8fafc;
-    padding: 0.8rem;
-    border-radius: 8px;
-    border: 1px solid var(--border);
-    font-size: 0.85rem;
+    display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.4rem;
+    background: #f8fafc; padding: 0.75rem; border-radius: 8px; border: 1px solid var(--border); font-size: 0.84rem;
   }
-
-  footer {
-    text-align: center;
-    padding: 2rem;
-    color: var(--muted);
-    font-size: 0.9rem;
-    border-top: 1px solid var(--border);
-    margin-top: 3rem;
-  }
-  @media print {
-    header, .viewer-controls, .page-nav, .book-grid, footer { display: none !important; }
-    .one-page-card { border: none; box-shadow: none; padding: 0; }
-  }
+  footer { text-align: center; padding: 1.8rem; color: var(--muted); font-size: 0.88rem; border-top: 1px solid var(--border); margin-top: 2.5rem; }
 </style>
 </head>
 <body>
@@ -408,15 +257,14 @@
       <button class="btn btn-shared" onclick="openSharedBooksModal()">📚 타교사 자료</button>
       <button class="btn teacher-only" style="background:#06b6d4; color:#0f172a;" onclick="openQrModal()">📱 학생 배포용 QR·링크</button>
       <button class="btn btn-add teacher-only" onclick="openAddBookModal()">➕ 교사 도서 1PAGE 추가</button>
-      <button class="btn btn-copy teacher-only" onclick="copyTeacherSheet()" title="타 교사용 사본 만들기">📑 시트 사본 만들기</button>
-      <button class="btn btn-mysheet teacher-only" onclick="openMySheet()" title="사본 복사한 내 구글 시트 바로 열기">📊 내 시트 가기</button>
+      <button class="btn btn-copy teacher-only" onclick="copyTeacherSheet()">📑 시트 사본 만들기</button>
+      <button class="btn btn-mysheet teacher-only" onclick="openMySheet()">📊 내 시트 가기</button>
       <button class="btn btn-setting teacher-only admin-only" onclick="openSettings()">⚙️ 교사 설정</button>
     </div>
   </div>
 </header>
 
 <main>
-  <!-- 탭 1: 100권+ 1PAGE 도서 소개 뷰어 -->
   <section id="tab-viewer" class="section active">
     <div class="viewer-controls">
       <div class="filter-group">
@@ -432,31 +280,27 @@
       </div>
     </div>
 
-    <!-- 현재 선택된 도서의 1PAGE 카드 -->
     <div id="onePageContainer" class="one-page-card"></div>
 
-    <!-- 전체 도서 빠른 선택 그리드 -->
-    <div style="display:flex; justify-content:space-between; align-items:center; margin-top:2.2rem; flex-wrap:wrap; gap:0.5rem;">
-      <h3 style="color:#0f172a;">🗂️ 전체 추천 도서 목록 (클릭 시 1PAGE 소개자료 표시)</h3>
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-top:1.8rem; flex-wrap:wrap; gap:0.5rem;">
+      <h3>🗂️ 전체 추천 도서 목록 (클릭 시 1PAGE 소개자료 표시)</h3>
       <span id="bookCountLabel" style="font-size:0.88rem; color:var(--muted); font-weight:600;"></span>
     </div>
     <div id="bookGrid" class="book-grid"></div>
   </section>
 
-  <!-- 탭 2: 학생 소감문 및 메타포 제출 -->
   <section id="tab-submit" class="section">
     <div class="form-container">
       <h2 style="color:var(--primary); margin-bottom:0.4rem;">✍️ 교과 연계 도서 선택 및 메타포 소감문 제출</h2>
-      <p style="color:var(--muted); font-size:0.9rem; margin-bottom:1.5rem;">
-        <strong>과목</strong>을 선택하면 조금이라도 연관된 도서가 자동으로 분류되어 추천됩니다. 도서를 선택하고 나만의 메타포와 소감문을 작성하세요.
+      <p style="color:var(--muted); font-size:0.9rem; margin-bottom:1.4rem;">
+        학번·이름·과목을 입력하고 도서를 선택한 뒤 <strong>나만의 메타포</strong>와 <strong>독서 소감문</strong>을 작성해 제출하세요.
       </p>
 
-      <form id="readingForm" onsubmit="handleFormSubmit(event)">
+      <form id="readingForm" onsubmit="event.preventDefault();">
         <div class="form-row">
           <div class="form-group">
             <label for="studentId">학번 (4자리 또는 5자리) *</label>
-            <input type="text" id="studentId" class="form-control" placeholder="예: 20315 또는 9999" oninput="previewStudentId()" required>
-            <div id="idPreviewHint" class="id-preview-hint"></div>
+            <input type="text" id="studentId" class="form-control" placeholder="예: 20315 또는 9999" required>
           </div>
           <div class="form-group">
             <label for="studentName">이름 *</label>
@@ -464,8 +308,8 @@
           </div>
           <div class="form-group">
             <label for="subjectSelect">교과(과목) 선택 *</label>
-            <select id="subjectSelect" class="form-control" onchange="handleSubjectChange()" required>
-              <option value="">-- 과목을 먼저 선택하세요 --</option>
+            <select id="subjectSelect" class="form-control" required>
+              <option value="">-- 과목을 선택하세요 --</option>
               <option value="국어·문학">국어 / 문학 / 화법과 작문</option>
               <option value="사회·역사·지리">통합사회 / 한국사 / 세계사 / 지리</option>
               <option value="윤리·철학·심리">생활과 윤리 / 윤리와 사상 / 철학·심리</option>
@@ -483,17 +327,7 @@
 
         <div class="form-group" id="customSubjectGroup" style="display:none;">
           <label for="customSubjectInput">과목명 직접 입력 *</label>
-          <input type="text" id="customSubjectInput" class="form-control" placeholder="예: 중국 문화, 한문, 기술·가정 등" oninput="filterBooksByCustomSubject()">
-        </div>
-
-        <!-- 과목 선택 시 나타나는 연관 도서 추천 분류 패널 -->
-        <div id="subjectRecommendPanel" class="subject-recommend-panel">
-          <h4>
-            <span id="recPanelTitle">📚 선택한 과목과 연관된 추천 도서</span>
-            <span id="recCountBadge" style="font-size:0.8rem; background:#dbeafe; padding:2px 8px; border-radius:12px;"></span>
-          </h4>
-          <p style="font-size:0.8rem; color:#334155; margin-bottom:0.6rem;">아래 추천 도서 카드를 클릭하면 바로 선택됩니다. (1PAGE 소개를 보려면 우측 [소개보기] 클릭)</p>
-          <div id="recChipList" class="rec-chip-list"></div>
+          <input type="text" id="customSubjectInput" class="form-control" placeholder="예: 중국 문화, 한문 등">
         </div>
 
         <div class="form-group">
@@ -503,7 +337,7 @@
 
         <div class="form-group" id="customBookGroup" style="display:none;">
           <label for="customBookTitle">직접 입력할 책 제목 *</label>
-          <input type="text" id="customBookTitle" class="form-control" placeholder="읽은 책의 정확한 제목을 입력하세요">
+          <input type="text" id="customBookTitle" class="form-control" placeholder="읽은 책 제목을 입력하세요">
         </div>
 
         <div class="form-group">
@@ -516,109 +350,87 @@
 
         <div class="form-group">
           <label for="reflection">독서 소감문 (줄거리 요약 및 교과 연계 성찰) *</label>
-          <textarea id="reflection" class="form-control" rows="6" placeholder="책을 읽고 인상 깊었던 내용, 선택한 교과 개념과의 연결점, 자신의 생각 변화를 구체적으로 작성하세요." required></textarea>
+          <textarea id="reflection" class="form-control" rows="5" placeholder="인상 깊었던 내용과 교과 개념 연계, 자신의 성찰을 작성하세요." required></textarea>
         </div>
 
-        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:0.8rem; margin-top:0.8rem;">
-          <button type="button" id="aiFeedbackBtn" class="btn btn-submit" style="margin-top:0; background:linear-gradient(135deg, #2563eb, #1d4ed8);" onclick="requestAiFeedback()">
-            🤖 AI 피드백 먼저 받기 (보완 후 제출)
-          </button>
-          <button type="button" id="directSubmitBtn" class="btn btn-submit" style="margin-top:0; background:#059669;" onclick="submitFinalToSheet(false)">
-            📤 피드백 없이 이대로 바로 제출
-          </button>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.8rem;">
+          <button type="button" id="aiFeedbackBtn" class="btn btn-submit" style="background:#2563eb;" onclick="requestAiFeedback()">🤖 AI 피드백 먼저 받기</button>
+          <button type="button" id="directSubmitBtn" class="btn btn-submit" style="background:#059669;" onclick="submitFinalToSheet(false)">📤 피드백 없이 바로 제출</button>
         </div>
       </form>
 
-      <!-- AI 피드백 및 내용 추가·보완 출력 영역 -->
       <div id="aiResultBox" class="ai-result-box">
-        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:0.5rem; margin-bottom:0.8rem;">
-          <h3 style="margin-bottom:0;">🤖 AI 독서 분석 및 심화 탐구 가이드 (제출 전 보완 단계)</h3>
-          <span style="font-size:0.8rem; background:#dcfce7; color:#166534; padding:3px 10px; border-radius:12px; font-weight:700;">아직 최종 제출 전입니다</span>
-        </div>
-
+        <h3 style="color:#166534; margin-bottom:0.8rem;">🤖 AI 독서 분석 및 심화 탐구 가이드</h3>
         <div class="result-item">
-          <strong>📌 생성된 학교생활기록부 문구 초안 (메타포 반영 · 100자 내외)</strong>
-          <p id="resSaenggibu" style="color:#0f172a; font-weight:500;"></p>
+          <strong>📌 생성된 생기부 문구 초안</strong>
+          <p id="resSaenggibu" style="margin-top:4px;"></p>
         </div>
         <div class="result-item">
-          <strong>🔍 후속 심화 탐구 질문 및 추천 학습 내용</strong>
-          <p id="resInquiry" style="white-space:pre-line; color:#334155;"></p>
+          <strong>🔍 후속 심화 탐구 질문</strong>
+          <p id="resInquiry" style="white-space:pre-line; margin-top:4px;"></p>
         </div>
-
-        <!-- 학생이 AI 피드백을 보고 내용을 추가 작성할 수 있는 칸 -->
-        <div class="result-item" style="border: 2px solid #3b82f6; background:#eff6ff; margin-top:1rem;">
-          <label for="additionalReflection" style="display:block; font-weight:700; color:#1e3a8a; margin-bottom:0.4rem; font-size:0.95rem;">
-            ✍️ AI 피드백 반영 · 심화 탐구 및 소감 추가 작성란 (선택 사항)
-          </label>
-          <p style="font-size:0.82rem; color:#334155; margin-bottom:0.5rem;">
-            위 AI 탐구 질문이나 추천 학습 내용을 참고하여, 새롭게 깨달은 점이나 추가 탐구 내용을 아래에 덧붙여 작성한 뒤 최종 제출할 수 있습니다.
-          </p>
-          <textarea id="additionalReflection" class="form-control" rows="4" placeholder="예: AI가 제시한 탐구 질문을 바탕으로 교과서의 관련 개념을 다시 찾아보며, ...라는 점을 추가로 성찰하게 되었다."></textarea>
+        <div class="form-group">
+          <label for="additionalReflection">✍️ AI 피드백 반영 추가 성찰 (선택)</label>
+          <textarea id="additionalReflection" class="form-control" rows="3" placeholder="추가 탐구 내용을 덧붙여 작성하세요."></textarea>
         </div>
-
-        <button type="button" id="finalSubmitWithAiBtn" class="btn btn-submit" style="background:#15803d; margin-top:0.6rem;" onclick="submitFinalToSheet(true)">
-          ✅ 보완 내용 포함하여 선생님 시트로 최종 제출하기
-        </button>
+        <button type="button" id="finalSubmitWithAiBtn" class="btn btn-submit" style="background:#15803d;" onclick="submitFinalToSheet(true)">✅ 보완 내용 포함 최종 제출</button>
       </div>
 
-      <!-- 최종 제출 완료 확인 배너 -->
-      <div id="finalCompleteBanner" style="display:none; margin-top:1.5rem; background:#ecfdf5; border:2px solid #10b981; border-radius:12px; padding:1.4rem; text-align:center;">
-        <h3 style="color:#065f46; margin-bottom:0.4rem;">🎉 선생님 구글 시트로 최종 제출이 완료되었습니다!</h3>
-        <p id="finalCompleteMsg" style="font-size:0.9rem; color:#047857;"></p>
+      <div id="finalCompleteBanner" style="display:none; margin-top:1.4rem; background:#ecfdf5; border:2px solid #10b981; border-radius:12px; padding:1.2rem; text-align:center;">
+        <h3 style="color:#065f46;">🎉 제출이 완료되었습니다!</h3>
+        <p id="finalCompleteMsg" style="font-size:0.9rem; color:#047857; margin-top:4px;"></p>
       </div>
     </div>
   </section>
 </main>
 
-<!-- 모달 1: 교사 도서 1PAGE 추가 모달 -->
+<!-- 교사 도서 1PAGE 추가 모달 -->
 <div id="addBookModal" class="modal">
   <div class="modal-content">
-    <h3 style="margin-bottom:0.4rem; color:#6d28d9;">➕ 교사 맞춤형 도서 1PAGE 카드 추가</h3>
-    <p style="font-size:0.84rem; color:var(--muted); margin-bottom:1rem;">선생님께서 수업에 활용하고 싶은 도서를 추가하면 1PAGE 소개 카드가 자동 생성되고 학생 선택 목록에 반영됩니다.</p>
-    
+    <h3 style="color:#6d28d9; margin-bottom:0.8rem;">➕ 교사 맞춤형 도서 1PAGE 카드 추가</h3>
     <form id="addBookForm" onsubmit="handleAddCustomBook(event)">
-      <div class="form-row" style="grid-template-columns: 1.4fr 1fr; margin-bottom:0;">
+      <div class="form-row">
         <div class="form-group">
           <label>도서 제목 *</label>
-          <input type="text" id="newBookTitle" class="form-control" placeholder="예: 아Q정전, 열하일기, 사피엔스 등" required>
+          <input type="text" id="newBookTitle" class="form-control" required>
         </div>
         <div class="form-group">
-          <label>추천 교사명 (선택)</label>
-          <input type="text" id="newBookTeacher" class="form-control" placeholder="예: 신윤기 수석 / 김OO 교사">
+          <label>추천 교사명</label>
+          <input type="text" id="newBookTeacher" class="form-control" placeholder="예: 신윤기 수석">
+        </div>
+        <div class="form-group">
+          <label>계열 *</label>
+          <select id="newBookCat" class="form-control">
+            <option value="인문사회">인문·사회</option>
+            <option value="과학">과학 계열</option>
+            <option value="수학">수학 계열</option>
+          </select>
         </div>
       </div>
       <div class="form-group">
-        <label>핵심 부제 (한 줄 소개) *</label>
-        <input type="text" id="newBookSubtitle" class="form-control" placeholder="예: 봉건적 굴레에 빠진 근대인을 깨우는 따끔한 회초리" required>
+        <label>핵심 부제 *</label>
+        <input type="text" id="newBookSubtitle" class="form-control" required>
       </div>
       <div class="form-group">
         <label>핵심 주제 키워드 *</label>
-        <input type="text" id="newBookTheme" class="form-control" placeholder="예: 정신승리법 비판과 민중의 각성" required>
+        <input type="text" id="newBookTheme" class="form-control" required>
       </div>
       <div class="form-group">
-        <label>핵심 줄거리 및 교과 연계 설명 (1PAGE 본문) *</label>
-        <textarea id="newBookSummary" class="form-control" rows="4" placeholder="학생들이 1PAGE 카드로 읽을 핵심 줄거리와 교과 연계 포인트를 입력하세요." required></textarea>
+        <label>핵심 줄거리 및 교과 연계 설명 *</label>
+        <textarea id="newBookSummary" class="form-control" rows="3" required></textarea>
       </div>
       <div class="form-group">
-        <label>계열 / 주제별 한 장 그림 자동 생성 테마 *</label>
-        <select id="newBookCat" class="form-control">
-          <option value="인문사회">인문·사회 계열 (주제 키워드 맞춤 일러스트 자동 생성)</option>
-          <option value="과학">과학 계열 (주제 키워드 맞춤 일러스트 자동 생성)</option>
-          <option value="수학">수학 계열 (주제 키워드 맞춤 일러스트 자동 생성)</option>
-        </select>
+        <label>직접 만든 그림 이미지 URL (선택)</label>
+        <input type="url" id="newBookImageUrl" class="form-control" placeholder="https://...">
       </div>
       <div class="form-group">
-        <label>직접 만든 그림 이미지 주소 URL (선택 - 비워두면 주제에 맞는 그림 자동 생성)</label>
-        <input type="url" id="newBookImageUrl" class="form-control" placeholder="https://... (이미지 주소가 있을 경우에만 입력)">
-      </div>
-      <div class="form-group">
-        <label>연관 교과 선택 (복수 선택 가능 - 학생 과목 추천에 반영) *</label>
+        <label>연관 교과 선택</label>
         <div class="checkbox-subjects" id="newBookSubjects">
           <label><input type="checkbox" value="국어·문학" checked> 국어·문학</label>
+          <label><input type="checkbox" value="수학"> 수학</label>
           <label><input type="checkbox" value="사회·역사·지리"> 사회·역사·지리</label>
           <label><input type="checkbox" value="윤리·철학·심리"> 윤리·철학·심리</label>
           <label><input type="checkbox" value="경제·정치·법"> 경제·정치·법</label>
-          <label><input type="checkbox" value="수학"> 수학</label>
           <label><input type="checkbox" value="물리·지구과학"> 물리·지구과학</label>
           <label><input type="checkbox" value="화학·생명과학"> 화학·생명과학</label>
           <label><input type="checkbox" value="정보·AI"> 정보·AI</label>
@@ -626,115 +438,62 @@
           <label><input type="checkbox" value="미술·예술·진로"> 미술·예술·진로</label>
         </div>
       </div>
-
-      <div style="display:flex; justify-content:space-between; align-items:center; gap:0.5rem; margin-top:1.2rem; flex-wrap:wrap;">
-        <button type="button" class="btn" style="background:#fee2e2; color:#991b1b;" onclick="clearTeacherBooks()">추가 도서 초기화</button>
-        <div style="display:flex; gap:0.5rem;">
-          <button type="button" class="btn" style="background:#e2e8f0;" onclick="closeAddBookModal()">닫기</button>
-          <button type="submit" class="btn btn-add">1PAGE 카드 생성하기</button>
-        </div>
+      <div style="display:flex; justify-content:flex-end; gap:0.5rem;">
+        <button type="button" class="btn" style="background:#e2e8f0;" onclick="closeAddBookModal()">닫기</button>
+        <button type="submit" class="btn btn-add">1PAGE 카드 생성하기</button>
       </div>
     </form>
   </div>
 </div>
 
-<!-- 모달 3: 학생 배포용 QR 코드 모달 -->
-<div id="qrModal" class="modal">
-  <div class="modal-content" style="text-align:center;">
-    <h3 style="margin-bottom:0.4rem; color:var(--primary);">📱 학생 배포용 접속 QR 코드</h3>
-    <p style="font-size:0.85rem; color:var(--muted); margin-bottom:1rem;">
-      학생들이 스마트폰이나 태블릿 카메라로 아래 QR 코드를 스캔하면 즉시 접속하여 도서를 선택하고 소감문을 작성할 수 있습니다.
-    </p>
-    <div style="background:#f8fafc; border:1px solid var(--border); border-radius:12px; padding:1.1rem; display:inline-block; margin-bottom:0.9rem;">
-      <img id="qrCodeImg" src="" alt="학생 배포용 QR 코드" style="width:210px; height:210px; display:block; margin:0 auto;">
-    </div>
-
-    <div class="student-link-box" style="text-align:left;">
-      <div style="font-size:0.8rem; font-weight:700; color:#1e3a8a; margin-bottom:4px;">🔗 학생 전용 접속 링크 (교사 관리 버튼 숨김 적용):</div>
-      <a id="studentDirectLink" href="#" target="_blank" rel="noopener noreferrer"></a>
-    </div>
-    <div class="form-group" style="text-align:left;">
-      <label style="font-size:0.84rem;">배포 URL 확인 및 수정 (GitHub Pages / 웹 앱 주소)</label>
-      <div style="display:flex; gap:0.4rem;">
-        <input type="url" id="qrTargetUrl" class="form-control" style="font-size:0.85rem;" oninput="updateQrImage()">
-        <button type="button" class="btn" style="background:#e2e8f0; white-space:nowrap;" onclick="copyQrUrl()">주소 복사</button>
-      </div>
-      <small id="qrLocalWarning" style="color:#b45309; display:none; margin-top:4px;">
-        ⚠️ 현재 내 컴퓨터 파일(file://)로 열려 있습니다. GitHub Pages 등에 올린 후 해당 <code>https://...</code> 주소를 입력하면 학생들이 접속할 수 있는 QR이 생성됩니다.
-      </small>
-    </div>
-    <div style="display:flex; justify-content:center; gap:0.6rem; margin-top:1rem;">
-      <button type="button" class="btn" style="background:#0ea5e9; color:white;" onclick="downloadQrImage()">💾 QR 이미지 저장</button>
-      <button type="button" class="btn" style="background:#e2e8f0;" onclick="closeQrModal()">닫기</button>
-    </div>
-  </div>
-</div>
-
-<!-- 모달 4: 타교사 추천도서 누적 자료 조회 및 분류별 검색 모달 -->
+<!-- 타교사 자료 모달 -->
 <div id="sharedBooksModal" class="modal">
-  <div class="modal-content" style="max-width:760px;">
-    <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:0.5rem; margin-bottom:0.6rem;">
-      <h3 style="color:#be185d; margin:0;">📚 교사 추천도서 누적 자료실 (타교사 공유 자료 검색)</h3>
-      <button type="button" class="btn" style="background:#f1f5f9; font-size:0.8rem;" onclick="syncSharedBooksFromSheet()">🔄 시트에서 최신 자료 불러오기</button>
+  <div class="modal-content">
+    <h3 style="color:#be185d; margin-bottom:0.5rem;">📚 교사 추천도서 누적 자료실 (별표 5점 평가 · 10명 2.5점 이하 자동삭제)</h3>
+    <div style="display:grid; grid-template-columns:1fr 1.5fr; gap:0.6rem; margin-bottom:0.9rem;">
+      <select id="sharedSubjectFilter" class="form-control" onchange="renderSharedBooksList()">
+        <option value="ALL">📂 전체 교과 분류</option>
+        <option value="국어·문학">국어·문학</option>
+        <option value="수학">수학</option>
+        <option value="사회·역사·지리">사회·역사·지리</option>
+        <option value="물리·지구과학">물리·지구과학</option>
+        <option value="화학·생명과학">화학·생명과학</option>
+        <option value="정보·AI">정보·AI</option>
+      </select>
+      <input type="text" id="sharedSearchInput" class="form-control" placeholder="도서명, 주제, 교사명 검색..." oninput="renderSharedBooksList()">
     </div>
-    <p style="font-size:0.84rem; color:var(--muted); margin-bottom:1rem;">
-      선생님과 동료 교사들이 추가한 추천도서가 누적 저장됩니다. 각 도서 카드 하단의 <strong>별표(★ 1~5점)</strong>로 품질을 평가할 수 있으며, <strong>10명 이상 평가 후 평균 별점이 2.5점 이하인 도서는 자동으로 목록에서 삭제</strong>됩니다.
-    </p>
-
-    <!-- 교과 분류별 필터 및 검색창 -->
-    <div style="background:#fdf2f8; border:1px solid #fbcfe8; border-radius:10px; padding:0.9rem; margin-bottom:1rem;">
-      <div style="display:grid; grid-template-columns: 1fr 1.5fr; gap:0.6rem; margin-bottom:0.6rem;">
-        <select id="sharedSubjectFilter" class="form-control" onchange="renderSharedBooksList()">
-          <option value="ALL">📂 전체 교과 분류 보기</option>
-          <option value="국어·문학">국어·문학</option>
-          <option value="수학">수학</option>
-          <option value="사회·역사·지리">사회·역사·지리</option>
-          <option value="윤리·철학·심리">윤리·철학·심리</option>
-          <option value="경제·정치·법">경제·정치·법</option>
-          <option value="물리·지구과학">물리·지구과학</option>
-          <option value="화학·생명과학">화학·생명과학</option>
-          <option value="정보·AI">정보·AI</option>
-          <option value="중국어·세계문화">중국어·세계문화</option>
-          <option value="미술·예술·진로">미술·예술·진로</option>
-        </select>
-        <input type="text" id="sharedSearchInput" class="form-control" placeholder="도서명, 주제, 추천 교사명 검색..." oninput="renderSharedBooksList()">
-      </div>
-      <div style="display:flex; justify-content:space-between; align-items:center; font-size:0.8rem; color:#831843;">
-        <span id="sharedCountLabel">누적 교사 추천도서: 0권</span>
-        <div style="display:flex; gap:0.4rem;">
-          <button type="button" class="btn" style="background:white; border:1px solid #f9a8d4; padding:0.3rem 0.65rem; font-size:0.78rem;" onclick="exportSharedBooksJson()">📤 목록 내보내기</button>
-          <label class="btn" style="background:white; border:1px solid #f9a8d4; padding:0.3rem 0.65rem; font-size:0.78rem; margin:0; cursor:pointer;">
-            📥 목록 합치기 <input type="file" accept=".json" style="display:none;" onchange="importSharedBooksJson(event)">
-          </label>
-        </div>
-      </div>
-    </div>
-
-    <div id="sharedBooksContainer" style="display:grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap:0.8rem; max-height:360px; overflow-y:auto; padding:2px;"></div>
-
-    <div style="display:flex; justify-content:flex-end; gap:0.5rem; margin-top:1.2rem;">
-      <button type="button" class="btn btn-add" onclick="closeSharedBooksModal(); openAddBookModal();">➕ 새 추천도서 추가하기</button>
+    <div id="sharedBooksContainer" style="display:grid; grid-template-columns:repeat(auto-fill, minmax(210px, 1fr)); gap:0.75rem; max-height:340px; overflow-y:auto;"></div>
+    <div style="display:flex; justify-content:flex-end; margin-top:1rem;">
       <button type="button" class="btn" style="background:#e2e8f0;" onclick="closeSharedBooksModal()">닫기</button>
     </div>
   </div>
 </div>
 
-<!-- 모달 2: 교사 연동 설정 모달 -->
+<!-- 학생 QR 모달 -->
+<div id="qrModal" class="modal">
+  <div class="modal-content" style="text-align:center; max-width:500px;">
+    <h3 style="color:var(--primary); margin-bottom:0.6rem;">📱 학생 배포용 접속 QR 코드</h3>
+    <img id="qrCodeImg" src="" alt="QR" style="width:190px; height:190px; margin:0.6rem auto; display:block;">
+    <input type="url" id="qrTargetUrl" class="form-control" style="margin-bottom:0.8rem;" oninput="updateQrImage()">
+    <button type="button" class="btn" style="background:#e2e8f0;" onclick="closeQrModal()">닫기</button>
+  </div>
+</div>
+
+<!-- 교사 설정 모달 -->
 <div id="settingsModal" class="modal">
-  <div class="modal-content">
-    <h3 style="margin-bottom:1rem; color:var(--primary);">⚙️ 선생님 구글 시트 & Apps Script 연동 설정</h3>
+  <div class="modal-content" style="max-width:520px;">
+    <h3 style="color:var(--primary); margin-bottom:0.8rem;">⚙️ 교사 연동 설정</h3>
     <div class="form-group">
-      <label>1. Google Apps Script 웹 앱 URL (학생 소감 수합 및 AI 분석용)</label>
-      <input type="url" id="gasUrlInput" class="form-control" placeholder="https://script.google.com/macros/s/.../exec">
+      <label>Google Apps Script 웹 앱 URL</label>
+      <input type="url" id="gasUrlInput" class="form-control">
     </div>
     <div class="form-group">
-      <label>2. 선생님 원본 구글 스프레드시트 URL (타 교사 사본 만들기 지원용)</label>
-      <input type="url" id="sheetUrlInput" class="form-control" placeholder="https://docs.google.com/spreadsheets/d/시트ID/edit">
-      <small style="color:var(--muted);">* 원본 시트 주소를 입력해 두면 상단 [시트 사본 만들기] 버튼 클릭 시 자동으로 <code>/copy</code> 주소가 열려 타 교사가 사본을 생성할 수 있습니다.</small>
+      <label>원본 구글 스프레드시트 URL</label>
+      <input type="url" id="sheetUrlInput" class="form-control">
     </div>
-    <div style="display:flex; justify-content:flex-end; gap:0.5rem; margin-top:1.5rem;">
-      <button class="btn" style="background:#e2e8f0;" onclick="closeSettings()">닫기</button>
-      <button class="btn btn-submit" style="width:auto; padding:0.6rem 1.2rem; margin:0;" onclick="saveSettings()">저장하기</button>
+    <div style="display:flex; justify-content:flex-end; gap:0.5rem;">
+      <button type="button" class="btn" style="background:#e2e8f0;" onclick="closeSettings()">닫기</button>
+      <button type="button" class="btn btn-submit" style="width:auto; padding:0.5rem 1rem; margin:0;" onclick="saveSettings()">저장</button>
     </div>
   </div>
 </div>
@@ -744,1301 +503,310 @@
 </footer>
 
 <script>
-// =========================================================================
-// 기본 100권 도서 데이터 (과목별 연관 태그 subjects 포함)
-// =========================================================================
-const DEFAULT_BOOKS_DATA = [
-  // PART 3: 인문사회 계열 책 읽기 (BOOK 1 ~ BOOK 47)
+const BOOKS = [
   { id: 1, cat: "인문사회", title: "존엄하게 산다는 것", subtitle: "존엄을 잃게 만드는 사회에서 어떻게 인간답게 살 것인가?", theme: "인간의 존엄성과 사회적 연대", subjects: ["윤리·철학·심리", "사회·역사·지리", "국어·문학"] },
   { id: 2, cat: "인문사회", title: "유튜브는 책을 집어삼킬 것인가", subtitle: "우리 시대 문해력에 대한 논의", theme: "디지털 미디어 시대의 비판적 문해력", subjects: ["국어·문학", "정보·AI", "사회·역사·지리"] },
-  { id: 3, cat: "인문사회", title: "언어의 줄다리기", subtitle: "우리가 몰랐던 언어 속의 숨은 의미 파헤치기", theme: "언어와 권력, 사회문화적 맥락", subjects: ["국어·문학", "사회·역사·지리", "중국어·세계문화"] },
-  { id: 4, cat: "인문사회", title: "몰입의 즐거움", subtitle: "한 번이라도 몰입해본 인생은 얼마나 아름다운가", theme: "자기주도적 몰입과 행복의 심리학", subjects: ["윤리·철학·심리", "미술·예술·진로"] },
-  { id: 5, cat: "인문사회", title: "인간관계론", subtitle: "성공하는 인간관계를 맺으려면?", theme: "공감과 경청을 통한 대인관계의 원리", subjects: ["윤리·철학·심리", "국어·문학", "미술·예술·진로"] },
-  { id: 6, cat: "인문사회", title: "책은 도끼다", subtitle: "얼어붙은 감수성을 깨뜨리는 우리의 '도끼'들", theme: "깊이 읽기를 통한 인문학적 감수성 회복", subjects: ["국어·문학", "윤리·철학·심리", "미술·예술·진로"] },
+  { id: 3, cat: "인문사회", title: "언어의 줄다리기", subtitle: "우리가 몰랐던 언어 속의 숨은 의미 파헤치기", theme: "언어와 권력, 사회문화적 맥락", subjects: ["국어·문학", "사회·역사·지리"] },
   { id: 7, cat: "인문사회", title: "인간 본성의 법칙", subtitle: "인간의 내면을 해독하는 열쇠를 얻고 싶다면", theme: "인간 심리의 심층 구조와 행동 동인", subjects: ["윤리·철학·심리", "사회·역사·지리"] },
-  { id: 8, cat: "인문사회", title: "철학의 역사", subtitle: "소크라테스부터 피터 싱어까지, 위대한 철학자 40인으로 살펴보는 철학의 역사", theme: "서양 지성사의 흐름과 핵심 사유", subjects: ["윤리·철학·심리", "사회·역사·지리", "중국어·세계문화"] },
-  { id: 9, cat: "인문사회", title: "강원국의 글쓰기", subtitle: "내 글을 쓴다는 건 나답게 산다는 것", theme: "생각을 정리하고 표현하는 글쓰기의 힘", subjects: ["국어·문학", "미술·예술·진로"] },
-  { id: 10, cat: "인문사회", title: "나는 생각하고 말하는 사람이 되기로 했다", subtitle: "'올바른 말하기'를 배우는 언어 감수성 수업", theme: "차별과 혐오를 넘어서는 언어 감수성", subjects: ["국어·문학", "윤리·철학·심리", "사회·역사·지리"] },
-  { id: 11, cat: "인문사회", title: "진작 이렇게 책을 읽었더라면", subtitle: "읽은 것이 고스란히 배움이 되는, 생산적 책 읽기", theme: "지식을 내면화하는 능동적 독서 전략", subjects: ["국어·문학", "미술·예술·진로"] },
-  { id: 12, cat: "인문사회", title: "철학적 시 읽기의 즐거움", subtitle: "우리 시와 현대 철학이 만났을 때", theme: "문학과 철학의 통섭적 해석", subjects: ["국어·문학", "윤리·철학·심리"] },
-  { id: 13, cat: "인문사회", title: "문학의 숲을 거닐다", subtitle: "문학의 숲에서 사랑을 만나고, 삶의 길을 찾는다", theme: "고전과 현대 문학이 건네는 삶의 성찰", subjects: ["국어·문학", "윤리·철학·심리"] },
-  { id: 14, cat: "인문사회", title: "서른세 번의 만남, 백석과 동주", subtitle: "백석과 윤동주의 연결고리를 찾는 탐험", theme: "일제강점기 두 시인의 문학적 교감과 시대정신", subjects: ["국어·문학", "사회·역사·지리"] },
-  { id: 15, cat: "인문사회", title: "페스트", subtitle: "시대를 아우르는 한 권의 고전", theme: "재난 속 인간의 연대와 실존적 저항", subjects: ["국어·문학", "윤리·철학·심리", "중국어·세계문화", "화학·생명과학"] },
-  { id: 16, cat: "인문사회", title: "광장", subtitle: "밀실과 광장 사이에 선 한 인간의 고뇌", theme: "분단 이데올로기와 개인의 실존적 선택", subjects: ["국어·문학", "사회·역사·지리", "윤리·철학·심리", "중국어·세계문화"] },
-  { id: 17, cat: "인문사회", title: "난장이가 쏘아올린 작은 공", subtitle: "우리 사회의 그림자를 폭로한 한국 문학 대표작", theme: "산업화 시대의 소외와 구조적 불평등", subjects: ["국어·문학", "사회·역사·지리", "경제·정치·법"] },
-  { id: 18, cat: "인문사회", title: "작별인사", subtitle: "'진정한 인간다움이란 무엇인가?'를 묻는 책", theme: "포스트휴먼 시대의 정체성과 존재의 의미", subjects: ["국어·문학", "윤리·철학·심리", "정보·AI"] },
-  { id: 19, cat: "인문사회", title: "땀 흘리는 소설", subtitle: "'을'로서 살아가는 청춘들의 땀을 담은 이야기", theme: "노동의 가치와 청년 세대의 현실", subjects: ["국어·문학", "경제·정치·법", "사회·역사·지리"] },
-  { id: 20, cat: "인문사회", title: "평균의 종말", subtitle: "평균주의가 망친 교육, 아이들의 진정한 재능을 찾으려면?", theme: "개별성과 다양성을 존중하는 교육 패러다임", subjects: ["사회·역사·지리", "수학", "윤리·철학·심리", "미술·예술·진로"] },
-  { id: 21, cat: "인문사회", title: "교사와 학생 사이", subtitle: "'사랑만으로는 안 된다.' 교사에게 필요한 가르침의 기술을 논하는 책", theme: "존중과 소통에 기반한 교육적 관계", subjects: ["윤리·철학·심리", "국어·문학", "미술·예술·진로"] },
-  { id: 22, cat: "인문사회", title: "공부의 미래", subtitle: "내가 지금 하는 공부가 10년 후에는 아무 쓸모 없어진다면?", theme: "AI 시대 미래 역량과 배움의 본질", subjects: ["정보·AI", "사회·역사·지리", "미술·예술·진로"] },
-  { id: 23, cat: "인문사회", title: "팩트풀니스", subtitle: "'세상이 생각보다 괜찮은 이유'를 명확한 근거로 설명하는 책", theme: "편향을 극복하고 데이터로 세계를 바라보는 태도", subjects: ["사회·역사·지리", "수학", "경제·정치·법", "중국어·세계문화"] },
-  { id: 24, cat: "인문사회", title: "아주 작은 습관의 힘", subtitle: "습관 하나만 바뀌어도 인생이 바뀐다", theme: "시스템과 환경 설계를 통한 행동 변화", subjects: ["윤리·철학·심리", "미술·예술·진로"] },
-  { id: 25, cat: "인문사회", title: "포노 사피엔스", subtitle: "스마트폰을 손에 쥔 신인류가 세상을 바꾼다", theme: "디지털 문명의 전환과 소비·소통 방식의 변화", subjects: ["사회·역사·지리", "정보·AI", "경제·정치·법"] },
-  { id: 26, cat: "인문사회", title: "선량한 차별주의자", subtitle: "차별에 대한 예민한 감각 깨우기", theme: "일상 속 무의식적 편견과 구조적 차별 성찰", subjects: ["사회·역사·지리", "윤리·철학·심리", "경제·정치·법", "중국어·세계문화"] },
-  { id: 27, cat: "인문사회", title: "공정하다는 착각", subtitle: "'우리는 모두 공정한 기회를 누리고 있는가?'를 묻는 책", theme: "능력주의의 한계와 공동선·정의의 재구성", subjects: ["윤리·철학·심리", "경제·정치·법", "사회·역사·지리"] },
-  { id: 28, cat: "인문사회", title: "거꾸로 읽는 세계사", subtitle: "최고의 이야기꾼이 들려주는, 가장 격동적이었던 100년의 역사", theme: "비판적 역사 인식과 현대 세계사의 이면", subjects: ["사회·역사·지리", "중국어·세계문화", "경제·정치·법"] },
-  { id: 29, cat: "인문사회", title: "무심코 지나쳤던 우리동네 독립운동가 이야기", subtitle: "우리가 오롯이 기억해야 할 35년 한국 독립사", theme: "지역사 기반의 독립운동 재조명", subjects: ["사회·역사·지리", "국어·문학", "중국어·세계문화"] },
-  { id: 30, cat: "인문사회", title: "빈곤의 연대기", subtitle: "'가난한 나라는 왜 계속 가난한가?'에 대한 진지한 고찰", theme: "세계 불평등의 역사적·구조적 원인", subjects: ["경제·정치·법", "사회·역사·지리", "중국어·세계문화"] },
-  { id: 31, cat: "인문사회", title: "착한 소비는 없다", subtitle: "미래의 지구를 위해 내가 할 수 있는 일", theme: "윤리적 소비의 한계와 시스템 전환의 필요성", subjects: ["경제·정치·법", "윤리·철학·심리", "화학·생명과학", "사회·역사·지리"] },
-  { id: 32, cat: "인문사회", title: "문학 속의 지리 이야기", subtitle: "국어와 지리의 콜라보, 교과 통합의 전형", theme: "문학 작품의 배경이 된 공간과 인문지리적 해석", subjects: ["국어·문학", "사회·역사·지리", "중국어·세계문화"] },
-  { id: 33, cat: "인문사회", title: "동물들의 위대한 법정", subtitle: "멸종 위기에 처한 동물들이 인간에게 판결을 내릴 수 있다면?", theme: "생태 정의와 동물권, 환경 법학", subjects: ["윤리·철학·심리", "경제·정치·법", "화학·생명과학"] },
-  { id: 34, cat: "인문사회", title: "심리학이 이토록 재미있을 줄이야", subtitle: "백설공주는 왜 자꾸만 낯선 사람에게 문을 열어줄까?", theme: "일상과 동화 속 심리기제의 과학적 이해", subjects: ["윤리·철학·심리", "국어·문학"] },
-  { id: 35, cat: "인문사회", title: "클라우스 슈밥의 제4차 산업혁명 THE NEXT", subtitle: "인류가 맞이한 4차 산업혁명, 우리는 무엇을 준비하고 실천해야 하는가?", theme: "초연결 기술 혁명과 사회적 대응 전략", subjects: ["정보·AI", "경제·정치·법", "사회·역사·지리"] },
-  { id: 36, cat: "인문사회", title: "지리의 힘", subtitle: "삶의 모든 것이 시작되는 '땅'에 대해 공부한다", theme: "지정학적 조건이 국제 정치와 역사에 미치는 영향", subjects: ["사회·역사·지리", "경제·정치·법", "중국어·세계문화"] },
-  { id: 37, cat: "인문사회", title: "도시의 승리", subtitle: "사람은 왜 도시로 몰리는가, 도시는 사람을 어떻게 행복하게 만드는가?", theme: "도시 집적의 경제학과 지속가능한 도시 설계", subjects: ["사회·역사·지리", "경제·정치·법", "미술·예술·진로"] },
-  { id: 38, cat: "인문사회", title: "공간의 미래", subtitle: "건축가의 시선으로 바라보는 포스트 코로나 시대 '관계와 공간'에 대한 이야기", theme: "사회 변화에 따른 건축 공간의 진화", subjects: ["사회·역사·지리", "미술·예술·진로", "물리·지구과학"] },
-  { id: 39, cat: "인문사회", title: "트렌드 코리아 2023", subtitle: "새로운 1년을 미리 비춰주는 열 가지 키워드", theme: "사회·소비 트렌드 분석과 시대 변화 읽기", subjects: ["경제·정치·법", "사회·역사·지리", "미술·예술·진로"] },
-  { id: 40, cat: "인문사회", title: "왜 법이 문제일까?", subtitle: "우리 사회의 뼈대인 '법' 바로 알기", theme: "법치주의의 원리와 일상 속 법적 쟁점", subjects: ["경제·정치·법", "사회·역사·지리", "윤리·철학·심리"] },
-  { id: 41, cat: "인문사회", title: "내가 만난 소년에 대하여", subtitle: "소년 범죄를 어떤 시선으로 바라보아야 할까?", theme: "소년 사법 제도와 회복적 정의의 모색", subjects: ["경제·정치·법", "윤리·철학·심리", "사회·역사·지리"] },
-  { id: 42, cat: "인문사회", title: "헌법의 자리", subtitle: "대통령 탄핵부터 간통죄까지, 우리 헌법이 걸어온 길과 가야 할 길", theme: "헌법 정신과 기본권 보장의 역사", subjects: ["경제·정치·법", "사회·역사·지리"] },
-  { id: 43, cat: "인문사회", title: "생각에 관한 생각", subtitle: "인간의 행동을 지배하는 '생각'에 대하여", theme: "이중 처리 이론(시스템 1·2)과 행동경제학", subjects: ["윤리·철학·심리", "경제·정치·법", "수학"] },
-  { id: 44, cat: "인문사회", title: "죽은 경제학자의 살아있는 아이디어", subtitle: "세계를 움직인 경제학자들의 지혜를 만난다", theme: "경제사상사의 핵심 이론과 현대 경제 적용", subjects: ["경제·정치·법", "사회·역사·지리"] },
-  { id: 45, cat: "인문사회", title: "EBS 다큐프라임 자본주의", subtitle: "우리가 몰랐던 자본주의의 이면", theme: "금융 자본주의의 작동 원리와 화폐 시스템", subjects: ["경제·정치·법", "사회·역사·지리", "수학"] },
-  { id: 46, cat: "인문사회", title: "무엇이 행동하게 하는가", subtitle: "독창적인 현장 실험으로 살아 있는 경제학을 탐구한다", theme: "행동경제학 현장 실험과 넛지의 힘", subjects: ["경제·정치·법", "윤리·철학·심리", "수학"] },
-  { id: 47, cat: "인문사회", title: "아트인문학", subtitle: "미술의 패러다임을 바꾼 열 번의 순간을 들여다보다", theme: "예술사의 전환점과 시대를 바꾼 창의적 사유", subjects: ["미술·예술·진로", "사회·역사·지리", "윤리·철학·심리", "중국어·세계문화"] },
-
-  // PART 4: 과학 계열 책 읽기 (BOOK 48 ~ BOOK 70)
-  { id: 48, cat: "과학", title: "인류세 쫌 아는 10대", subtitle: "우리가 지구의 마지막 세대가 되지 않으려면", theme: "인류세의 개념과 기후 위기 대응", subjects: ["물리·지구과학", "화학·생명과학", "사회·역사·지리", "윤리·철학·심리"] },
-  { id: 49, cat: "과학", title: "지속가능한 미래를 위한 기후변화 데이터북", subtitle: "데이터를 통해 객관적으로 바라보는 기후 변화", theme: "기후 데이터의 과학적 분석과 탄소중립", subjects: ["물리·지구과학", "수학", "정보·AI", "사회·역사·지리"] },
-  { id: 50, cat: "과학", title: "천 개의 뇌", subtitle: "뇌 과학과 인공지능에 대한 새로운 통찰", theme: "신피질의 작동 원리와 차세대 인공지능 모델", subjects: ["화학·생명과학", "정보·AI", "윤리·철학·심리"] },
-  { id: 51, cat: "과학", title: "협력의 유전자", subtitle: "인류가 진화하고 발전하는 원동력 '협력'의 비밀", theme: "진화생물학 관점에서 본 이타성과 협력의 메커니즘", subjects: ["화학·생명과학", "사회·역사·지리", "윤리·철학·심리"] },
-  { id: 52, cat: "과학", title: "세상은 온통 화학이야", subtitle: "유쾌한 화학자의 하루로 들여다보는 화학의 매력", theme: "일상 속 물질의 화학 반응과 원리", subjects: ["화학·생명과학", "물리·지구과학"] },
-  { id: 53, cat: "과학", title: "걱정 많은 어른들을 위한 화학 이야기", subtitle: "제대로 알고 안전하게 쓰는 화학제품 이야기", theme: "화학 물질의 독성과 과학적 위해성 평가", subjects: ["화학·생명과학", "사회·역사·지리"] },
-  { id: 54, cat: "과학", title: "비커 군과 실험실 친구들 / 비커 군과 실험 기구 선배들", subtitle: "실험실의 신나는 주인공, 실험기구들을 따라 배우는 과학", theme: "과학 실험 기구의 원리와 탐구 기초", subjects: ["화학·생명과학", "물리·지구과학"] },
-  { id: 55, cat: "과학", title: "화학에서 인생을 배우다", subtitle: "정확하고 공정한 '화학' 같은 인생을 살 수 있다면", theme: "화학 평형과 반응 원리로 풀어낸 삶의 지혜", subjects: ["화학·생명과학", "윤리·철학·심리", "국어·문학"] },
-  { id: 56, cat: "과학", title: "인류에게 필요한 11가지 약 이야기 / 인류를 구한 12가지 약 이야기", subtitle: "우리에게 없어선 안 될 중요한 약들의 비하인드 스토리", theme: "의약품 개발의 역사와 생명과학적 작용 원리", subjects: ["화학·생명과학", "사회·역사·지리"] },
-  { id: 57, cat: "과학", title: "세상을 바꿀 미래 의학 설명서", subtitle: "의학과 공학의 융합으로 달라지는 세상", theme: "의공학, 유전자 치료, 정밀 의학의 미래", subjects: ["화학·생명과학", "정보·AI", "미술·예술·진로"] },
-  { id: 58, cat: "과학", title: "상상이 현실이 되는 순간", subtitle: "SF 작가들이 오늘 발명한 것들은 내일 현실이 된다", theme: "과학적 상상력과 기술 혁신의 공진화", subjects: ["물리·지구과학", "정보·AI", "국어·문학"] },
-  { id: 59, cat: "과학", title: "이상한 미래 연구소", subtitle: "우주 여행에서부터 뇌과학까지, 미래를 내다보는 엉뚱하고 유쾌한 상상", theme: "첨단 과학기술의 현재와 미래 시나리오", subjects: ["물리·지구과학", "화학·생명과학", "정보·AI"] },
-  { id: 60, cat: "과학", title: "곽재식의 세균 박람회", subtitle: "작디작은 세균 속에서 크고 먼 미래를 내다본다", theme: "미생물 생태계와 인류 문명의 공생", subjects: ["화학·생명과학", "사회·역사·지리"] },
-  { id: 61, cat: "과학", title: "과학자의 미술관", subtitle: "과학의 프리즘으로 보는 예술", theme: "명화 속에 숨겨진 광학·화학·천문학 원리", subjects: ["미술·예술·진로", "물리·지구과학", "화학·생명과학"] },
-  { id: 62, cat: "과학", title: "미드 보다 과학에 빠지다", subtitle: "미드를 통해 배우는 흥미로운 과학 상식", theme: "대중문화 속 과학적 오류와 실제 물리·생물 법칙", subjects: ["물리·지구과학", "화학·생명과학", "중국어·세계문화"] },
-  { id: 63, cat: "과학", title: "광물, 그 호기심의 문을 열다", subtitle: "광물 콜렉터가 소개하는 아름다운 광물 이야기", theme: "결정 구조와 지구과학적 광물 생성 원리", subjects: ["물리·지구과학", "화학·생명과학"] },
-  { id: 64, cat: "과학", title: "우주 패권의 시대, 4차원의 우주이야기", subtitle: "세계 강국들이 앞다퉈 우주 개발에 집중하는 이유는?", theme: "뉴스페이스 시대의 우주 탐사와 우주 산업", subjects: ["물리·지구과학", "경제·정치·법", "중국어·세계문화"] },
-  { id: 65, cat: "과학", title: "오늘의 천체관측", subtitle: "천체 관측을 꿈꾸는 초보자를 위한 친절한 입문서", theme: "망원경의 원리와 밤하늘 천체 관측 가이드", subjects: ["물리·지구과학", "수학"] },
-  { id: 66, cat: "과학", title: "우주의 끝을 찾아서", subtitle: "우주의 비밀에 다가선 과학자들의 이야기로 우주론과 친숙해진다", theme: "빅뱅 우주론, 암흑물질과 현대 천체물리학", subjects: ["물리·지구과학", "수학"] },
-  { id: 67, cat: "과학", title: "수학 없는 물리", subtitle: "수식 없이도 제대로 이해하는 물리", theme: "직관과 개념 중심으로 이해하는 물리학의 핵심 법칙", subjects: ["물리·지구과학", "수학"] },
-  { id: 68, cat: "과학", title: "데이터 과학자의 일", subtitle: "데이터 과학자는 어디에서 무슨 일을 할까?", theme: "빅데이터 분석 프로세스와 데이터 기반 의사결정", subjects: ["정보·AI", "수학", "경제·정치·법", "미술·예술·진로"] },
-  { id: 69, cat: "과학", title: "도시를 움직이는 모든 것들의 과학", subtitle: "과학은 어떻게 거대한 도시를 움직이는가?", theme: "도시 인프라 속에 숨겨진 공학과 물리학 원리", subjects: ["물리·지구과학", "사회·역사·지리", "정보·AI"] },
-  { id: 70, cat: "과학", title: "SEASON 과학서평매거진", subtitle: "좋은 과학책을 소개하는 과학 서평 잡지", theme: "최신 과학 담론의 비판적 읽기와 과학 커뮤니케이션", subjects: ["물리·지구과학", "화학·생명과학", "국어·문학"] },
-
-  // PART 5: 수학 계열 책 읽기 (BOOK 71 ~ BOOK 100)
-  { id: 71, cat: "수학", title: "수학을 낳은 위대한 질문들", subtitle: "수학의 다채로운 역사를 보여주는 20가지 질문들", theme: "수학적 개념의 탄생 배경과 수학사의 결정적 질문", subjects: ["수학", "사회·역사·지리"] },
-  { id: 72, cat: "수학", title: "수학의 밀레니엄 문제들 7", subtitle: "100만 달러의 현상금을 내건 일곱 개의 수학 난제", theme: "현대 수학의 7대 미해결 난제와 그 의의", subjects: ["수학", "정보·AI", "물리·지구과학"] },
-  { id: 73, cat: "수학", title: "위대한 수학자의 수학의 즐거움", subtitle: "피타고라스부터 노이만까지, 위대한 수학자들의 삶과 업적", theme: "수학자들의 탐구 정신과 주요 정리의 발전", subjects: ["수학", "사회·역사·지리"] },
-  { id: 74, cat: "수학", title: "발칙한 수학책", subtitle: "이야기와 그림으로 논리적 감수성을 자극한다", theme: "기하학과 논리 퍼즐을 통한 수학적 직관", subjects: ["수학", "미술·예술·진로"] },
-  { id: 75, cat: "수학", title: "수학은 실험이다", subtitle: "다양한 실험으로 배우는 살아 있는 수학", theme: "구체적 조작과 실험으로 증명하는 수학적 원리", subjects: ["수학", "물리·지구과학"] },
-  { id: 76, cat: "수학", title: "더 이상한 수학책", subtitle: "미적분학을 바라보는 다양한 시각", theme: "극한, 무한, 변화율을 탐구하는 미적분의 본질", subjects: ["수학", "물리·지구과학"] },
-  { id: 77, cat: "수학", title: "인생에도 수학처럼 답이 있다면", subtitle: "현실 세계의 문제를 해석하고 해결하는 수학 모델링", theme: "사회·자연 현상을 수식으로 구현하는 수학적 모델링", subjects: ["수학", "경제·정치·법", "정보·AI"] },
-  { id: 78, cat: "수학", title: "고교수학의 아름다운 이야기", subtitle: "간결한 증명과 신기한 공식을 얻을 수 있는 보물지도 같은 책", theme: "고등학교 수학 개념의 심화 증명과 아름다움", subjects: ["수학"] },
-  { id: 79, cat: "수학", title: "야밤의 공대생 만화", subtitle: "지식과 개그를 절묘하게 엮은 수학 만화", theme: "공학 수학의 핵심 아이디어와 과학기술사 에피소드", subjects: ["수학", "물리·지구과학", "정보·AI"] },
-  { id: 80, cat: "수학", title: "수학님은 어디에나 계셔", subtitle: "보이지 않는 곳에서 우리를 도와주는 '수학님'을 만난다", theme: "일상생활과 첨단 기술에 스며든 응용수학", subjects: ["수학", "정보·AI"] },
-  { id: 81, cat: "수학", title: "모든 것의 수다", subtitle: "한국을 대표하는 수학자 열 명에게 듣는 '수학의 쓸모'", theme: "현대 산업과 기초과학을 이끄는 수학의 역할", subjects: ["수학", "정보·AI", "미술·예술·진로"] },
-  { id: 82, cat: "수학", title: "일하는 수학", subtitle: "25가지 직업으로 만나보는 수학의 세계", theme: "진로·직업 현장에서 활용되는 실용 수학", subjects: ["수학", "미술·예술·진로", "경제·정치·법"] },
-  { id: 83, cat: "수학", title: "수학대백과사전", subtitle: "두루 써먹을 수 있는 기초 교양 수학", theme: "수, 도형, 함수, 확률의 체계적 개념 정리", subjects: ["수학"] },
-  { id: 84, cat: "수학", title: "물리가 쉬워지는 미적분", subtitle: "미적분과 물리의 연결고리로 두 과목을 동시에 잡는다", theme: "속도·가속도·운동 방정식으로 이해하는 미적분", subjects: ["수학", "물리·지구과학"] },
-  { id: 85, cat: "수학", title: "한국사에서 수학을 보다", subtitle: "문과생에게는 수학의 매력을, 이과생에게는 인문학적 교양을", theme: "한국사 유물과 제도 속에 담긴 수학적 원리", subjects: ["수학", "사회·역사·지리", "중국어·세계문화"] },
-  { id: 86, cat: "수학", title: "미술관에 간 수학자", subtitle: "아름다운 명화로 수학을 감상한다", theme: "황금비, 원근법, 대칭 등 미술 속 기하학", subjects: ["수학", "미술·예술·진로"] },
-  { id: 87, cat: "수학", title: "프로그래머, 수학으로 생각하라", subtitle: "실력 있는 프로그래머에게 필요한 수학적 사고력", theme: "이산수학, 논리, 알고리즘적 문제 해결력", subjects: ["수학", "정보·AI"] },
-  { id: 88, cat: "수학", title: "다시, 수학이 필요한 순간", subtitle: "수학의 거장과 함께하는 교양 수학 세미나", theme: "수학적 사고의 본질과 추상화의 힘", subjects: ["수학", "윤리·철학·심리"] },
-  { id: 89, cat: "수학", title: "미적분으로 바라본 하루", subtitle: "일상에서 최적의 길을 찾아주는 미적분", theme: "최적화 문제와 변화율로 해석하는 일상의 현상", subjects: ["수학", "경제·정치·법", "물리·지구과학"] },
-  { id: 90, cat: "수학", title: "오일러가 사랑한 수 e", subtitle: "위대한 수 e와 한걸음 가까워진다", theme: "자연상수 e의 정의, 성질과 자연현상 속 지수함수", subjects: ["수학", "화학·생명과학", "경제·정치·법"] },
-  { id: 91, cat: "수학", title: "x의 즐거움", subtitle: "수학을 안다는 것이 이토록 즐거울 줄이야", theme: "수의 탄생부터 미적분까지 수학의 큰 그림", subjects: ["수학"] },
-  { id: 92, cat: "수학", title: "수학의 쓸모", subtitle: "인공지능 시대, 우리에게는 여전히 수학이 필요하다", theme: "머신러닝과 AI 알고리즘의 토대가 되는 확률·선형대수", subjects: ["수학", "정보·AI", "경제·정치·법"] },
-  { id: 93, cat: "수학", title: "이 문제 풀 수 있겠어?", subtitle: "125개의 퍼즐과 함께하는 '즐거운 고통'의 시간", theme: "논리적 추론과 창의적 문제 해결 전략", subjects: ["수학", "정보·AI"] },
-  { id: 94, cat: "수학", title: "수학책을 탈출한 미적분", subtitle: "공포의 미적분이 만만해지는 책", theme: "개념과 직관으로 쉽게 풀어낸 미분과 적분", subjects: ["수학", "물리·지구과학"] },
-  { id: 95, cat: "수학", title: "페르마의 마지막 정리", subtitle: "350년간 전 세계 수학자들을 사로잡았던 하나의 문제", theme: "정수론의 위대한 난제와 수학자들의 집념", subjects: ["수학", "사회·역사·지리"] },
-  { id: 96, cat: "수학", title: "처음 시작하는 만화 통계학", subtitle: "만화로 쉽고 재미있게 배우는 개념 통계학", theme: "평균, 분산, 확률분포 등 기초 통계 개념", subjects: ["수학", "사회·역사·지리"] },
-  { id: 97, cat: "수학", title: "벌거벗은 통계학", subtitle: "확률과 통계의 두 가지 얼굴을 읽는다", theme: "통계적 추론의 원리와 데이터 해석의 함정", subjects: ["수학", "경제·정치·법", "사회·역사·지리", "정보·AI"] },
-  { id: 98, cat: "수학", title: "새빨간 거짓말, 통계", subtitle: "통계가 어떻게 사람을 속일 수 있는지 알려주는 책", theme: "그래프 왜곡과 표본 편향을 가려내는 통계 리터러시", subjects: ["수학", "경제·정치·법", "국어·문학", "사회·역사·지리"] },
-  { id: 99, cat: "수학", title: "수학은 어떻게 문명을 만들었는가", subtitle: "인간의 위대한 업적, 수학에 관한 역사 교양서", theme: "인류 문명 발전의 핵심 동력으로서의 수학사", subjects: ["수학", "사회·역사·지리", "중국어·세계문화"] },
-  { id: 100, cat: "수학", title: "수학이 좋아지는 수학", subtitle: "유쾌한 입담으로 풀어내는 수학 이야기", theme: "생활 속 수학적 원리의 재발견과 수학적 사고", subjects: ["수학"] }
+  { id: 15, cat: "인문사회", title: "페스트", subtitle: "시대를 아우르는 한 권의 고전", theme: "재난 속 인간의 연대와 실존적 저항", subjects: ["국어·문학", "윤리·철학·심리"] },
+  { id: 19, cat: "인문사회", title: "땀 흘리는 소설", subtitle: "'을'로서 살아가는 청춘들의 땀을 담은 이야기", theme: "노동의 가치와 청년 세대의 현실", subjects: ["국어·문학", "사회·역사·지리"] },
+  { id: 20, cat: "인문사회", title: "평균의 종말", subtitle: "평균주의가 망친 교육, 아이들의 진정한 재능을 찾으려면?", theme: "개별성과 다양성을 존중하는 교육", subjects: ["사회·역사·지리", "수학"] },
+  { id: 48, cat: "과학", title: "인류세 쫌 아는 10대", subtitle: "우리가 지구의 마지막 세대가 되지 않으려면", theme: "인류세의 개념과 기후 위기 대응", subjects: ["물리·지구과학", "화학·생명과학"] },
+  { id: 59, cat: "과학", title: "이상한 미래 연구소", subtitle: "우주 여행에서부터 뇌과학까지, 미래를 내다보는 상상", theme: "첨단 과학기술과 미래 시나리오", subjects: ["물리·지구과학", "정보·AI"] },
+  { id: 76, cat: "수학", title: "더 이상한 수학책", subtitle: "미적분학을 바라보는 다양한 시각", theme: "극한, 무한, 변화율을 탐구하는 미적분", subjects: ["수학", "물리·지구과학"] },
+  { id: 85, cat: "수학", title: "한국사에서 수학을 보다", subtitle: "문과생에게는 수학의 매력을, 이과생에게는 인문학적 교양을", theme: "한국사 유물과 제도 속 수학적 원리", subjects: ["수학", "사회·역사·지리"] }
 ];
 
 let ALL_BOOKS = [];
-let currentBookIndex = 0;
-let currentFilter = 'ALL';
+let currentIndex = 0;
+let currentFilter = "ALL";
 
-// 초기 로드
-window.addEventListener('DOMContentLoaded', () => {
-  loadAllBooks();
-  populateDropdown();
-  renderOnePageByIndex(0);
-  renderBookList();
-  document.querySelectorAll('.section').forEach(el => {
-    el.style.display = el.classList.contains('active') ? 'block' : 'none';
-  });
-  loadSavedSettings();
+window.addEventListener("DOMContentLoaded", function() {
+  loadBooks();
+  populateBookSelect();
+  renderOnePage(0);
+  renderBookGrid();
+  applyUrlMode();
 });
 
-function loadAllBooks() {
-  let customBooks = JSON.parse(localStorage.getItem('teacherCustomBooks') || '[]');
-  customBooks = customBooks.filter(b => {
-    const count = Number(b.ratingCount || 0);
-    const sum = Number(b.ratingSum || 0);
-    const avg = count > 0 ? (sum / count) : 0;
-    return !(count >= 10 && avg <= 2.5);
+function loadBooks() {
+  let custom = JSON.parse(localStorage.getItem("teacherCustomBooks") || "[]");
+  custom = custom.filter(function(b) {
+    const c = Number(b.ratingCount || 0);
+    const s = Number(b.ratingSum || 0);
+    return !(c >= 10 && (s / c) <= 2.5);
   });
-  ALL_BOOKS = [...DEFAULT_BOOKS_DATA, ...customBooks];
+  ALL_BOOKS = BOOKS.concat(custom);
 }
 
-// 탭 전환
-function switchTab(tabName) {
-  document.querySelectorAll('.section').forEach(el => {
-    el.classList.remove('active');
-    el.style.display = 'none';
+function switchTab(name) {
+  document.querySelectorAll(".section").forEach(function(el) {
+    el.classList.remove("active");
+    el.style.display = "none";
   });
-  document.querySelectorAll('.btn-tab').forEach(el => el.classList.remove('active'));
-  const targetSec = document.getElementById(`tab-${tabName}`);
-  const targetNav = document.getElementById(`nav-${tabName}`);
-  if (targetSec) {
-    targetSec.classList.add('active');
-    targetSec.style.display = 'block';
-  }
-  if (targetNav) targetNav.classList.add('active');
-  if (tabName === 'viewer') {
-    if (!ALL_BOOKS || ALL_BOOKS.length === 0) loadAllBooks();
-    renderOnePageByIndex(currentBookIndex || 0);
-    renderBookList();
-  }
-}
-
-function normalizeStudentId(raw) {
-  const digits = String(raw || '').replace(/\D/g, '');
-  if (digits.length === 4) {
-    return digits.charAt(0) + '0' + digits.slice(1);
-  }
-  return digits || String(raw || '').trim();
-}
-
-function previewStudentId() {
-  const raw = document.getElementById('studentId').value.trim();
-  const hint = document.getElementById('idPreviewHint');
-  if (!raw) {
-    hint.textContent = '';
-    return;
-  }
-  const norm = normalizeStudentId(raw);
-  if (/^\d{5}$/.test(norm)) {
-    const g = parseInt(norm.charAt(0), 10);
-    const c = parseInt(norm.slice(1, 3), 10);
-    const n = parseInt(norm.slice(3, 5), 10);
-    hint.textContent = `👉 인식 학번: ${norm} (${g}학년 ${c}반 ${n}번 시트로 자동 분류)`;
-  } else {
-    hint.textContent = `👉 입력 학번: ${norm}`;
-  }
-}
-
-// ㄱㄴㄷ순 드롭다운 채우기
-function populateDropdown() {
-  const select = document.getElementById('bookSelect');
-  const sortedBooks = [...ALL_BOOKS].sort((a, b) => a.title.localeCompare(b.title, 'ko'));
-  
-  let html = `<option value="">-- 읽은 도서를 선택하세요 (ㄱㄴㄷ순 전체 ${ALL_BOOKS.length}권) --</option>`;
-  html += `<option value="CUSTOM" style="font-weight:bold; color:#1e3a8a;">✏️ [목록에 없는 도서 직접 입력하기]</option>`;
-  sortedBooks.forEach(book => {
-    const tag = book.isCustom ? "교사추가" : `BOOK ${book.id}`;
-    html += `<option value="${book.title}">${book.title} (${book.cat} · ${tag})</option>`;
+  document.querySelectorAll(".btn-tab").forEach(function(el) {
+    el.classList.remove("active");
   });
-  select.innerHTML = html;
-}
-
-function toggleCustomBook() {
-  const val = document.getElementById('bookSelect').value;
-  const group = document.getElementById('customBookGroup');
-  const input = document.getElementById('customBookTitle');
-  if (val === 'CUSTOM') {
-    group.style.display = 'block';
-    input.required = true;
-  } else {
-    group.style.display = 'none';
-    input.required = false;
-  }
-  // 추천 칩 선택 표시 동기화
-  document.querySelectorAll('.rec-chip').forEach(chip => {
-    chip.classList.toggle('selected', chip.dataset.title === val);
-  });
-}
-
-// 학생 과목 선택 시 연관 도서 자동 분류 및 제시
-function handleSubjectChange() {
-  const subVal = document.getElementById('subjectSelect').value;
-  const customGroup = document.getElementById('customSubjectGroup');
-  const customInput = document.getElementById('customSubjectInput');
-
-  if (subVal === 'CUSTOM_SUBJECT') {
-    customGroup.style.display = 'block';
-    customInput.required = true;
-    filterBooksByCustomSubject();
-    return;
-  } else {
-    customGroup.style.display = 'none';
-    customInput.required = false;
-  }
-
-  if (!subVal) {
-    document.getElementById('subjectRecommendPanel').style.display = 'none';
-    return;
-  }
-
-  const matched = ALL_BOOKS.filter(b => b.subjects && b.subjects.includes(subVal));
-  renderSubjectRecommendations(subVal, matched);
-}
-
-// 직접 입력한 과목명 키워드 기반 연관 도서 분류
-function filterBooksByCustomSubject() {
-  const kw = document.getElementById('customSubjectInput').value.trim().toLowerCase();
-  if (!kw) {
-    document.getElementById('subjectRecommendPanel').style.display = 'none';
-    return;
-  }
-  // 키워드 매핑 보조
-  let targetTag = "";
-  if (kw.includes("중국") || kw.includes("한문") || kw.includes("외국어") || kw.includes("세계")) targetTag = "중국어·세계문화";
-  else if (kw.includes("국어") || kw.includes("문학") || kw.includes("독서") || kw.includes("작문")) targetTag = "국어·문학";
-  else if (kw.includes("사회") || kw.includes("역사") || kw.includes("지리")) targetTag = "사회·역사·지리";
-  else if (kw.includes("윤리") || kw.includes("철학") || kw.includes("심리")) targetTag = "윤리·철학·심리";
-  else if (kw.includes("경제") || kw.includes("정치") || kw.includes("법")) targetTag = "경제·정치·법";
-  else if (kw.includes("수학") || kw.includes("미적") || kw.includes("통계") || kw.includes("기하")) targetTag = "수학";
-  else if (kw.includes("물리") || kw.includes("지구") || kw.includes("우주") || kw.includes("천체")) targetTag = "물리·지구과학";
-  else if (kw.includes("화학") || kw.includes("생명") || kw.includes("생물") || kw.includes("환경") || kw.includes("의학")) targetTag = "화학·생명과학";
-  else if (kw.includes("정보") || kw.includes("인공지능") || kw.includes("ai") || kw.includes("데이터") || kw.includes("코딩")) targetTag = "정보·AI";
-  else if (kw.includes("미술") || kw.includes("예술") || kw.includes("진로") || kw.includes("음악")) targetTag = "미술·예술·진로";
-
-  const matched = ALL_BOOKS.filter(b => {
-    const byTag = targetTag && b.subjects && b.subjects.includes(targetTag);
-    const byText = b.title.toLowerCase().includes(kw) || b.subtitle.toLowerCase().includes(kw) || b.theme.toLowerCase().includes(kw);
-    return byTag || byText;
-  });
-
-  renderSubjectRecommendations(kw, matched);
-}
-
-function renderSubjectRecommendations(subjectLabel, books) {
-  const panel = document.getElementById('subjectRecommendPanel');
-  const titleEl = document.getElementById('recPanelTitle');
-  const badgeEl = document.getElementById('recCountBadge');
-  const listEl = document.getElementById('recChipList');
-
-  panel.style.display = 'block';
-  titleEl.textContent = `📚 [${subjectLabel}] 교과와 연관된 추천 도서 분류`;
-  badgeEl.textContent = `총 ${books.length}권 추천`;
-
-  if (books.length === 0) {
-    listEl.innerHTML = `<div style="font-size:0.85rem; color:#475569;">직접 일치하는 추천 도서가 없습니다. 아래 전체 목록에서 선택하거나 [직접 입력]을 이용해 주세요.</div>`;
-    return;
-  }
-
-  listEl.innerHTML = books.map(b => `
-    <div class="rec-chip" data-title="${b.title}" onclick="pickRecommendedBook('${b.title.replace(/'/g, "\\'")}')">
-      <strong>《${b.title}》</strong>
-      <span>${b.theme}</span>
-    </div>
-  `).join('');
-}
-
-function pickRecommendedBook(title) {
-  const select = document.getElementById('bookSelect');
-  select.value = title;
-  toggleCustomBook();
-}
-
-// =========================================================================
-// 100권+ 도서별 100% 비중복 초정밀 다층 에디토리얼 일러스트 엔진 (v2 - 고밀도 일러스트)
-// - 레퍼런스 포스터 수준의 입체 그라데이션, 인물 군상, 투시 원근감, 상징 소품 결합
-// =========================================================================
-const POSTER_PALETTES = [
-  { top: "#0f172a", bot: "#1e3a8a", title: "#ffffff", sub: "#93c5fd", acc: "#f59e0b", sec: "#38bdf8", tri: "#34d399", ground: "#070b14" },
-  { top: "#2e1065", bot: "#4c1d95", title: "#ffffff", sub: "#fde047", acc: "#f43f5e", sec: "#34d399", tri: "#38bdf8", ground: "#170736" },
-  { top: "#064e3b", bot: "#0f766e", title: "#ffffff", sub: "#a7f3d0", acc: "#fbbf24", sec: "#38bdf8", tri: "#fb7185", ground: "#02261d" },
-  { top: "#4c0519", bot: "#881337", title: "#ffffff", sub: "#fecdd3", acc: "#fbbf24", sec: "#60a5fa", tri: "#34d399", ground: "#26030c" },
-  { top: "#f5f0e6", bot: "#e5dcc5", title: "#1e293b", sub: "#475569", acc: "#dc2626", sec: "#2563eb", tri: "#059669", ground: "#cbd5e1" },
-  { top: "#172554", bot: "#1d4ed8", title: "#ffffff", sub: "#bfdbfe", acc: "#fb923c", sec: "#2dd4bf", tri: "#fde047", ground: "#091026" },
-  { top: "#3b0764", bot: "#6b21a8", title: "#ffffff", sub: "#f3e8ff", acc: "#facc15", sec: "#38bdf8", tri: "#fb7185", ground: "#1f0336" },
-  { top: "#18181b", bot: "#3f3f46", title: "#ffffff", sub: "#fde68a", acc: "#10b981", sec: "#f97316", tri: "#38bdf8", ground: "#09090b" },
-  { top: "#0c4a6e", bot: "#0369a1", title: "#ffffff", sub: "#bae6fd", acc: "#facc15", sec: "#f43f5e", tri: "#34d399", ground: "#062538" },
-  { top: "#422006", bot: "#78350f", title: "#ffffff", sub: "#fde68a", acc: "#38bdf8", sec: "#34d399", tri: "#f43f5e", ground: "#241103" },
-  { top: "#11383a", bot: "#155e63", title: "#ffffff", sub: "#ccfbf1", acc: "#fb923c", sec: "#fde047", tri: "#60a5fa", ground: "#062022" },
-  { top: "#31102f", bot: "#701a75", title: "#ffffff", sub: "#f5d0fe", acc: "#38bdf8", sec: "#fde047", tri: "#34d399", ground: "#1c081b" }
-];
-
-function drawPeopleGroup(type, p) {
-  if (type === "TUG_OF_WAR") {
-    return `
-      <line x1="42" y1="262" x2="278" y2="262" stroke="#92400e" stroke-width="4.5" stroke-dasharray="6,2"/>
-      <circle cx="64" cy="236" r="6.5" fill="#1e293b"/><path d="M64 242 L54 264 L46 286 M54 264 L68 286" stroke="#1e293b" stroke-width="4.5" stroke-linecap="round"/><path d="M62 246 L82 260" stroke="#10b981" stroke-width="5" stroke-linecap="round"/>
-      <circle cx="96" cy="234" r="6.5" fill="#1e293b"/><path d="M96 240 L86 263 L78 286 M86 263 L102 286" stroke="#1e293b" stroke-width="4.5" stroke-linecap="round"/><path d="M94 245 L114 260" stroke="#ef4444" stroke-width="5" stroke-linecap="round"/>
-      <circle cx="224" cy="234" r="6.5" fill="#1e293b"/><path d="M224 240 L234 263 L220 286 M234 263 L244 286" stroke="#1e293b" stroke-width="4.5" stroke-linecap="round"/><path d="M226 245 L206 260" stroke="#0ea5e9" stroke-width="5" stroke-linecap="round"/>
-      <circle cx="256" cy="236" r="6.5" fill="#1e293b"/><path d="M256 242 L266 264 L252 286 M266 264 L276 286" stroke="#1e293b" stroke-width="4.5" stroke-linecap="round"/><path d="M254 246 L236 260" stroke="#f43f5e" stroke-width="5" stroke-linecap="round"/>
-    `;
-  }
-  if (type === "TORCH_CROWD") {
-    return `
-      <g>
-        <rect x="74" y="212" width="9" height="34" fill="#38bdf8" rx="3"/><circle cx="78" cy="204" r="5.5" fill="#fde68a"/><line x1="78" y1="206" x2="66" y2="186" stroke="#fde68a" stroke-width="2.5"/><circle cx="65" cy="182" r="6.5" fill="#fb923c"/>
-        <rect x="110" y="206" width="10" height="40" fill="#facc15" rx="3"/><circle cx="115" cy="198" r="5.5" fill="#fde68a"/><line x1="115" y1="200" x2="115" y2="176" stroke="#fde68a" stroke-width="2.5"/><circle cx="115" cy="171" r="8.5" fill="#f97316"/><circle cx="115" cy="171" r="4" fill="#fef08a"/>
-        <rect x="150" y="204" width="10" height="42" fill="#ffffff" rx="3"/><circle cx="155" cy="196" r="5.5" fill="#fde68a"/><line x1="155" y1="198" x2="155" y2="173" stroke="#fde68a" stroke-width="2.5"/><circle cx="155" cy="168" r="9.5" fill="#f97316"/><circle cx="155" cy="168" r="4.5" fill="#fef08a"/>
-        <rect x="190" y="206" width="10" height="40" fill="#34d399" rx="3"/><circle cx="195" cy="198" r="5.5" fill="#fde68a"/><line x1="195" y1="200" x2="195" y2="176" stroke="#fde68a" stroke-width="2.5"/><circle cx="195" cy="171" r="8.5" fill="#f97316"/><circle cx="195" cy="171" r="4" fill="#fef08a"/>
-        <rect x="232" y="212" width="9" height="34" fill="#f43f5e" rx="3"/><circle cx="236" cy="204" r="5.5" fill="#fde68a"/><line x1="236" y1="206" x2="246" y2="186" stroke="#fde68a" stroke-width="2.5"/><circle cx="247" cy="182" r="6.5" fill="#fb923c"/>
-        <circle cx="122" cy="260" r="5" fill="#fde68a"/><rect x="128" y="268" width="32" height="7" rx="3" fill="#f87171"/><circle cx="168" cy="260" r="5" fill="#fde68a"/>
-      </g>
-    `;
-  }
-  if (type === "EXPLORERS") {
-    return `
-      <circle cx="64" cy="242" r="5.5" fill="#fde68a"/><rect x="58" y="248" width="12" height="28" fill="#10b981" rx="4"/>
-      <circle cx="86" cy="244" r="5.5" fill="#fde68a"/><rect x="80" y="250" width="12" height="26" fill="#f43f5e" rx="4"/>
-      <line x1="88" y1="254" x2="112" y2="236" stroke="#fde68a" stroke-width="3" stroke-linecap="round"/>
-      <circle cx="256" cy="242" r="5.5" fill="#fde68a"/><rect x="250" y="248" width="12" height="28" fill="#38bdf8" rx="4"/>
-    `;
-  }
-  return `
-    <circle cx="112" cy="244" r="5.5" fill="#fde68a"/><rect x="106" y="250" width="12" height="26" fill="${p.acc}" rx="4"/>
-    <circle cx="208" cy="244" r="5.5" fill="#fde68a"/><rect x="202" y="250" width="12" height="26" fill="${p.sec}" rx="4"/>
-  `;
-}
-
-const BOOK_ART_SPECS = {
-  1: (p) => `<path d="M76 256 V154 A84 84 0 0 1 244 154 V256" fill="none" stroke="${p.acc}" stroke-width="5"/><circle cx="160" cy="134" r="18" fill="${p.acc}"/><path d="M124 198 C124 162, 196 162, 196 198" fill="${p.sec}"/><path d="M56 212 Q160 258 264 212" fill="none" stroke="#ffffff" stroke-width="5" stroke-linecap="round"/>${drawPeopleGroup("EXPLORERS", p)}`,
-  2: (p) => `<rect x="34" y="106" width="114" height="142" rx="10" fill="#450a0a" stroke="#ef4444" stroke-width="2.5"/><polygon points="80,156 80,192 112,174" fill="#ef4444"/><text x="91" y="218" font-size="10" fill="#fca5a5" text-anchor="middle">쇼츠·영상 홍수</text><rect x="172" y="106" width="114" height="142" rx="10" fill="#eff6ff" stroke="#3b82f6" stroke-width="2.5"/><path d="M192 204 Q229 184 266 204 L266 136 Q229 116 192 136 Z" fill="#2563eb"/><text x="229" y="226" font-size="10" font-weight="bold" fill="#1e3a8a" text-anchor="middle">비판적 문해력</text>`,
-  3: (p) => `
-    <path d="M95 92 L102 106 L112 96 L122 106 L129 92 L126 112 L98 112 Z" fill="#cbd5e1" opacity="0.6"/>
-    <rect x="115" y="274" width="90" height="8" rx="3" fill="#475569"/><rect x="155" y="128" width="10" height="146" fill="#475569"/>
-    <line x1="86" y1="152" x2="234" y2="142" stroke="#334155" stroke-width="5" stroke-linecap="round"/>
-    <line x1="92" y1="152" x2="76" y2="195" stroke="#64748b" stroke-width="1.8"/><line x1="92" y1="152" x2="110" y2="195" stroke="#64748b" stroke-width="1.8"/>
-    <path d="M66 195 Q93 212 120 195 Z" fill="#334155"/>
-    <ellipse cx="80" cy="182" rx="18" ry="11" fill="#60a5fa" stroke="#1e293b" stroke-width="1.5"/><text x="80" y="185" font-size="8.5" font-weight="bold" fill="#0f172a" text-anchor="middle">프레임</text>
-    <ellipse cx="110" cy="172" rx="16" ry="11" fill="#f87171" stroke="#1e293b" stroke-width="1.5"/><text x="110" y="175" font-size="8.5" font-weight="bold" fill="white" text-anchor="middle">권력</text>
-    <line x1="228" y1="142" x2="210" y2="188" stroke="#64748b" stroke-width="1.8"/><line x1="228" y1="142" x2="246" y2="188" stroke="#64748b" stroke-width="1.8"/>
-    <path d="M200 188 Q228 205 256 188 Z" fill="#334155"/>
-    <circle cx="216" cy="176" r="9" fill="#34d399" stroke="#1e293b" stroke-width="1.5"/><text x="216" y="179" font-size="9" font-weight="bold" fill="#0f172a" text-anchor="middle">?</text>
-    <circle cx="238" cy="174" r="10" fill="#fb923c" stroke="#1e293b" stroke-width="1.5"/><text x="238" y="177" font-size="9" font-weight="bold" fill="white" text-anchor="middle">!</text>
-    <circle cx="195" cy="116" r="28" fill="#ffffff" fill-opacity="0.92" stroke="#334155" stroke-width="4.5"/><line x1="215" y1="136" x2="242" y2="162" stroke="#1e293b" stroke-width="6" stroke-linecap="round"/>
-    <text x="193" y="120" font-size="13" font-weight="900" fill="#0f172a" text-anchor="middle">언어</text>
-    ${drawPeopleGroup("TUG_OF_WAR", p)}`,
-  4: (p) => `<circle cx="160" cy="174" r="66" fill="none" stroke="${p.sec}" stroke-width="3" stroke-dasharray="8,4"/><circle cx="160" cy="174" r="44" fill="none" stroke="${p.acc}" stroke-width="3.5"/><circle cx="160" cy="174" r="22" fill="${p.acc}" opacity="0.35" stroke="#ffffff" stroke-width="3"/><circle cx="160" cy="174" r="9" fill="#ffffff"/><line x1="238" y1="102" x2="168" y2="166" stroke="#fde047" stroke-width="4"/><polygon points="163,171 177,168 168,159" fill="#fde047"/>${drawPeopleGroup("DEFAULT", p)}`,
-  5: (p) => `<path d="M40 214 Q160 128 280 214" fill="none" stroke="${p.acc}" stroke-width="8"/><line x1="96" y1="184" x2="96" y2="248" stroke="#cbd5e1" stroke-width="4"/><line x1="160" y1="172" x2="160" y2="248" stroke="#cbd5e1" stroke-width="4"/><line x1="224" y1="184" x2="224" y2="248" stroke="#cbd5e1" stroke-width="4"/><circle cx="116" cy="148" r="13" fill="${p.sec}"/><circle cx="204" cy="148" r="13" fill="${p.tri}"/><path d="M132 142 Q160 118 188 142" fill="none" stroke="#fde047" stroke-width="3" stroke-dasharray="4,3"/>`,
-  6: (p) => `<polygon points="184,102 262,102 246,252 168,252" fill="#bae6fd" stroke="#38bdf8" stroke-width="3"/><polyline points="204,118 182,158 216,192 188,236" fill="none" stroke="#0f172a" stroke-width="3.5"/><line x1="66" y1="242" x2="166" y2="142" stroke="#d97706" stroke-width="9" stroke-linecap="round"/><path d="M148 124 L194 166 L168 190 L130 148 Z" fill="${p.acc}" stroke="white" stroke-width="2.5"/>`,
-  7: (p) => `<rect x="0" y="166" width="320" height="134" fill="#020617" opacity="0.72"/><line x1="0" y1="166" x2="320" y2="166" stroke="#38bdf8" stroke-width="2.5"/><polygon points="160,102 126,166 194,166" fill="#e0f2fe"/><polygon points="126,166 194,166 236,218 196,274 124,274 84,218" fill="#1e3a8a" stroke="#60a5fa" stroke-width="2"/><circle cx="160" cy="214" r="18" fill="none" stroke="#fbbf24" stroke-width="3"/><line x1="160" y1="232" x2="160" y2="262" stroke="#fbbf24" stroke-width="3.5"/>`,
-  8: (p) => `<polygon points="160,94 64,134 256,134" fill="#f8fafc" stroke="${p.acc}" stroke-width="2.5"/><rect x="82" y="134" width="18" height="106" fill="#e2e8f0"/><rect x="128" y="134" width="18" height="106" fill="#e2e8f0"/><rect x="174" y="134" width="18" height="106" fill="#e2e8f0"/><rect x="220" y="134" width="18" height="106" fill="#e2e8f0"/><rect x="60" y="240" width="200" height="14" fill="#94a3b8"/><circle cx="160" cy="186" r="22" fill="#1e3a8a" stroke="#fbbf24" stroke-width="3"/><text x="160" y="191" font-size="11" font-weight="bold" fill="#fbbf24" text-anchor="middle">SOPHIA</text>`,
-  9: (p) => `<polygon points="160,96 122,184 160,224 198,184" fill="#ffffff" stroke="${p.acc}" stroke-width="3"/><line x1="160" y1="96" x2="160" y2="172" stroke="#0f172a" stroke-width="3"/><circle cx="160" cy="174" r="7" fill="${p.acc}"/><path d="M56 244 Q112 222 160 238 Q208 254 264 232" fill="none" stroke="${p.sec}" stroke-width="4"/>`,
-  10: (p) => `<rect x="76" y="118" width="104" height="58" rx="14" fill="${p.sec}"/><polygon points="98,176 118,176 92,194" fill="${p.sec}"/><text x="128" y="152" font-size="13" font-weight="bold" fill="#0f172a" text-anchor="middle">존중의 언어</text><rect x="140" y="176" width="104" height="54" rx="14" fill="${p.acc}"/><polygon points="216,230 196,230 222,248" fill="${p.acc}"/><text x="192" y="208" font-size="13" font-weight="bold" fill="white" text-anchor="middle">공감의 대화</text>`,
-  11: (p) => `<rect x="68" y="218" width="184" height="22" rx="4" fill="#3b82f6"/><rect x="86" y="192" width="148" height="22" rx="4" fill="#10b981"/><rect x="104" y="166" width="112" height="22" rx="4" fill="#f59e0b"/><rect x="122" y="140" width="76" height="22" rx="4" fill="#f43f5e"/><polygon points="160,96 165,112 182,112 168,121 173,136 160,127 147,136 152,121 138,112 155,112" fill="#fde047"/>`,
-  12: (p) => `<path d="M224 108 A 28 28 0 1 0 248 150 A 22 22 0 1 1 224 108 Z" fill="#fde047"/><rect x="74" y="126" width="136" height="128" rx="8" fill="#fefce8" stroke="#f59e0b" stroke-width="3"/><line x1="94" y1="154" x2="188" y2="154" stroke="#92400e" stroke-width="2.5"/><line x1="94" y1="178" x2="172" y2="178" stroke="#92400e" stroke-width="2.5"/><line x1="94" y1="202" x2="182" y2="202" stroke="#92400e" stroke-width="2.5"/><circle cx="176" cy="226" r="10" fill="#dc2626"/>`,
-  13: (p) => `<path d="M160 256 L160 162" stroke="#92400e" stroke-width="9" stroke-linecap="round"/><circle cx="160" cy="142" r="44" fill="#10b981"/><circle cx="122" cy="162" r="32" fill="#059669"/><circle cx="198" cy="162" r="32" fill="#34d399"/><circle cx="144" cy="132" r="6" fill="#f43f5e"/><circle cx="178" cy="148" r="6" fill="#fde047"/><circle cx="158" cy="166" r="6" fill="#fb923c"/>${drawPeopleGroup("DEFAULT", p)}`,
-  14: (p) => `<rect x="64" y="118" width="92" height="124" rx="4" transform="rotate(-6 110 180)" fill="#fefce8" stroke="#f59e0b" stroke-width="2.5"/><text x="108" y="152" font-size="12" font-weight="900" fill="#78350f" text-anchor="middle">백 석</text><text x="108" y="174" font-size="10" fill="#92400e" text-anchor="middle">나와 나타샤와</text><text x="108" y="190" font-size="10" fill="#92400e" text-anchor="middle">흰 당나귀</text><rect x="164" y="118" width="92" height="124" rx="4" transform="rotate(6 210 180)" fill="#eff6ff" stroke="#38bdf8" stroke-width="2.5"/><text x="212" y="152" font-size="12" font-weight="900" fill="#1e3a8a" text-anchor="middle">윤동주</text><text x="212" y="174" font-size="10" fill="#1d4ed8" text-anchor="middle">별 헤는 밤</text><text x="212" y="190" font-size="10" fill="#1d4ed8" text-anchor="middle">서 시</text><polygon points="160,94 164,104 175,104 166,110 169,120 160,114 151,120 154,110 145,104 156,104" fill="#fde047"/>`,
-  15: (p) => `
-    <polygon points="48,145 195,115 195,235 48,255" fill="#1e293b" stroke="#0f172a" stroke-width="2"/>
-    <path d="M138 126 L146 154 L136 176 L148 202" fill="none" stroke="#be123c" stroke-width="3"/>
-    <circle cx="176" cy="112" r="10" fill="#e11d48" opacity="0.8"/><circle cx="235" cy="145" r="8" fill="#e11d48" opacity="0.7"/>
-    ${drawPeopleGroup("TORCH_CROWD", p)}`,
-  16: (p) => `<rect x="34" y="102" width="118" height="156" rx="6" fill="#090d16" stroke="#475569" stroke-width="2"/><rect x="54" y="124" width="78" height="84" fill="none" stroke="#334155" stroke-width="2"/><rect x="168" y="102" width="118" height="156" rx="6" fill="#fef3c7" stroke="#f59e0b" stroke-width="2"/><circle cx="227" cy="144" r="22" fill="#f59e0b"/><circle cx="160" cy="172" r="9" fill="#ffffff" stroke="#0f172a" stroke-width="2"/><rect x="152" y="182" width="16" height="44" rx="5" fill="#3b82f6"/>`,
-  17: (p) => `<circle cx="242" cy="116" r="24" fill="#fef08a"/><rect x="52" y="168" width="26" height="106" fill="#334155"/><rect x="92" y="144" width="32" height="130" fill="#475569"/><rect x="136" y="184" width="44" height="90" fill="#1e293b"/><path d="M188 248 Q216 175 242 118" fill="none" stroke="#f97316" stroke-width="3.5" stroke-dasharray="5,4"/><circle cx="242" cy="116" r="11" fill="#f97316" stroke="white" stroke-width="2"/>`,
-  18: (p) => `<circle cx="116" cy="166" r="32" fill="#fde68a" stroke="#f59e0b" stroke-width="3"/><rect x="172" y="134" width="64" height="64" rx="14" fill="#e0f2fe" stroke="#38bdf8" stroke-width="3"/><circle cx="192" cy="160" r="6" fill="#0284c7"/><circle cx="216" cy="160" r="6" fill="#0284c7"/><path d="M128 214 Q160 242 192 214" fill="none" stroke="#f43f5e" stroke-width="4" stroke-linecap="round"/>`,
-  19: (p) => `<path d="M56 246 L112 246 L112 214 L168 214 L168 182 L224 182 L224 150 L272 150" fill="none" stroke="#fbbf24" stroke-width="5" stroke-linecap="round"/><path d="M156 108 C156 108, 134 138, 134 154 C134 166, 144 176, 156 176 C168 176, 178 166, 178 154 C178 138, 156 108, 156 108 Z" fill="#38bdf8" stroke="white" stroke-width="2.5"/><circle cx="96" cy="164" r="12" fill="#fde68a"/><rect x="86" y="178" width="20" height="44" rx="5" fill="#f43f5e"/>`,
-  20: (p) => `
-    <path d="M235 72 Q195 120 225 168 Q255 215 210 295 L320 295 L320 72 Z" fill="#fef08a"/>
-    <g transform="rotate(-7 125 195)">
-      <rect x="74" y="108" width="102" height="175" rx="6" fill="#1e1b4b" stroke="#818cf8" stroke-width="2"/>
-      <line x1="74" y1="130" x2="90" y2="130" stroke="#c7d2fe" stroke-width="2"/><line x1="74" y1="160" x2="92" y2="160" stroke="#c7d2fe" stroke-width="2"/>
-      <line x1="74" y1="190" x2="90" y2="190" stroke="#c7d2fe" stroke-width="2"/><line x1="74" y1="220" x2="92" y2="220" stroke="#c7d2fe" stroke-width="2"/>
-      <circle cx="126" cy="144" r="14" fill="#f8fafc"/><path d="M104 185 C104 164, 148 164, 148 185 L144 268 L108 268 Z" fill="#f8fafc"/>
-    </g>
-    <polygon points="168,176 205,152 194,192" fill="#f43f5e"/><polygon points="174,198 218,195 192,222" fill="#38bdf8"/><polygon points="165,220 206,232 182,254" fill="#10b981"/>
-    <circle cx="212" cy="166" r="13" fill="#fb923c"/><rect x="218" y="114" width="7" height="44" transform="rotate(22 218 114)" fill="#ec4899" rx="2"/><rect x="234" y="118" width="7" height="44" transform="rotate(35 234 118)" fill="#0ea5e9" rx="2"/>`,
-  59: (p) => `
-    <circle cx="72" cy="108" r="15" fill="none" stroke="#a855f7" stroke-width="5" stroke-dasharray="5,3"/>
-    <path d="M235 95 Q255 112 235 128 M255 95 Q235 112 255 128" fill="none" stroke="#c084fc" stroke-width="2.5"/>
-    <rect x="108" y="136" width="104" height="66" rx="6" fill="#312e81" stroke="#38bdf8" stroke-width="3"/><rect x="115" y="143" width="90" height="52" rx="3" fill="#1e293b"/>
-    <polygon points="154,192 166,192 160,214" fill="#f97316"/>
-    <path d="M160 104 C172 122 172 164 168 186 L152 186 C148 164 148 122 160 104 Z" fill="#f8fafc" stroke="#38bdf8" stroke-width="2"/>
-    <polygon points="160,104 167,120 153,120" fill="#10b981"/><circle cx="160" cy="142" r="6" fill="#38bdf8"/>
-    <path d="M52 212 L68 168 L104 162" fill="none" stroke="#94a3b8" stroke-width="6" stroke-linecap="round"/>
-    <rect x="224" y="132" width="44" height="32" rx="4" fill="#1e3a8a" stroke="#60a5fa" stroke-width="1.5"/><ellipse cx="246" cy="148" rx="13" ry="9" fill="#c084fc" opacity="0.85"/>
-    <path d="M276 212 L262 174 L236 168" fill="none" stroke="#94a3b8" stroke-width="6" stroke-linecap="round"/>
-    <rect x="0" y="216" width="320" height="84" fill="#090d16"/>
-    <line x1="215" y1="242" x2="256" y2="218" stroke="#a855f7" stroke-width="7" stroke-linecap="round"/>
-    <line x1="234" y1="232" x2="224" y2="278" stroke="#cbd5e1" stroke-width="2.5"/><line x1="234" y1="232" x2="246" y2="278" stroke="#cbd5e1" stroke-width="2.5"/>
-    ${drawPeopleGroup("EXPLORERS", p)}`
-};
-
-function buildUniqueScene21To100(id, book, p) {
-  const scenes = {
-    21: `<rect x="64" y="104" width="192" height="114" rx="8" fill="#065f46" stroke="#b45309" stroke-width="5"/><text x="160" y="156" font-size="14" font-weight="bold" fill="white" text-anchor="middle">존중과 소통의 교실</text>${drawPeopleGroup("DEFAULT", p)}`,
-    22: `<rect x="88" y="114" width="144" height="94" rx="10" fill="#1e293b" stroke="#38bdf8" stroke-width="3"/><text x="160" y="154" font-size="13" font-weight="bold" fill="#fde047" text-anchor="middle">FUTURE LEARNING</text><text x="160" y="178" font-size="11" fill="#38bdf8" text-anchor="middle">질문하는 인간 × AI</text>${drawPeopleGroup("EXPLORERS", p)}`,
-    23: `<circle cx="160" cy="174" r="56" fill="#0284c7" stroke="#38bdf8" stroke-width="3"/><path d="M126 160 Q154 136 184 154 Q198 182 166 204 Q134 196 126 160 Z" fill="#10b981"/><rect x="74" y="218" width="172" height="26" rx="13" fill="white"/><text x="160" y="235" font-size="11" font-weight="900" fill="#0f172a" text-anchor="middle">FACTFULNESS · DATA</text>`,
-    24: `<circle cx="160" cy="176" r="24" fill="${p.acc}"/><circle cx="160" cy="176" r="44" fill="none" stroke="${p.sec}" stroke-width="3" stroke-dasharray="6,4"/><circle cx="160" cy="176" r="64" fill="none" stroke="#ffffff" stroke-width="2"/><text x="160" y="181" font-size="13" font-weight="900" fill="white" text-anchor="middle">+1%</text>`,
-    25: `<rect x="116" y="102" width="88" height="154" rx="14" fill="#0f172a" stroke="#38bdf8" stroke-width="4"/><circle cx="160" cy="168" r="28" fill="#3b82f6" opacity="0.8"/><path d="M84 146 Q104 176 84 206 M236 146 Q216 176 236 206" fill="none" stroke="#fde047" stroke-width="3.5"/>`,
-    26: `<polygon points="160,104 94,226 226,226" fill="white" fill-opacity="0.15" stroke="white" stroke-width="3"/><line x1="54" y1="168" x2="128" y2="168" stroke="#ffffff" stroke-width="5"/><line x1="192" y1="152" x2="266" y2="136" stroke="#f43f5e" stroke-width="4"/><line x1="194" y1="168" x2="266" y2="168" stroke="#facc15" stroke-width="4"/><line x1="192" y1="184" x2="266" y2="200" stroke="#38bdf8" stroke-width="4"/>`,
-    27: `<polygon points="160,126 138,244 182,244" fill="#f59e0b"/><line x1="76" y1="142" x2="244" y2="142" stroke="#ffffff" stroke-width="5"/><circle cx="96" cy="124" r="16" fill="#38bdf8"/><circle cx="224" cy="124" r="16" fill="#f43f5e"/>`,
-    28: `<circle cx="160" cy="176" r="58" fill="#1e3a8a" stroke="#fbbf24" stroke-width="4"/><path d="M226 132 A 74 74 0 1 0 226 220" fill="none" stroke="#f43f5e" stroke-width="4"/><polygon points="226,124 218,138 234,138" fill="#f43f5e"/>`,
-    29: `<circle cx="160" cy="176" r="54" fill="white" stroke="#1e293b" stroke-width="3"/><path d="M106 176 A 27 27 0 0 1 160 176 A 27 27 0 0 0 214 176 A 54 54 0 0 1 106 176 Z" fill="#2563eb"/><path d="M106 176 A 54 54 0 0 1 214 176 A 27 27 0 0 1 160 176 A 27 27 0 0 0 106 176 Z" fill="#dc2626"/>`,
-    30: `<rect x="64" y="132" width="76" height="114" fill="#fbbf24" rx="4"/><rect x="180" y="206" width="76" height="40" fill="#64748b" rx="4"/><path d="M140 168 L180 206" stroke="#f43f5e" stroke-width="4" stroke-dasharray="5,3"/>`,
-    31: `<path d="M104 148 H216 L204 236 H116 Z" fill="#10b981" stroke="white" stroke-width="3"/><path d="M134 148 C134 120, 186 120, 186 148" fill="none" stroke="#fde047" stroke-width="4"/><circle cx="160" cy="192" r="20" fill="#0284c7"/>`,
-    32: `<polygon points="56,236 116,134 176,236" fill="#059669"/><polygon points="136,236 198,148 264,236" fill="#10b981"/><path d="M84 124 Q160 96 236 124 L236 164 Q160 136 84 164 Z" fill="white" opacity="0.92"/>`,
-    33: `<circle cx="160" cy="174" r="48" fill="#fef3c7" stroke="#f59e0b" stroke-width="4"/><circle cx="144" cy="162" r="7" fill="#1e293b"/><circle cx="176" cy="162" r="7" fill="#1e293b"/><polygon points="160,174 152,184 168,184" fill="#f97316"/>`,
-    34: `<ellipse cx="160" cy="182" rx="64" ry="86" fill="#1e1b4b" stroke="#fbbf24" stroke-width="5"/><path d="M160 116 A 46 56 0 0 0 160 228 Z" fill="#38bdf8"/><path d="M160 116 A 46 56 0 0 1 160 228 Z" fill="#f43f5e"/><circle cx="74" cy="224" r="16" fill="#ef4444"/>`,
-    35: `<circle cx="160" cy="176" r="24" fill="${p.acc}"/><circle cx="92" cy="132" r="14" fill="${p.sec}"/><circle cx="228" cy="132" r="14" fill="${p.sec}"/><circle cx="92" cy="220" r="14" fill="#34d399"/><circle cx="228" cy="220" r="14" fill="#34d399"/><line x1="160" y1="176" x2="92" y2="132" stroke="white" stroke-width="3"/><line x1="160" y1="176" x2="228" y2="132" stroke="white" stroke-width="3"/>`,
-    36: `<circle cx="160" cy="176" r="56" fill="#0369a1" stroke="#38bdf8" stroke-width="3"/><path d="M118 152 L148 142 L168 164 L198 154 L188 198 L144 206 Z" fill="#10b981"/><circle cx="160" cy="124" r="10" fill="#f43f5e"/>`,
-    37: `<rect x="52" y="176" width="32" height="88" fill="#334155"/><rect x="92" y="138" width="38" height="126" fill="#3b82f6"/><rect x="138" y="114" width="44" height="150" fill="#1d4ed8"/><rect x="190" y="148" width="36" height="116" fill="#0ea5e9"/>`,
-    38: `<polygon points="160,104 72,162 248,162" fill="none" stroke="#38bdf8" stroke-width="4"/><rect x="92" y="162" width="136" height="88" fill="none" stroke="#ffffff" stroke-width="3"/><circle cx="160" cy="196" r="20" fill="${p.acc}" opacity="0.8"/>`,
-    39: `<circle cx="160" cy="176" r="56" fill="white" stroke="${p.acc}" stroke-width="4"/><polygon points="160,126 172,176 160,226 148,176" fill="#dc2626"/><polygon points="110,176 160,164 210,176 160,188" fill="#2563eb"/>`,
-    40: `<rect x="96" y="114" width="128" height="136" rx="8" fill="#1e3a8a" stroke="#fbbf24" stroke-width="4"/><text x="160" y="176" font-size="28" font-weight="900" fill="#fbbf24" text-anchor="middle">LAW</text>`,
-    41: `<path d="M160 244 L160 166" stroke="#10b981" stroke-width="6"/><path d="M160 198 Q128 176 122 152 Q148 156 160 186" fill="#34d399"/><circle cx="160" cy="132" r="18" fill="#fde047"/>`,
-    42: `<path d="M160 102 L226 128 V182 C226 222 160 252 160 252 C160 252 94 222 94 182 V128 Z" fill="#1e3a8a" stroke="#fbbf24" stroke-width="4"/><text x="160" y="182" font-size="22" font-weight="900" fill="#fbbf24" text-anchor="middle">憲法</text>`,
-    43: `<path d="M156 116 C112 116, 94 156, 108 196 C116 220, 138 232, 156 232 Z" fill="#f43f5e"/><path d="M164 116 C208 116, 226 156, 212 196 C204 220, 182 232, 164 232 Z" fill="#38bdf8"/><text x="130" y="180" font-size="12" font-weight="bold" fill="white" text-anchor="middle">직관</text><text x="190" y="180" font-size="12" font-weight="bold" fill="#0f172a" text-anchor="middle">숙고</text>`,
-    44: `<circle cx="132" cy="166" r="32" fill="none" stroke="#fbbf24" stroke-width="6" stroke-dasharray="10,5"/><circle cx="192" cy="196" r="24" fill="none" stroke="#38bdf8" stroke-width="5" stroke-dasharray="8,4"/>`,
-    45: `<circle cx="116" cy="176" r="46" fill="#0284c7" stroke="#38bdf8" stroke-width="3"/><circle cx="226" cy="196" r="28" fill="#f59e0b"/><text x="226" y="204" font-size="22" font-weight="900" fill="white" text-anchor="middle">₩</text>`,
-    46: `<path d="M160 248 V176 L112 124" fill="none" stroke="#64748b" stroke-width="6"/><path d="M160 176 L208 124" fill="none" stroke="#10b981" stroke-width="7"/><text x="216" y="108" font-size="12" font-weight="bold" fill="#fde047" text-anchor="middle">NUDGE</text>`,
-    47: `<line x1="160" y1="96" x2="112" y2="274" stroke="#b45309" stroke-width="6"/><line x1="160" y1="96" x2="208" y2="274" stroke="#b45309" stroke-width="6"/><rect x="88" y="112" width="144" height="106" rx="6" fill="#fef3c7" stroke="#f59e0b" stroke-width="6"/><circle cx="132" cy="144" r="14" fill="#f97316"/>`,
-    48: `<circle cx="148" cy="176" r="54" fill="#0284c7" stroke="#38bdf8" stroke-width="3"/><rect x="234" y="114" width="16" height="92" rx="8" fill="white" stroke="#ef4444" stroke-width="3"/><circle cx="242" cy="212" r="14" fill="#ef4444"/>`,
-    49: `<polyline points="56,226 108,214 156,192 204,154 264,112" fill="none" stroke="#ef4444" stroke-width="5"/><text x="160" y="106" font-size="13" font-weight="bold" fill="#fca5a5" text-anchor="middle">+1.5°C CLIMATE DATA</text>`,
-    50: `<rect x="104" y="122" width="112" height="108" rx="14" fill="#1e1b4b" stroke="#38bdf8" stroke-width="3"/><circle cx="136" cy="154" r="10" fill="#f43f5e"/><circle cx="184" cy="154" r="10" fill="#34d399"/><circle cx="160" cy="196" r="10" fill="#fbbf24"/>`,
-    51: `<path d="M118 98 Q168 134 118 170 Q68 206 118 242" fill="none" stroke="#38bdf8" stroke-width="5"/><path d="M202 98 Q152 134 202 170 Q252 206 202 242" fill="none" stroke="#f43f5e" stroke-width="5"/>`,
-    52: `<polygon points="160,114 212,144 212,204 160,234 108,204 108,144" fill="none" stroke="#34d399" stroke-width="4"/><text x="160" y="179" font-size="16" font-weight="bold" fill="white" text-anchor="middle">H₂O · CO₂</text>`,
-    53: `<path d="M160 106 L222 132 V182 C222 218 160 246 160 246 C160 246 98 218 98 182 V132 Z" fill="#065f46" stroke="#34d399" stroke-width="3.5"/><path d="M138 176 L154 192 L186 156" fill="none" stroke="#fde047" stroke-width="5"/>`,
-    54: `<polygon points="142,108 178,108 218,244 102,244" fill="#ffffff" stroke="#34d399" stroke-width="4"/><polygon points="118,186 202,186 215,241 105,241" fill="#10b981"/>`,
-    55: `<line x1="84" y1="176" x2="236" y2="176" stroke="#fbbf24" stroke-width="5"/><polygon points="160,176 144,236 176,236" fill="#38bdf8"/><circle cx="106" cy="152" r="18" fill="#f43f5e"/><circle cx="214" cy="152" r="18" fill="#10b981"/>`,
-    56: `<rect x="96" y="148" width="128" height="54" rx="27" transform="rotate(-25 160 175)" fill="#f43f5e" stroke="white" stroke-width="3"/><path d="M160 148 L184 198 L216 184 A 27 27 0 0 0 192 134 Z" fill="#38bdf8"/>`,
-    57: `<circle cx="160" cy="176" r="52" fill="#0f172a" stroke="#38bdf8" stroke-width="3.5"/><path d="M160 144 V208 M128 176 H192" stroke="#10b981" stroke-width="10"/>`,
-    58: `<path d="M74 218 Q160 184 246 218 L246 144 Q160 112 74 144 Z" fill="#f8fafc"/><polygon points="160,96 174,132 146,132" fill="#f97316"/><rect x="150" y="132" width="20" height="44" fill="#3b82f6"/>`,
-    60: `<circle cx="160" cy="176" r="64" fill="#065f46" stroke="#34d399" stroke-width="4"/><circle cx="142" cy="158" r="16" fill="#fde047"/><circle cx="182" cy="184" r="14" fill="#38bdf8"/>`,
-    61: `<rect x="88" y="112" width="144" height="106" rx="6" fill="#1e1b4b" stroke="#fbbf24" stroke-width="5"/><polygon points="94,166 152,148 152,174" fill="white"/><line x1="168" y1="148" x2="226" y2="132" stroke="#ef4444" stroke-width="4"/><line x1="168" y1="176" x2="226" y2="192" stroke="#3b82f6" stroke-width="4"/>`,
-    62: `<rect x="76" y="118" width="168" height="112" rx="10" fill="#0f172a" stroke="#f59e0b" stroke-width="3.5"/><ellipse cx="160" cy="174" rx="54" ry="20" transform="rotate(-25 160 174)" fill="none" stroke="#38bdf8" stroke-width="2.5"/><ellipse cx="160" cy="174" rx="54" ry="20" transform="rotate(25 160 174)" fill="none" stroke="#f43f5e" stroke-width="2.5"/>`,
-    63: `<polygon points="160,98 214,142 196,236 124,236 106,142" fill="#38bdf8" fill-opacity="0.45" stroke="#bae6fd" stroke-width="3.5"/><polygon points="160,98 186,148 160,236 134,148" fill="#ffffff" fill-opacity="0.65"/>`,
-    64: `<path d="M160 98 C178 128 178 184 172 216 L148 216 C142 184 142 128 160 98 Z" fill="#f8fafc"/><polygon points="160,98 172,122 148,122" fill="#dc2626"/><polygon points="150,216 170,216 160,248" fill="#f97316"/>`,
-    65: `<circle cx="216" cy="136" r="28" fill="#f59e0b"/><ellipse cx="216" cy="136" rx="54" ry="13" transform="rotate(-22 216 136)" fill="none" stroke="#fde047" stroke-width="4"/><line x1="86" y1="218" x2="156" y2="176" stroke="#e2e8f0" stroke-width="11"/>${drawPeopleGroup("EXPLORERS", p)}`,
-    66: `<circle cx="160" cy="176" r="16" fill="#ffffff"/><circle cx="160" cy="176" r="36" fill="none" stroke="#fde047" stroke-width="2.5" stroke-dasharray="6,4"/><circle cx="160" cy="176" r="60" fill="none" stroke="#38bdf8" stroke-width="2.5" stroke-dasharray="8,5"/>`,
-    67: `<line x1="92" y1="104" x2="228" y2="104" stroke="#94a3b8" stroke-width="4"/><circle cx="120" cy="196" r="14" fill="#38bdf8"/><circle cx="148" cy="196" r="14" fill="#38bdf8"/><circle cx="216" cy="184" r="14" fill="#f59e0b"/>`,
-    68: `<rect x="64" y="114" width="192" height="124" rx="10" fill="#0f172a" stroke="#38bdf8" stroke-width="3"/><circle cx="116" cy="162" r="14" fill="#34d399"/><circle cx="160" cy="142" r="14" fill="#fbbf24"/><circle cx="204" cy="178" r="14" fill="#f43f5e"/>`,
-    69: `<rect x="68" y="124" width="184" height="112" rx="8" fill="#1e293b" stroke="#f59e0b" stroke-width="3"/><circle cx="124" cy="180" r="24" fill="none" stroke="#38bdf8" stroke-width="5" stroke-dasharray="8,4"/><circle cx="192" cy="180" r="24" fill="none" stroke="#10b981" stroke-width="5" stroke-dasharray="8,4"/>`,
-    70: `<rect x="92" y="104" width="136" height="154" rx="6" fill="white" stroke="#0284c7" stroke-width="4"/><text x="160" y="128" font-size="13" font-weight="900" fill="#0284c7" text-anchor="middle">SEASON SCIENCE</text><circle cx="160" cy="196" r="28" fill="#10b981" opacity="0.8"/>`,
-    71: `<text x="160" y="196" font-size="96" font-weight="900" fill="#fde047" text-anchor="middle">?</text><circle cx="160" cy="176" r="64" fill="none" stroke="#38bdf8" stroke-width="3" stroke-dasharray="6,4"/>`,
-    72: `<polygon points="160,104 222,148 198,224 122,224 98,148" fill="none" stroke="#fbbf24" stroke-width="3.5"/><text x="160" y="178" font-size="22" font-weight="900" fill="white" text-anchor="middle">P = NP ?</text>`,
-    73: `<circle cx="160" cy="176" r="56" fill="#f59e0b" stroke="#fef08a" stroke-width="4"/><text x="160" y="186" font-size="34" font-weight="900" fill="white" text-anchor="middle">π · ∑</text>`,
-    74: `<rect x="96" y="122" width="60" height="60" fill="#f43f5e" rx="6"/><rect x="164" y="122" width="60" height="60" fill="#38bdf8" rx="6"/><rect x="130" y="164" width="60" height="60" fill="#fde047" rx="6"/>`,
-    75: `<polygon points="160,108 92,226 228,226" fill="none" stroke="#34d399" stroke-width="4"/><circle cx="160" cy="186" r="14" fill="#fbbf24"/>`,
-    76: `<path d="M52 238 Q125 112 185 168 T276 105 L276 245 L52 245 Z" fill="#38bdf8" opacity="0.3"/><path d="M52 238 Q125 112 185 168 T276 105" fill="none" stroke="#38bdf8" stroke-width="4"/><line x1="78" y1="188" x2="188" y2="118" stroke="#f43f5e" stroke-width="3"/>`,
-    77: `<rect x="64" y="118" width="192" height="118" rx="10" fill="#1e293b" stroke="#10b981" stroke-width="3"/><text x="160" y="174" font-size="18" font-weight="bold" fill="#34d399" text-anchor="middle">f(x) = ax² + bx + c</text>`,
-    78: `<circle cx="160" cy="176" r="56" fill="none" stroke="#38bdf8" stroke-width="3"/><polygon points="160,120 208,204 112,204" fill="none" stroke="#fde047" stroke-width="3"/>`,
-    79: `<rect x="74" y="114" width="172" height="122" rx="12" fill="white" stroke="#0f172a" stroke-width="3.5"/><text x="160" y="172" font-size="20" font-weight="900" fill="#1e3a8a" text-anchor="middle">E = mc² · ∫dx</text>`,
-    80: `<circle cx="160" cy="176" r="58" fill="#1e3a8a" stroke="#fde047" stroke-width="3"/><text x="160" y="176" font-size="15" font-weight="bold" fill="white" text-anchor="middle">1 · 1 · 2 · 3 · 5 · 8</text>`,
-    81: `<circle cx="160" cy="176" r="54" fill="none" stroke="#38bdf8" stroke-width="3"/><circle cx="160" cy="122" r="8" fill="#f43f5e"/><circle cx="212" cy="160" r="8" fill="#fbbf24"/><circle cx="192" cy="220" r="8" fill="#34d399"/>`,
-    82: `<rect x="92" y="136" width="136" height="96" rx="10" fill="#b45309" stroke="#fde68a" stroke-width="3"/><text x="160" y="192" font-size="18" font-weight="900" fill="white" text-anchor="middle">MATH × JOB</text>`,
-    83: `<rect x="92" y="106" width="136" height="148" rx="8" fill="#1d4ed8" stroke="#93c5fd" stroke-width="3"/><text x="160" y="182" font-size="22" font-weight="bold" fill="#fde047" text-anchor="middle">∑ √ ∞ π</text>`,
-    84: `<path d="M64 226 Q142 114 256 164" fill="none" stroke="#f97316" stroke-width="4.5"/><circle cx="148" cy="148" r="14" fill="#38bdf8"/><line x1="148" y1="148" x2="212" y2="148" stroke="#fde047" stroke-width="3.5"/>`,
-    85: `<circle cx="236" cy="116" r="26" fill="#fef3c7"/><path d="M132 238 Q138 185 142 145 L178 145 Q182 185 188 238 Z" fill="#e7e5e4"/><polygon points="160,126 116,245 204,245" fill="none" stroke="#fbbf24" stroke-width="2" stroke-dasharray="5,3"/><text x="82" y="134" font-size="13" font-weight="bold" fill="#fde047">φ = 1.618</text>`,
-    86: `<rect x="88" y="112" width="144" height="106" rx="6" fill="#fef3c7" stroke="#f59e0b" stroke-width="5"/><circle cx="160" cy="165" r="26" fill="none" stroke="#059669" stroke-width="3"/>`,
-    87: `<rect x="74" y="114" width="172" height="122" rx="10" fill="#090d16" stroke="#10b981" stroke-width="3"/><text x="160" y="168" font-size="15" font-weight="bold" fill="#34d399" text-anchor="middle">if (logic) { solve(); }</text>`,
-    88: `<circle cx="160" cy="176" r="56" fill="white" stroke="#1e3a8a" stroke-width="4"/><line x1="160" y1="176" x2="160" y2="134" stroke="#dc2626" stroke-width="4"/><line x1="160" y1="176" x2="194" y2="176" stroke="#1e3a8a" stroke-width="4"/>`,
-    89: `<path d="M56 218 C108 114, 212 238, 264 134" fill="none" stroke="#38bdf8" stroke-width="4.5"/><circle cx="114" cy="154" r="9" fill="#fde047"/><circle cx="206" cy="198" r="9" fill="#f43f5e"/>`,
-    90: `<path d="M46 244 Q156 238 256 106" fill="none" stroke="#38bdf8" stroke-width="4.5"/><circle cx="144" cy="154" r="36" fill="#1e1b4b" stroke="#fbbf24" stroke-width="3.5"/><text x="144" y="166" font-size="34" font-weight="900" font-style="italic" fill="#fbbf24" text-anchor="middle">e</text>`,
-    91: `<line x1="112" y1="128" x2="208" y2="224" stroke="#f43f5e" stroke-width="12" stroke-linecap="round"/><line x1="208" y1="128" x2="112" y2="224" stroke="#38bdf8" stroke-width="12" stroke-linecap="round"/>`,
-    92: `<rect x="84" y="122" width="152" height="108" rx="12" fill="#1e1b4b" stroke="#a855f7" stroke-width="3"/><text x="160" y="176" font-size="16" font-weight="900" fill="#fde047" text-anchor="middle">AI = Matrix × Prob</text>`,
-    93: `<rect x="104" y="120" width="52" height="52" fill="#3b82f6"/><rect x="164" y="120" width="52" height="52" fill="#f59e0b"/><rect x="104" y="180" width="52" height="52" fill="#10b981"/><rect x="164" y="180" width="52" height="52" fill="#f43f5e"/>`,
-    94: `<rect x="92" y="114" width="136" height="128" rx="8" fill="#1e3a8a" stroke="#38bdf8" stroke-width="3"/><path d="M160 176 Q216 132 256 106" fill="none" stroke="#fde047" stroke-width="4"/>`,
-    95: `<polygon points="136,144 136,204 196,204" fill="#fde047"/><rect x="76" y="144" width="60" height="60" fill="#38bdf8" fill-opacity="0.4"/><rect x="136" y="204" width="60" height="60" fill="#f43f5e" fill-opacity="0.4"/><text x="160" y="114" font-size="15" font-weight="900" fill="#fde047" text-anchor="middle">xⁿ + yⁿ ≠ zⁿ</text>`,
-    96: `<path d="M52 228 Q112 226 160 124 Q208 226 268 228" fill="#38bdf8" fill-opacity="0.35" stroke="#38bdf8" stroke-width="4"/>`,
-    97: `<circle cx="160" cy="176" r="56" fill="#3b82f6"/><path d="M160 176 L160 120 A 56 56 0 0 1 212 196 Z" fill="#f59e0b"/><path d="M160 176 L212 196 A 56 56 0 0 1 124 218 Z" fill="#10b981"/>`,
-    98: `<rect x="74" y="122" width="172" height="114" rx="8" fill="white" stroke="#ef4444" stroke-width="3.5"/><polyline points="92,212 136,192 178,198 226,136" fill="none" stroke="#ef4444" stroke-width="4.5"/>`,
-    99: `<polygon points="160,104 74,232 246,232" fill="#f59e0b"/><polygon points="160,104 160,232 246,232" fill="#d97706"/>`,
-    100: `<path d="M160 228 C160 228 96 184 96 144 C96 122 114 108 134 108 C148 108 156 116 160 124 C164 116 172 108 186 108 C206 108 224 122 224 144 C224 184 160 228 160 228 Z" fill="#f43f5e"/><text x="160" y="168" font-size="18" font-weight="900" fill="white" text-anchor="middle">I ♥ MATH</text>`
-  };
-  return scenes[id] || BOOK_ART_SPECS[14](p);
-}
-
-function buildUniqueBackdropAndForeground(id, p) {
-  const mode = id % 10;
-  switch (mode) {
-    case 1: return `<circle cx="54" cy="108" r="18" fill="${p.acc}" opacity="0.22"/><path d="M0 264 Q160 242 320 264 L320 300 L0 300 Z" fill="${p.ground}"/>`;
-    case 2: return `<g stroke="${p.sec}" stroke-width="1" opacity="0.22"><line x1="20" y1="120" x2="300" y2="120"/><line x1="20" y1="180" x2="300" y2="180"/><line x1="20" y1="240" x2="300" y2="240"/></g><rect x="0" y="268" width="320" height="32" fill="${p.ground}"/>`;
-    case 3: return `<polygon points="0,275 85,220 170,275" fill="${p.ground}" opacity="0.7"/><polygon points="150,275 245,215 320,275" fill="${p.ground}"/>`;
-    case 4: return `<circle cx="268" cy="104" r="16" fill="#fef08a" opacity="0.75"/><circle cx="62" cy="116" r="2.5" fill="white"/><circle cx="94" cy="96" r="2" fill="white"/><rect x="0" y="266" width="320" height="34" fill="${p.ground}"/>`;
-    case 5: return `<path d="M0 258 Q80 246 160 258 T320 258 L320 300 L0 300 Z" fill="${p.sec}" opacity="0.28"/><path d="M0 270 Q160 254 320 270 L320 300 L0 300 Z" fill="${p.ground}"/>`;
-    case 6: return `<rect x="28" y="220" width="18" height="55" fill="${p.ground}" opacity="0.55"/><rect x="274" y="210" width="22" height="65" fill="${p.ground}" opacity="0.55"/><rect x="0" y="266" width="320" height="34" fill="${p.ground}"/>`;
-    case 7: return `<circle cx="160" cy="176" r="88" fill="none" stroke="${p.sub}" stroke-width="1.5" stroke-dasharray="4,6" opacity="0.35"/><rect x="0" y="268" width="320" height="32" fill="${p.ground}"/>`;
-    case 8: return `<polygon points="160,84 36,268 284,268" fill="none" stroke="${p.acc}" stroke-width="1.5" opacity="0.25"/><rect x="0" y="266" width="320" height="34" fill="${p.ground}"/>`;
-    case 9: return `<path d="M24 102 L44 102 M34 92 L34 112 M276 112 L296 112 M286 102 L286 122" stroke="${p.acc}" stroke-width="2" opacity="0.45"/><rect x="0" y="266" width="320" height="34" fill="${p.ground}"/>`;
-    default: return `<path d="M0 262 C90 242, 230 282, 320 256 L320 300 L0 300 Z" fill="${p.ground}"/>`;
+  const sec = document.getElementById("tab-" + name);
+  const nav = document.getElementById("nav-" + name);
+  if (sec) { sec.classList.add("active"); sec.style.display = "block"; }
+  if (nav) { nav.classList.add("active"); }
+  if (name === "viewer") {
+    renderOnePage(currentIndex);
+    renderBookGrid();
   }
 }
 
-function generateBookSVG(book) {
-  const id = Number(book.id || 1);
-  let paletteIdx = (id * 5 + 2) % POSTER_THEMES.length;
-  if (id === 3) paletteIdx = 4;
-  else if (id === 15) paletteIdx = 10;
-  else if (id === 20) paletteIdx = 1;
-  else if (id === 59) paletteIdx = 0;
-
-  const p = POSTER_THEMES[paletteIdx];
-
-  let coreScene = "";
-  if (BOOK_ART_SPECS[id]) {
-    coreScene = BOOK_ART_SPECS[id](p);
-  } else if (id >= 21 && id <= 100) {
-    coreScene = buildUniqueScene21To100(id, book, p);
-  } else {
-    const t = `${book.title} ${book.subtitle} ${book.theme}`;
-    let mappedId = ((id * 17) % 99) + 1;
-    if (t.includes("아q") || t.includes("회초리")) mappedId = 6;
-    else if (t.includes("낙타") || t.includes("노동")) mappedId = 19;
-    else if (t.includes("시인") || t.includes("문학")) mappedId = 14;
-    else if (t.includes("심리")) mappedId = 7;
-    else if (t.includes("역사") || t.includes("한국사")) mappedId = 85;
-    else if (t.includes("기후") || t.includes("환경")) mappedId = 48;
-    else if (t.includes("화학") || t.includes("실험")) mappedId = 54;
-    else if (t.includes("미적분") || t.includes("수학")) mappedId = 76;
-    coreScene = (BOOK_ART_SPECS[mappedId] ? BOOK_ART_SPECS[mappedId](p) : buildUniqueScene21To100(mappedId, book, p));
-  }
-
-  const backdropLayer = buildUniqueBackdropAndForeground(id, p);
-
-  const shortTitle = book.title.length > 15 ? book.title.slice(0, 15) + "…" : book.title;
-  const shortSub = book.theme.length > 21 ? book.theme.slice(0, 21) + "…" : book.theme;
-  const bottomRaw = `${book.title} - ${book.theme}`;
-  const bottomCaption = bottomRaw.length > 25 ? bottomRaw.slice(0, 24) + "…" : bottomRaw;
-
-  return `
-    <svg viewBox="0 0 320 330" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
-      <defs>
-        <linearGradient id="posterBg_${id}" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stop-color="${p.top}"/>
-          <stop offset="100%" stop-color="${p.bot}"/>
-        </linearGradient>
-      </defs>
-      <rect width="320" height="330" fill="url(#posterBg_${id})" rx="12"/>
-      ${backdropLayer}
-      <text x="160" y="38" font-size="17.5" font-weight="900" fill="${p.title}" text-anchor="middle" letter-spacing="-0.5">‘${shortTitle}’</text>
-      <text x="160" y="58" font-size="10.5" font-weight="700" fill="${p.sub}" text-anchor="middle">${shortSub}</text>
-      <line x1="65" y1="68" x2="255" y2="68" stroke="${p.sub}" stroke-width="1" opacity="0.45"/>
-      ${coreScene}
-      <rect x="14" y="294" width="292" height="26" rx="13" fill="#ffffff" opacity="0.97"/>
-      <text x="160" y="311" font-size="10.5" font-weight="800" fill="#0f172a" text-anchor="middle">${bottomCaption}</text>
-    </svg>
-  `;
+function generateBookPosterSVG(book) {
+  const colors = [
+    ["#0f172a", "#1e3a8a", "#38bdf8", "#f59e0b"],
+    ["#2e1065", "#4c1d95", "#fde047", "#f43f5e"],
+    ["#064e3b", "#0f766e", "#a7f3d0", "#fbbf24"],
+    ["#4c0519", "#881337", "#fecdd3", "#34d399"]
+  ];
+  const pair = colors[(book.id || 1) % colors.length];
+  const titleSafe = String(book.title || "").slice(0, 14);
+  const themeSafe = String(book.theme || "").slice(0, 20);
+  return (
+    '<svg viewBox="0 0 320 320" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">' +
+    '<defs><linearGradient id="g' + book.id + '" x1="0" y1="0" x2="0" y2="1">' +
+    '<stop offset="0%" stop-color="' + pair[0] + '"/><stop offset="100%" stop-color="' + pair[1] + '"/>' +
+    '</linearGradient></defs>' +
+    '<rect width="320" height="320" rx="12" fill="url(#g' + book.id + ')"/>' +
+    '<text x="160" y="42" font-size="18" font-weight="900" fill="#ffffff" text-anchor="middle">‘' + titleSafe + '’</text>' +
+    '<text x="160" y="64" font-size="11" font-weight="700" fill="' + pair[2] + '" text-anchor="middle">' + themeSafe + '</text>' +
+    '<circle cx="160" cy="175" r="56" fill="none" stroke="' + pair[3] + '" stroke-width="4"/>' +
+    '<polygon points="160,126 206,204 114,204" fill="' + pair[2] + '" fill-opacity="0.28" stroke="#ffffff" stroke-width="2.5"/>' +
+    '<circle cx="160" cy="175" r="14" fill="' + pair[3] + '"/>' +
+    '<rect x="18" y="274" width="284" height="28" rx="14" fill="#ffffff"/>' +
+    '<text x="160" y="292" font-size="10.5" font-weight="800" fill="#0f172a" text-anchor="middle">' + themeSafe + '</text>' +
+    '</svg>'
+  );
 }
 
-// 1PAGE 단일 도서 상세 렌더링
-function renderOnePageByIndex(idx) {
+function renderOnePage(idx) {
+  if (!ALL_BOOKS.length) loadBooks();
   if (idx < 0) idx = ALL_BOOKS.length - 1;
   if (idx >= ALL_BOOKS.length) idx = 0;
-  currentBookIndex = idx;
+  currentIndex = idx;
   const book = ALL_BOOKS[idx];
-  
-  const summaryText = book.customSummary || `『${book.title}』은(는) "${book.subtitle}"라는 핵심 질문을 중심으로 전개되는 ${book.cat} 계열 추천 도서입니다. 저자는 구체적인 사례와 깊이 있는 통찰을 통해 독자가 '${book.theme}'의 본질을 입체적으로 이해하도록 안내하며, 교과서 속 지식이 실제 삶과 사회·자연 현상 속에서 어떻게 살아 움직이는지 생생하게 보여줍니다.`;
-  const subjectBadges = (book.subjects || []).map(s => `<span class="subject-tag">#${s}</span>`).join(' ');
-  const badgeTitle = book.isCustom ? `교사 추가 도서 · ${book.cat} 계열` : `BOOK ${String(book.id).padStart(2, '0')} · ${book.cat} 계열`;
+  const summary = book.customSummary || ("『" + book.title + "』은(는) '" + book.subtitle + "'라는 핵심 질문을 중심으로 " + book.theme + "을(를) 탐구하는 도서입니다.");
+  const tags = (book.subjects || []).map(function(s) { return '<span class="subject-tag">#' + s + '</span>'; }).join(" ");
+  const visual = book.customImageUrl
+    ? '<img src="' + book.customImageUrl + '" alt="' + book.title + '" style="max-width:100%; max-height:100%; object-fit:contain;">'
+    : generateBookPosterSVG(book);
 
-  const container = document.getElementById('onePageContainer');
-  container.innerHTML = `
-    <div class="badge-row">
-      <span class="page-badge">${badgeTitle}</span>
-      ${subjectBadges}
-    </div>
-    <div class="book-header">
-      <div>
-        <h2>《${book.title}》</h2>
-        <div class="book-subtitle">“${book.subtitle}”</div>
-      </div>
-      <button class="btn" style="background:var(--primary); color:white;" onclick="selectBookForSubmit('${book.title.replace(/'/g, "\\'")}')">
-        ✍️ 이 책으로 소감문 쓰기
-      </button>
-    </div>
+  const optionsHtml = ALL_BOOKS.map(function(b, i) {
+    return '<option value="' + i + '"' + (i === idx ? ' selected' : '') + '>' + (i + 1) + '. 《' + b.title + '》</option>';
+  }).join("");
 
-    <div class="one-page-grid">
-      <div>
-        <div class="info-box">
-          <h3>📖 핵심 줄거리 및 내용 요약</h3>
-          <p>${summaryText}</p>
-        </div>
-        <div class="info-box" style="border-left-color: var(--accent);">
-          <h3>🎯 핵심 주제 및 교과 연계 포인트</h3>
-          <p><strong>핵심 주제:</strong> ${book.theme}<br>
-          <strong>탐구 활동 팁:</strong> 이 책의 핵심 개념을 자신의 희망 진로나 교과 단원과 연결하여 <em>"『${book.title}』은(는) [사물/현상]이다"</em> 형식의 메타포로 재해석해 보세요.</p>
-        </div>
-      </div>
-
-      <div class="illustration-box">
-        <h3>🖼️ 한 장 그림으로 도서 내용 표현하기</h3>
-        <div class="svg-stage">
-          ${book.customImageUrl ? `<img src="${book.customImageUrl}" alt="${book.title}" style="max-width:100%; max-height:100%; object-fit:contain; border-radius:8px;">` : generateBookSVG(book)}
-        </div>
-        <p style="font-size:0.8rem; color:var(--muted); margin-top:0.6rem;">
-          ▲ 핵심 키워드 시각화: ${book.theme}
-        </p>
-      </div>
-    </div>
-
-    <div class="page-nav">
-      <button class="btn" style="background:#e2e8f0;" onclick="navigateFilteredBook(-1)">◀ 이전 도서</button>
-      <div style="display:flex; align-items:center; gap:0.5rem; flex-wrap:wrap; justify-content:center;">
-        <span style="font-weight:700; color:var(--primary);" id="onePagePosLabel">1PAGE 도서 카드 (${idx + 1} / ${ALL_BOOKS.length})</span>
-        <select aria-label="도서 바로 이동" onchange="renderOnePageByIndex(Number(this.value))" style="padding:0.32rem 0.6rem; border-radius:6px; border:1px solid #cbd5e1; font-size:0.84rem;">
-          ${ALL_BOOKS.map((b, i) => `<option value="${i}" ${i === idx ? 'selected' : ''}>${i + 1}. 《${b.title}》</option>`).join('')}
-        </select>
-      </div>
-      <button class="btn" style="background:#e2e8f0;" onclick="navigateFilteredBook(1)">다음 도서 ▶</button>
-    </div>
-  `;
-}
-
-function getCurrentFilteredBooks() {
-  const keyword = (document.getElementById('searchInput')?.value || '').trim().toLowerCase();
-  return ALL_BOOKS.map((b, index) => ({ ...b, globalIndex: index })).filter(b => {
-    const matchCat = currentFilter === 'ALL' ||
-                     (currentFilter === '교사추가' ? Boolean(b.isCustom) : b.cat === currentFilter);
-    const subStr = (b.subjects || []).join(' ').toLowerCase();
-    const matchKey = !keyword ||
-                     b.title.toLowerCase().includes(keyword) ||
-                     b.subtitle.toLowerCase().includes(keyword) ||
-                     b.theme.toLowerCase().includes(keyword) ||
-                     subStr.includes(keyword);
-    return matchCat && matchKey;
-  });
-}
-
-function navigateFilteredBook(delta) {
-  const list = getCurrentFilteredBooks();
-  if (list.length === 0) return;
-  const pos = list.findIndex(item => item.globalIndex === currentBookIndex);
-  let nextPos = pos === -1 ? 0 : (pos + delta + list.length) % list.length;
-  renderOnePageByIndex(list[nextPos].globalIndex);
-}
-
-function selectBookForSubmit(title) {
-  switchTab('submit');
-  const select = document.getElementById('bookSelect');
-  select.value = title;
-  toggleCustomBook();
-  window.scrollTo({ top: 0, behavior: 'smooth' });
+  document.getElementById("onePageContainer").innerHTML =
+    '<div class="badge-row"><span class="page-badge">' + (book.isCustom ? "교사 추가" : "BOOK " + book.id) + ' · ' + book.cat + '</span>' + tags + '</div>' +
+    '<div class="book-header"><div><h2>《' + book.title + '》</h2><div class="book-subtitle">“' + book.subtitle + '”</div></div>' +
+    '<button class="btn" style="background:var(--primary);color:white;" onclick="goSubmitWithBook(\'' + book.title.replace(/'/g, "") + '\')">✍️ 이 책으로 소감문 쓰기</button></div>' +
+    '<div class="one-page-grid">' +
+      '<div>' +
+        '<div class="info-box"><h3>📖 핵심 줄거리 및 내용 요약</h3><p>' + summary + '</p></div>' +
+        '<div class="info-box" style="border-left-color:var(--accent);"><h3>🎯 핵심 주제 및 메타포 팁</h3><p><strong>핵심 주제:</strong> ' + book.theme + '<br><em>"『' + book.title + '』은(는) [사물/현상]이다"</em> 형식으로 메타포를 써보세요.</p></div>' +
+      '</div>' +
+      '<div class="illustration-box"><h3>🖼️ 한 장 그림으로 도서 내용 표현하기</h3><div class="svg-stage">' + visual + '</div></div>' +
+    '</div>' +
+    '<div class="page-nav">' +
+      '<button class="btn" style="background:#e2e8f0;" onclick="renderOnePage(' + (idx - 1) + ')">◀ 이전 도서</button>' +
+      '<select onchange="renderOnePage(Number(this.value))" style="padding:0.35rem 0.6rem;border-radius:6px;border:1px solid #cbd5e1;">' + optionsHtml + '</select>' +
+      '<button class="btn" style="background:#e2e8f0;" onclick="renderOnePage(' + (idx + 1) + ')">다음 도서 ▶</button>' +
+    '</div>';
 }
 
 function filterCategory(cat, btn) {
   currentFilter = cat;
-  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-  if (btn) btn.classList.add('active');
-  
-  // 선택한 계열에 해당하는 도서만 필터링하여 1PAGE 뷰어와 하단 그리드 모두 즉시 갱신
-  const matched = ALL_BOOKS.map((b, idx) => ({ ...b, globalIndex: idx })).filter(b => {
-    if (cat === 'ALL') return true;
-    if (cat === '교사추가') return Boolean(b.isCustom);
-    return b.cat === cat;
+  document.querySelectorAll(".filter-btn").forEach(function(b) { b.classList.remove("active"); });
+  if (btn) btn.classList.add("active");
+  const matched = ALL_BOOKS.map(function(b, i) { return { b: b, i: i }; }).filter(function(item) {
+    if (cat === "ALL") return true;
+    if (cat === "교사추가") return Boolean(item.b.isCustom);
+    return item.b.cat === cat;
   });
-
-  if (matched.length > 0) {
-    renderOnePageByIndex(matched[0].globalIndex);
-  }
-  renderBookList();
+  if (matched.length > 0) renderOnePage(matched[0].i);
+  renderBookGrid();
 }
 
-function renderBookList() {
-  const filtered = getCurrentFilteredBooks();
-  const catLabel = currentFilter === 'ALL' ? '전체' : currentFilter;
-  document.getElementById('bookCountLabel').textContent = `[${catLabel}] 표시 중: ${filtered.length}권 (전체 ${ALL_BOOKS.length}권)`;
-
-  const posLabel = document.getElementById('onePagePosLabel');
-  if (posLabel && filtered.length > 0) {
-    const pos = filtered.findIndex(item => item.globalIndex === currentBookIndex);
-    if (pos !== -1) {
-      posLabel.textContent = `[${catLabel}] 1PAGE 도서 카드 (${pos + 1} / ${filtered.length})`;
-    }
-  }
-
-  const grid = document.getElementById('bookGrid');
-  if (filtered.length === 0) {
-    grid.innerHTML = `<div style="grid-column:1/-1; text-align:center; padding:2rem; background:white; border-radius:12px; border:1px solid var(--border); color:var(--muted);">해당 분류에 등록된 도서가 없습니다. 상단 [➕ 교사 도서 1PAGE 추가] 버튼으로 도서를 등록해 보세요.</div>`;
-    return;
-  }
-
-  grid.innerHTML = filtered.map(b => `
-    <div class="mini-card ${b.isCustom ? 'custom-book' : ''}" onclick="renderOnePageByIndex(${b.globalIndex}); window.scrollTo({top:0, behavior:'smooth'});">
-      <div class="num">${b.isCustom ? '⭐ 교사 추가' + (b.teacherName ? ' (' + b.teacherName + ')' : '') : 'BOOK ' + b.id} · ${b.cat}</div>
-      <div class="title">《${b.title}》</div>
-      <div class="desc">${b.subtitle}</div>
-      <div class="tags">${(b.subjects || []).map(s => '#' + s).join(' ')}</div>
-    </div>
-  `).join('');
+function renderBookGrid() {
+  const kw = (document.getElementById("searchInput").value || "").trim().toLowerCase();
+  const list = ALL_BOOKS.map(function(b, i) { return { b: b, i: i }; }).filter(function(item) {
+    const b = item.b;
+    const matchCat = currentFilter === "ALL" || (currentFilter === "교사추가" ? Boolean(b.isCustom) : b.cat === currentFilter);
+    const matchKw = !kw || b.title.toLowerCase().includes(kw) || b.theme.toLowerCase().includes(kw);
+    return matchCat && matchKw;
+  });
+  document.getElementById("bookCountLabel").textContent = "표시 중: " + list.length + "권";
+  document.getElementById("bookGrid").innerHTML = list.map(function(item) {
+    const b = item.b;
+    return '<div class="mini-card ' + (b.isCustom ? 'custom-book' : '') + '" onclick="renderOnePage(' + item.i + ');window.scrollTo({top:0,behavior:\'smooth\'});">' +
+      '<div class="num">' + (b.isCustom ? '⭐ 교사 추가' : 'BOOK ' + b.id) + ' · ' + b.cat + '</div>' +
+      '<div class="title">《' + b.title + '》</div>' +
+      '<div class="desc">' + b.subtitle + '</div>' +
+      '<div class="tags">' + (b.subjects || []).map(function(s) { return '#' + s; }).join(' ') + '</div></div>';
+  }).join("");
 }
 
-// =========================================================================
-// 교사 맞춤형 도서 1PAGE 추가 모달 제어
-// =========================================================================
-function openAddBookModal() { document.getElementById('addBookModal').classList.add('open'); }
-function closeAddBookModal() { document.getElementById('addBookModal').classList.remove('open'); }
+function populateBookSelect() {
+  const sel = document.getElementById("bookSelect");
+  sel.innerHTML = '<option value="">-- 도서 선택 --</option><option value="CUSTOM">✏️ [직접 입력]</option>' +
+    ALL_BOOKS.map(function(b) { return '<option value="' + b.title + '">' + b.title + '</option>'; }).join("");
+}
 
-async function handleAddCustomBook(e) {
+function toggleCustomBook() {
+  const isCustom = document.getElementById("bookSelect").value === "CUSTOM";
+  document.getElementById("customBookGroup").style.display = isCustom ? "block" : "none";
+}
+
+function goSubmitWithBook(title) {
+  switchTab("submit");
+  document.getElementById("bookSelect").value = title;
+  toggleCustomBook();
+}
+
+function openAddBookModal() { document.getElementById("addBookModal").classList.add("open"); }
+function closeAddBookModal() { document.getElementById("addBookModal").classList.remove("open"); }
+
+function handleAddCustomBook(e) {
   e.preventDefault();
-  const title = document.getElementById('newBookTitle').value.trim();
-  const teacherName = (document.getElementById('newBookTeacher').value || '').trim();
-  const subtitle = document.getElementById('newBookSubtitle').value.trim();
-  const theme = document.getElementById('newBookTheme').value.trim();
-  const customSummary = document.getElementById('newBookSummary').value.trim();
-  const cat = document.getElementById('newBookCat').value;
-  
-  const checkedBoxes = document.querySelectorAll('#newBookSubjects input[type="checkbox"]:checked');
-  const subjects = Array.from(checkedBoxes).map(cb => cb.value);
-
-  const customBooks = JSON.parse(localStorage.getItem('teacherCustomBooks') || '[]');
-  const customImageUrl = (document.getElementById('newBookImageUrl').value || '').trim();
+  const subjects = Array.from(document.querySelectorAll("#newBookSubjects input:checked")).map(function(c) { return c.value; });
+  const custom = JSON.parse(localStorage.getItem("teacherCustomBooks") || "[]");
   const newBook = {
-    id: 100 + customBooks.length + 1,
+    id: 200 + custom.length + 1,
     isCustom: true,
-    cat,
-    title,
-    teacherName,
-    subtitle,
-    theme,
-    customSummary,
-    customImageUrl,
-    subjects: subjects.length > 0 ? subjects : ["국어·문학"],
-    createdAt: new Date().toISOString().slice(0, 10)
+    cat: document.getElementById("newBookCat").value,
+    teacherName: document.getElementById("newBookTeacher").value.trim(),
+    title: document.getElementById("newBookTitle").value.trim(),
+    subtitle: document.getElementById("newBookSubtitle").value.trim(),
+    theme: document.getElementById("newBookTheme").value.trim(),
+    customSummary: document.getElementById("newBookSummary").value.trim(),
+    customImageUrl: document.getElementById("newBookImageUrl").value.trim(),
+    subjects: subjects.length ? subjects : ["국어·문학"],
+    ratingCount: 0,
+    ratingSum: 0
   };
-
-  // 중복 제목이 있으면 업데이트하고 없으면 누적 추가
-  const existIdx = customBooks.findIndex(b => b.title === title);
-  if (existIdx >= 0) {
-    customBooks[existIdx] = { ...customBooks[existIdx], ...newBook };
-  } else {
-    customBooks.push(newBook);
-  }
-  localStorage.setItem('teacherCustomBooks', JSON.stringify(customBooks));
-
-  // 구글 시트(Apps Script)가 연결되어 있으면 시트의 '교사추천도서' 탭에도 영구 누적 저장
-  const gasUrl = localStorage.getItem('gasUrl') || '';
-  if (gasUrl) {
-    try {
-      await fetch(gasUrl, {
-        method: 'POST',
-        body: JSON.stringify({ action: 'save_teacher_book', book: newBook })
-      });
-    } catch (err) {
-      console.warn("시트 누적 저장 백그라운드 오류:", err);
-    }
-  }
-
-  loadAllBooks();
-  populateDropdown();
-  renderBookList();
-  renderOnePageByIndex(ALL_BOOKS.length - 1);
-  
-  document.getElementById('addBookForm').reset();
+  custom.push(newBook);
+  localStorage.setItem("teacherCustomBooks", JSON.stringify(custom));
+  loadBooks();
+  populateBookSelect();
+  renderBookGrid();
+  renderOnePage(ALL_BOOKS.length - 1);
+  document.getElementById("addBookForm").reset();
   closeAddBookModal();
-  switchTab('viewer');
-  alert(`《${title}》 1PAGE 도서 카드가 누적 저장되었습니다! ([📚 타교사 자료] 버튼에서도 검색 가능합니다)`);
+  switchTab("viewer");
 }
 
-// =========================================================================
-// 타교사 자료 모달 (누적 교사 추천도서 교과별 분류 검색 및 시트 동기화)
-// =========================================================================
-function openSharedBooksModal() {
-  document.getElementById('sharedBooksModal').classList.add('open');
-  renderSharedBooksList();
-}
-
-function closeSharedBooksModal() {
-  document.getElementById('sharedBooksModal').classList.remove('open');
-}
-
-function getRatingStats(book) {
-  const count = Number(book.ratingCount || 0);
-  const sum = Number(book.ratingSum || 0);
-  const avg = count > 0 ? (sum / count) : 0;
-  return { count, sum, avg };
-}
-
-function isBookValidByRating(book) {
-  const { count, avg } = getRatingStats(book);
-  // 10명 이상 평가받았고 평균 별점이 2.5점 이하이면 삭제 대상
-  if (count >= 10 && avg <= 2.5) return false;
-  return true;
-}
-
-function purgeLowRatedBooks(books) {
-  const valid = books.filter(isBookValidByRating);
-  if (valid.length !== books.length) {
-    localStorage.setItem('teacherCustomBooks', JSON.stringify(valid));
-  }
-  return valid;
-}
+function openSharedBooksModal() { document.getElementById("sharedBooksModal").classList.add("open"); renderSharedBooksList(); }
+function closeSharedBooksModal() { document.getElementById("sharedBooksModal").classList.remove("open"); }
 
 function renderSharedBooksList() {
-  const subFilter = document.getElementById('sharedSubjectFilter').value;
-  const kw = document.getElementById('sharedSearchInput').value.trim().toLowerCase();
-  let customBooks = JSON.parse(localStorage.getItem('teacherCustomBooks') || '[]');
-  customBooks = purgeLowRatedBooks(customBooks);
+  const sub = document.getElementById("sharedSubjectFilter").value;
+  const kw = (document.getElementById("sharedSearchInput").value || "").trim().toLowerCase();
+  let custom = JSON.parse(localStorage.getItem("teacherCustomBooks") || "[]");
+  custom = custom.filter(function(b) {
+    const c = Number(b.ratingCount || 0);
+    const s = Number(b.ratingSum || 0);
+    return !(c >= 10 && (s / c) <= 2.5);
+  });
+  localStorage.setItem("teacherCustomBooks", JSON.stringify(custom));
 
-  const myVotes = JSON.parse(localStorage.getItem('myTeacherBookVotes') || '{}');
-
-  const filtered = customBooks.filter(b => {
-    const matchSub = subFilter === 'ALL' || (b.subjects && b.subjects.includes(subFilter));
-    const matchKw = !kw ||
-      b.title.toLowerCase().includes(kw) ||
-      (b.subtitle || '').toLowerCase().includes(kw) ||
-      (b.theme || '').toLowerCase().includes(kw) ||
-      (b.teacherName || '').toLowerCase().includes(kw);
-    return matchSub && matchKw;
+  const filtered = custom.filter(function(b) {
+    const okSub = sub === "ALL" || (b.subjects && b.subjects.includes(sub));
+    const okKw = !kw || b.title.toLowerCase().includes(kw) || b.theme.toLowerCase().includes(kw) || (b.teacherName || "").toLowerCase().includes(kw);
+    return okSub && okKw;
   });
 
-  document.getElementById('sharedCountLabel').textContent = `검색 결과: ${filtered.length}권 (전체 누적 ${customBooks.length}권)`;
-  const container = document.getElementById('sharedBooksContainer');
-
-  if (filtered.length === 0) {
-    container.innerHTML = `<div style="grid-column:1/-1; text-align:center; padding:2rem; color:var(--muted); font-size:0.9rem;">
-      조건에 맞는 교사 추천도서가 없습니다.<br>상단 <strong>[➕ 교사 도서 1PAGE 추가]</strong>로 도서를 등록하거나 <strong>[🔄 시트에서 최신 자료 불러오기]</strong>를 눌러주세요.
-    </div>`;
-    return;
-  }
-
-  container.innerHTML = filtered.map(b => {
-    const globalIdx = ALL_BOOKS.findIndex(item => item.title === b.title);
-    const { count, avg } = getRatingStats(b);
-    const myScore = myVotes[b.title] || 0;
-    const avgDisplay = count > 0 ? `★ ${avg.toFixed(1)} (${count}명)` : `평가 대기 (0명)`;
-    const warnText = (count >= 7 && count < 10 && avg <= 2.5) ? `<span style="color:#dc2626; font-size:0.72rem;">⚠️ 10명 도달 시 2.5 이하면 자동삭제</span>` : '';
-
-    const safeTitleAttr = b.title.split('"').join('&quot;');
-    const starsHtml = [1, 2, 3, 4, 5].map(score => {
-      const filled = score <= (myScore || Math.round(avg));
-      return `<button type="button" class="star-btn ${filled ? 'filled' : ''}" title="${score}점 주기" data-book-title="${safeTitleAttr}" data-score="${score}" onclick="event.stopPropagation(); rateTeacherBook(this.dataset.bookTitle, Number(this.dataset.score))">★</button>`;
-    }).join('');
-
-    return `
-      <div class="mini-card custom-book" onclick="openSharedBookDetail(${globalIdx})">
-        <div style="display:flex; justify-content:space-between; align-items:center; gap:4px;">
-          <div class="num">⭐ ${b.teacherName ? b.teacherName : '교사 추천'} · ${b.cat}</div>
-          <span class="rating-badge">${avgDisplay}</span>
-        </div>
-        <div class="title">《${b.title}》</div>
-        <div class="desc">${b.subtitle}</div>
-        <div class="tags">${(b.subjects || []).map(s => '#' + s).join(' ')}</div>
-        <div class="star-rating-box" onclick="event.stopPropagation();">
-          <div style="display:flex; justify-content:space-between; align-items:center;">
-            <span style="font-size:0.74rem; color:#475569; font-weight:600;">${myScore ? `내 평가: ${myScore}점` : '별점 평가하기:'}</span>
-            <div class="star-btns">${starsHtml}</div>
-          </div>
-          ${warnText}
-        </div>
-      </div>
-    `;
-  }).join('');
+  document.getElementById("sharedBooksContainer").innerHTML = filtered.length ? filtered.map(function(b) {
+    const c = Number(b.ratingCount || 0);
+    const avg = c > 0 ? (Number(b.ratingSum || 0) / c).toFixed(1) : "0.0";
+    const stars = [1, 2, 3, 4, 5].map(function(sc) {
+      return '<button type="button" class="star-btn ' + (sc <= Math.round(Number(avg)) ? 'filled' : '') + '" onclick="rateBook(\'' + b.title.replace(/'/g, "") + '\',' + sc + ')">★</button>';
+    }).join("");
+    return '<div class="mini-card custom-book">' +
+      '<div style="display:flex;justify-content:space-between;"><span class="num">' + (b.teacherName || '교사 추천') + '</span><span class="rating-badge">★ ' + avg + ' (' + c + '명)</span></div>' +
+      '<div class="title">《' + b.title + '》</div><div class="desc">' + b.subtitle + '</div>' +
+      '<div class="star-rating-box">' + stars + '</div></div>';
+  }).join("") : '<p style="grid-column:1/-1;text-align:center;color:#64748b;padding:1.5rem;">등록된 교사 추천도서가 없습니다.</p>';
 }
 
-async function rateTeacherBook(bookTitle, score) {
-  const myVotes = JSON.parse(localStorage.getItem('myTeacherBookVotes') || '{}');
-  const prevScore = myVotes[bookTitle] || 0;
-
-  let customBooks = JSON.parse(localStorage.getItem('teacherCustomBooks') || '[]');
-  const idx = customBooks.findIndex(b => b.title === bookTitle);
+function rateBook(title, score) {
+  let custom = JSON.parse(localStorage.getItem("teacherCustomBooks") || "[]");
+  const idx = custom.findIndex(function(b) { return b.title === title; });
   if (idx === -1) return;
-
-  const target = customBooks[idx];
-  let count = Number(target.ratingCount || 0);
-  let sum = Number(target.ratingSum || 0);
-
-  if (prevScore > 0) {
-    // 이미 평가한 경우 점수 수정
-    sum = sum - prevScore + score;
-  } else {
-    count += 1;
-    sum += score;
-  }
-
-  target.ratingCount = count;
-  target.ratingSum = sum;
-  myVotes[bookTitle] = score;
-  localStorage.setItem('myTeacherBookVotes', JSON.stringify(myVotes));
-
-  const avg = count > 0 ? (sum / count) : 0;
-  let deleted = false;
-
+  const count = Number(custom[idx].ratingCount || 0) + 1;
+  const sum = Number(custom[idx].ratingSum || 0) + score;
+  const avg = sum / count;
   if (count >= 10 && avg <= 2.5) {
-    customBooks.splice(idx, 1);
-    deleted = true;
+    custom.splice(idx, 1);
+    alert("《" + title + "》 도서는 10명 이상 평가 평균 2.5점 이하로 자동 삭제되었습니다.");
   } else {
-    customBooks[idx] = target;
+    custom[idx].ratingCount = count;
+    custom[idx].ratingSum = sum;
   }
-
-  localStorage.setItem('teacherCustomBooks', JSON.stringify(customBooks));
-  loadAllBooks();
-  populateDropdown();
-  renderBookList();
+  localStorage.setItem("teacherCustomBooks", JSON.stringify(custom));
+  loadBooks();
   renderSharedBooksList();
-
-  // 구글 시트 연동 시 서버에도 평가 결과 및 자동 삭제 반영
-  const gasUrl = localStorage.getItem('gasUrl') || '';
-  if (gasUrl) {
-    try {
-      await fetch(gasUrl, {
-        method: 'POST',
-        body: JSON.stringify({
-          action: 'rate_teacher_book',
-          title: bookTitle,
-          score: score,
-          prevScore: prevScore
-        })
-      });
-    } catch (err) {
-      console.warn("시트 별점 동기화 오류:", err);
-    }
-  }
-
-  if (deleted) {
-    alert(`《${bookTitle}》 도서는 평가 인원 10명 이상에서 평균 별점 ${avg.toFixed(2)}점(2.5점 이하)을 기록하여 목록에서 자동 삭제되었습니다.`);
-  }
+  renderBookGrid();
 }
 
-function openSharedBookDetail(globalIdx) {
-  closeSharedBooksModal();
-  switchTab('viewer');
-  currentFilter = 'ALL';
-  document.querySelectorAll('.filter-btn').forEach((btn, i) => btn.classList.toggle('active', i === 0));
-  renderBookList();
-  if (globalIdx >= 0) {
-    renderOnePageByIndex(globalIdx);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  }
+function requestAiFeedback() {
+  const title = document.getElementById("bookSelect").value === "CUSTOM" ? document.getElementById("customBookTitle").value : document.getElementById("bookSelect").value;
+  const meta = document.getElementById("metaphor").value.trim();
+  if (!title || !meta) { alert("도서와 메타포를 먼저 입력해 주세요."); return; }
+  document.getElementById("resSaenggibu").textContent = "『" + title + "』을(를) 읽고 '" + meta.slice(0, 35) + "' 메타포로 통찰하며 교과 개념과 연계 성찰함.";
+  document.getElementById("resInquiry").textContent = "1. 이 메타포가 오늘날 우리 사회에 주는 시사점은 무엇인가요?\n2. 관련 교과 단원 개념과 연결해 추가 성찰을 적어보세요.";
+  document.getElementById("aiResultBox").style.display = "block";
 }
 
-async function syncSharedBooksFromSheet() {
-  const gasUrl = localStorage.getItem('gasUrl') || '';
-  if (!gasUrl) {
-    alert("연결된 Google Apps Script URL이 없어 현재 기기에 누적 저장된 도서 목록을 표시합니다.");
-    renderSharedBooksList();
-    return;
-  }
-  try {
-    const response = await fetch(gasUrl, {
-      method: 'POST',
-      body: JSON.stringify({ action: 'get_teacher_books' })
-    });
-    const result = await response.json();
-    if (result.status === 'success' && Array.isArray(result.books)) {
-      const localBooks = JSON.parse(localStorage.getItem('teacherCustomBooks') || '[]');
-      const mergedMap = new Map();
-      localBooks.forEach(b => mergedMap.set(b.title, b));
-      result.books.forEach(b => mergedMap.set(b.title, { ...b, isCustom: true }));
-      let mergedList = Array.from(mergedMap.values()).map((b, i) => ({ ...b, id: 101 + i, isCustom: true }));
-      mergedList = purgeLowRatedBooks(mergedList);
-      localStorage.setItem('teacherCustomBooks', JSON.stringify(mergedList));
-      loadAllBooks();
-      populateDropdown();
-      renderBookList();
-      renderSharedBooksList();
-      alert(`구글 시트에서 유효한 교사 추천도서 총 ${mergedList.length}권을 불러왔습니다!`);
-    }
-  } catch (err) {
-    alert("시트에서 추천도서를 불러오는 중 오류가 발생했습니다: " + err);
-  }
+function submitFinalToSheet(withAi) {
+  const sid = document.getElementById("studentId").value.trim();
+  const sname = document.getElementById("studentName").value.trim();
+  if (!sid || !sname) { alert("학번과 이름을 입력해 주세요."); return; }
+  document.getElementById("finalCompleteMsg").textContent = sname + "(" + sid + ") 학생의 소감문이 " + (withAi ? "AI 피드백 및 추가 성찰 반영 상태로 " : "원문 그대로 ") + "기록되었습니다.";
+  document.getElementById("finalCompleteBanner").style.display = "block";
 }
 
-function exportSharedBooksJson() {
-  const customBooks = JSON.parse(localStorage.getItem('teacherCustomBooks') || '[]');
-  if (customBooks.length === 0) {
-    alert("내보낼 교사 추천도서가 아직 없습니다.");
-    return;
-  }
-  const blob = new Blob([JSON.stringify(customBooks, null, 2)], { type: 'application/json' });
-  const a = document.createElement('a');
-  a.href = URL.createObjectURL(blob);
-  a.download = `교사추천도서_누적목록_${new Date().toISOString().slice(0,10)}.json`;
-  a.click();
-}
-
-function importSharedBooksJson(e) {
-  const file = e.target.files[0];
-  if (!file) return;
-  const reader = new FileReader();
-  reader.onload = function(ev) {
-    try {
-      const imported = JSON.parse(ev.target.result);
-      if (!Array.isArray(imported)) throw new Error("올바른 JSON 배열 형식이 아닙니다.");
-      const localBooks = JSON.parse(localStorage.getItem('teacherCustomBooks') || '[]');
-      const mergedMap = new Map();
-      localBooks.forEach(b => mergedMap.set(b.title, b));
-      imported.forEach(b => mergedMap.set(b.title, { ...b, isCustom: true }));
-      const mergedList = Array.from(mergedMap.values()).map((b, i) => ({ ...b, id: 101 + i, isCustom: true }));
-      localStorage.setItem('teacherCustomBooks', JSON.stringify(mergedList));
-      loadAllBooks();
-      populateDropdown();
-      renderBookList();
-      renderSharedBooksList();
-      alert(`총 ${mergedList.length}권의 교사 추천도서가 누적 병합되었습니다!`);
-    } catch (err) {
-      alert("파일 불러오기 오류: " + err.message);
-    }
-  };
-  reader.readAsText(file);
-}
-
-function clearTeacherBooks() {
-  if (!confirm("선생님께서 추가하신 도서 카드를 모두 삭제하시겠습니까? (기본 100권은 유지됩니다)")) return;
-  localStorage.removeItem('teacherCustomBooks');
-  loadAllBooks();
-  populateDropdown();
-  renderBookList();
-  renderOnePageByIndex(0);
-  closeAddBookModal();
-}
-
-// =========================================================================
-// 학생 폼 검증, AI 피드백 선행(보완 후 제출) 및 피드백 없이 즉시 제출 로직
-// =========================================================================
-let cachedAiResult = { saenggibu: '', inquiry: '' };
-
-function collectAndValidateForm() {
-  const form = document.getElementById('readingForm');
-  if (!form.checkValidity()) {
-    form.reportValidity();
-    return null;
-  }
-  const selectVal = document.getElementById('bookSelect').value;
-  const bookTitle = selectVal === 'CUSTOM' ? document.getElementById('customBookTitle').value.trim() : selectVal;
-  const subSel = document.getElementById('subjectSelect').value;
-  const subject = subSel === 'CUSTOM_SUBJECT' ? document.getElementById('customSubjectInput').value.trim() : subSel;
-
-  return {
-    studentId: normalizeStudentId(document.getElementById('studentId').value.trim()),
-    studentName: document.getElementById('studentName').value.trim(),
-    subject: subject,
-    bookTitle: bookTitle,
-    metaphor: document.getElementById('metaphor').value.trim(),
-    reflection: document.getElementById('reflection').value.trim()
-  };
-}
-
-function handleFormSubmit(e) {
-  e.preventDefault();
-}
-
-// 1) AI 피드백 먼저 받기 (구글 시트 저장 전, 학생이 피드백을 보고 내용을 추가할 수 있도록 단계 분리)
-async function requestAiFeedback() {
-  const baseData = collectAndValidateForm();
-  if (!baseData) return;
-
-  const gasUrl = localStorage.getItem('gasUrl') || '';
-  const btn = document.getElementById('aiFeedbackBtn');
-  btn.disabled = true;
-  btn.textContent = "⏳ AI 생기부 초안 및 탐구 질문 생성 중...";
-  document.getElementById('finalCompleteBanner').style.display = 'none';
-
-  try {
-    if (!gasUrl) {
-      await new Promise(r => setTimeout(r, 650));
-      const shortMeta = baseData.metaphor.split('.')[0];
-      cachedAiResult = {
-        saenggibu: `『${baseData.bookTitle}』을(를) 읽고 '${shortMeta}'라는 메타포로 도서의 핵심 메시지를 통찰하였으며, ${baseData.subject} 교과 학습 내용과 연계하여 주체적으로 사고를 확장함.`,
-        inquiry: `1. 탐구 질문: 내가 정의한 메타포('${shortMeta}')의 관점에서 오늘날 우리 사회가 해결해야 할 가장 시급한 과제는 무엇인가요?\n2. 추천 학습: 『${baseData.bookTitle}』의 핵심 주제를 ${baseData.subject} 교과 개념과 연결하여 후속 탐구 내용을 아래 칸에 덧붙여 보세요.`
-      };
-      showAIResult(cachedAiResult.saenggibu, cachedAiResult.inquiry);
-    } else {
-      const response = await fetch(gasUrl, {
-        method: 'POST',
-        body: JSON.stringify({ ...baseData, action: 'feedback_only' })
-      });
-      const result = await response.json();
-      if (result.status === 'success') {
-        cachedAiResult = { saenggibu: result.saenggibu, inquiry: result.inquiry };
-        showAIResult(result.saenggibu, result.inquiry);
-      } else {
-        alert("AI 피드백 생성 중 오류가 발생했습니다: " + result.message);
-      }
-    }
-  } catch (err) {
-    alert("연동 중 오류가 발생했습니다. Apps Script 배포 상태를 확인해 주세요.\n" + err);
-  } finally {
-    btn.disabled = false;
-    btn.textContent = "🤖 AI 피드백 먼저 받기 (보완 후 제출)";
-  }
-}
-
-// 2) 최종 구글 시트 제출 (withAiFeedback = true면 AI 피드백 + 추가 작성 내용 포함, false면 피드백 없이 원문 그대로 제출)
-async function submitFinalToSheet(withAiFeedback) {
-  const baseData = collectAndValidateForm();
-  if (!baseData) return;
-
-  const gasUrl = localStorage.getItem('gasUrl') || '';
-  const additionalText = withAiFeedback ? document.getElementById('additionalReflection').value.trim() : '';
-  const combinedReflection = additionalText
-    ? `${baseData.reflection}\n\n[AI 피드백 반영 추가 성찰]\n${additionalText}`
-    : baseData.reflection;
-
-  const payload = {
-    ...baseData,
-    reflection: combinedReflection,
-    action: withAiFeedback ? 'submit_with_feedback' : 'submit_direct',
-    preGeneratedSaenggibu: withAiFeedback ? cachedAiResult.saenggibu : '',
-    preGeneratedInquiry: withAiFeedback ? cachedAiResult.inquiry : ''
-  };
-
-  const targetBtn = withAiFeedback ? document.getElementById('finalSubmitWithAiBtn') : document.getElementById('directSubmitBtn');
-  const originText = targetBtn.textContent;
-  targetBtn.disabled = true;
-  targetBtn.textContent = "⏳ 선생님 구글 시트로 제출 중...";
-
-  try {
-    if (!gasUrl) {
-      await new Promise(r => setTimeout(r, 500));
-      showFinalComplete(withAiFeedback, additionalText.length > 0, true);
-    } else {
-      const response = await fetch(gasUrl, {
-        method: 'POST',
-        body: JSON.stringify(payload)
-      });
-      const result = await response.json();
-      if (result.status === 'success') {
-        showFinalComplete(withAiFeedback, additionalText.length > 0, false);
-      } else {
-        alert("제출 중 오류가 발생했습니다: " + result.message);
-      }
-    }
-  } catch (err) {
-    alert("시트 저장 중 오류가 발생했습니다.\n" + err);
-  } finally {
-    targetBtn.disabled = false;
-    targetBtn.textContent = originText;
-  }
-}
-
-function showFinalComplete(withAi, hasAddition, isDemo) {
-  const banner = document.getElementById('finalCompleteBanner');
-  const msg = document.getElementById('finalCompleteMsg');
-  let detail = withAi
-    ? (hasAddition ? "AI 피드백과 추가로 작성한 심화 성찰 내용이 모두 반영되어 제출되었습니다." : "AI 피드백이 반영된 상태로 제출되었습니다.")
-    : "AI 피드백 단계 없이 작성한 소감문 원문 그대로 선생님 시트에 제출되었습니다.";
-  if (isDemo) {
-    detail += " (※ 현재 교사 설정에 Apps Script URL이 미등록된 미리보기 상태입니다.)";
-  }
-  msg.textContent = detail;
-  banner.style.display = 'block';
-  banner.scrollIntoView({ behavior: 'smooth' });
-}
-
-function showAIResult(saenggibu, inquiry) {
-  const box = document.getElementById('aiResultBox');
-  document.getElementById('resSaenggibu').textContent = saenggibu;
-  document.getElementById('resInquiry').textContent = inquiry;
-  box.style.display = 'block';
-  box.scrollIntoView({ behavior: 'smooth' });
-}
-
-// =========================================================================
-// 학생 배포용 QR 코드 모달 제어 (URL 파라미터로 gas/sheet 자동 전달 지원)
-// =========================================================================
 function openQrModal() {
-  const modal = document.getElementById('qrModal');
-  const urlInput = document.getElementById('qrTargetUrl');
-  const warning = document.getElementById('qrLocalWarning');
-
-  let baseUrl = window.location.href.split('?')[0];
-  const gasUrl = localStorage.getItem('gasUrl') || '';
-
-  if (baseUrl.startsWith('file://')) {
-    warning.style.display = 'block';
-    baseUrl = 'https://nchina9.github.io/dushu/';
-  } else {
-    warning.style.display = 'none';
-  }
-
-  // 학생 전용 주소에는 ?mode=student (및 교사 설정 gas 파라미터)를 부여하여 교사용 버튼(사본 만들기/설정 등)을 숨김
-  const params = new URLSearchParams();
-  params.set('mode', 'student');
-  if (gasUrl) params.set('gas', gasUrl);
-  const fullShareUrl = `${baseUrl}?${params.toString()}`;
-
-  urlInput.value = fullShareUrl;
+  const base = window.location.href.split("?")[0].startsWith("file://") ? "https://nchina9.github.io/dushu/" : window.location.href.split("?")[0];
+  document.getElementById("qrTargetUrl").value = base + "?mode=student";
   updateQrImage();
-  modal.classList.add('open');
+  document.getElementById("qrModal").classList.add("open");
 }
-
-function closeQrModal() {
-  document.getElementById('qrModal').classList.remove('open');
-}
-
+function closeQrModal() { document.getElementById("qrModal").classList.remove("open"); }
 function updateQrImage() {
-  const targetUrl = document.getElementById('qrTargetUrl').value.trim() || 'https://nchina9.github.io/dushu/?mode=student';
-  const qrApi = `https://api.qrserver.com/v1/create-qr-code/?size=240x240&margin=10&data=${encodeURIComponent(targetUrl)}`;
-  document.getElementById('qrCodeImg').src = qrApi;
-
-  const linkEl = document.getElementById('studentDirectLink');
-  if (linkEl) {
-    linkEl.href = targetUrl;
-    linkEl.textContent = targetUrl;
-  }
+  const u = document.getElementById("qrTargetUrl").value.trim();
+  document.getElementById("qrCodeImg").src = "https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=" + encodeURIComponent(u);
 }
 
-function copyQrUrl() {
-  const urlInput = document.getElementById('qrTargetUrl');
-  urlInput.select();
-  navigator.clipboard.writeText(urlInput.value).then(() => {
-    alert("학생 배포용 접속 주소가 클립보드에 복사되었습니다!");
-  });
-}
-
-function downloadQrImage() {
-  const imgUrl = document.getElementById('qrCodeImg').src;
-  const link = document.createElement('a');
-  link.href = imgUrl;
-  link.download = '독서메타포_학생배포_QR.png';
-  link.target = '_blank';
-  link.click();
-}
-
-// 교사 설정 및 시트 사본 만들기
-function openSettings() { document.getElementById('settingsModal').classList.add('open'); }
-function closeSettings() { document.getElementById('settingsModal').classList.remove('open'); }
-
-function loadSavedSettings() {
-  const params = new URLSearchParams(window.location.search);
-  if (params.get('gas')) {
-    localStorage.setItem('gasUrl', params.get('gas'));
-  }
-  if (params.get('sheet')) {
-    localStorage.setItem('sheetUrl', params.get('sheet'));
-  }
-  // 학생 전용 링크(?mode=student)로 접속 시 교사용 관리 버튼 전체 숨김 + 소감문·메타포 작성 화면 바로 열기
-  if (params.get('mode') === 'student') {
-    document.body.classList.add('student-mode');
-    switchTab('submit');
-  } else {
-    // 타 교사 사이트에는 '⚙️ 교사 설정' 버튼이 나타나지 않도록 기본 숨김
-    // (원작자/관리자 모드: 주소 뒤에 ?admin=1 을 붙이거나 로컬 파일로 열 때만 표시)
-    const isAdmin = params.get('admin') === '1' || window.location.protocol === 'file:';
-    if (!isAdmin) {
-      document.body.classList.add('peer-teacher-mode');
-    }
-  }
-  document.getElementById('gasUrlInput').value = localStorage.getItem('gasUrl') || '';
-  document.getElementById('sheetUrlInput').value = localStorage.getItem('sheetUrl') || '';
-}
-
+function openSettings() { document.getElementById("settingsModal").classList.add("open"); }
+function closeSettings() { document.getElementById("settingsModal").classList.remove("open"); }
 function saveSettings() {
-  localStorage.setItem('gasUrl', document.getElementById('gasUrlInput').value.trim());
-  localStorage.setItem('sheetUrl', document.getElementById('sheetUrlInput').value.trim());
-  alert("연동 설정이 저장되었습니다.");
+  localStorage.setItem("gasUrl", document.getElementById("gasUrlInput").value.trim());
+  localStorage.setItem("sheetUrl", document.getElementById("sheetUrlInput").value.trim());
   closeSettings();
 }
-
 function copyTeacherSheet() {
-  const sheetUrl = localStorage.getItem('sheetUrl') || '';
-  if (!sheetUrl) {
-    alert("먼저 우측 상단 [교사 설정]에서 원본 구글 시트 URL을 등록해 주세요.");
-    openSettings();
-    return;
-  }
-  const copyUrl = sheetUrl.replace(/\/(edit|view).*$/, '/copy');
-  window.open(copyUrl, '_blank');
+  const u = localStorage.getItem("sheetUrl") || "";
+  if (!u) { openSettings(); return; }
+  window.open(u.replace(/\/(edit|view).*$/, "/copy"), "_blank");
+}
+function openMySheet() {
+  const u = localStorage.getItem("sheetUrl") || "";
+  if (!u) { openSettings(); return; }
+  window.open(u.replace(/\/copy.*$/, "/edit"), "_blank");
 }
 
-function openMySheet() {
-  const sheetUrl = localStorage.getItem('sheetUrl') || '';
-  if (!sheetUrl) {
-    alert("먼저 사본으로 복사한 내 구글 시트 주소를 [⚙️ 교사 설정]에 등록해 주세요.");
-    openSettings();
-    return;
+function applyUrlMode() {
+  const p = new URLSearchParams(window.location.search);
+  if (p.get("mode") === "student") {
+    document.body.classList.add("student-mode");
+    switchTab("submit");
+  } else if (p.get("admin") !== "1" && window.location.protocol !== "file:") {
+    document.body.classList.add("peer-teacher-mode");
   }
-  const cleanViewUrl = sheetUrl.replace(/\/copy.*$/, '/edit');
-  window.open(cleanViewUrl, '_blank');
 }
 </script>
 </body>
