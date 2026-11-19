@@ -307,7 +307,6 @@
       <button class="btn btn-add teacher-only" onclick="openAddBookModal()">➕ 교사 도서 1PAGE 추가</button>
       <button class="btn btn-copy teacher-only" onclick="copyTeacherSheet()">📑 시트 사본 만들기</button>
       <button class="btn btn-mysheet teacher-only" onclick="openMySheet()">📊 내 시트 가기</button>
-      <button class="btn teacher-only" style="background:#38bdf8; color:#0f172a;" onclick="openMySheetConnectModal(false)" title="내 사본 시트 주소 변경">🔗 시트연결</button>
       <button class="btn btn-setting teacher-only admin-only" onclick="openSettings()">⚙️ 교사 설정</button>
     </div>
   </div>
@@ -568,21 +567,6 @@
   </div>
 </div>
 
-
-<div id="mySheetConnectModal" class="modal">
-  <div class="modal-content" style="max-width:520px;">
-    <h3 id="mySheetModalTitle" style="color:#0284c7; margin-bottom:0.5rem;">📊 내 사본 시트 연결</h3>
-    <p id="mySheetModalDesc" style="font-size:0.85rem; color:#475569; margin-bottom:1rem; line-height:1.55;"></p>
-    <div class="form-group">
-      <label>사본으로 만든 내 구글 스프레드시트 URL *</label>
-      <input type="url" id="peerSheetUrlInput" class="form-control" placeholder="https://docs.google.com/spreadsheets/d/내시트ID/edit">
-    </div>
-    <div style="display:flex; justify-content:flex-end; gap:0.5rem; margin-top:1rem;">
-      <button type="button" class="btn" style="background:#e2e8f0;" onclick="closeMySheetConnectModal()">닫기</button>
-      <button type="button" class="btn btn-mysheet" onclick="saveAndOpenMySheet()">✅ 저장 및 내 시트 바로 열기</button>
-    </div>
-  </div>
-</div>
 
 <footer>
   <p><strong>개발자: 신윤기 수석</strong> | 교과 연계 200권+ 독서·메타포·AI 생기부 통합 플랫폼</p>
@@ -1392,53 +1376,44 @@ function saveSettings() {
   alert("구글 시트 및 Apps Script 연동 주소가 저장되었습니다!");
   closeSettings();
 }
+function getLinkedSheetUrl() {
+  const p = new URLSearchParams(window.location.search);
+  if (p.get("sheet")) {
+    const fromParam = p.get("sheet").trim().replace(/\/copy.*$/, "/edit");
+    localStorage.setItem("myPeerSheetUrl", fromParam);
+    localStorage.setItem("sheetUrl", fromParam);
+    return fromParam;
+  }
+  const peerSaved = (localStorage.getItem("myPeerSheetUrl") || "").trim();
+  const saved = (localStorage.getItem("sheetUrl") || "").trim();
+  return peerSaved || saved || DEFAULT_SHEET_URL;
+}
+
 function copyTeacherSheet() {
-  const u = DEFAULT_SHEET_URL;
-  window.open(u.replace(/\/(edit|view).*$/, "/copy"), "_blank");
-  // 사본 생성 후 바로 내 사본 시트와 웹 앱 주소를 연결할 수 있도록 연결 안내 창 자동 오픈
-  openMySheetConnectModal(true);
+  const baseSheet = (localStorage.getItem("sheetUrl") || DEFAULT_SHEET_URL).replace(/\/(edit|view|copy).*$/, "");
+  const copyUrl = baseSheet + "/copy";
+  // 사본 생성 시 해당 사본 경로를 자동 연결 대상으로 저장해 [📊 내 시트 가기]에서 바로 열리도록 처리
+  localStorage.setItem("myPeerSheetUrl", baseSheet + "/edit");
+  window.open(copyUrl, "_blank");
 }
 
 function openMySheet() {
-  const savedMySheet = (localStorage.getItem("myPeerSheetUrl") || "").trim();
-  const savedMyGas = (localStorage.getItem("myPeerGasUrl") || "").trim();
-  if (!savedMySheet) {
-    openMySheetConnectModal(false);
-    return;
-  }
-  window.open(savedMySheet.replace(/\/copy.*$/, "/edit"), "_blank");
+  const targetUrl = getLinkedSheetUrl();
+  window.open(targetUrl.replace(/\/copy.*$/, "/edit"), "_blank");
 }
 
-function openMySheetConnectModal(fromCopy) {
-  const modal = document.getElementById("mySheetConnectModal");
-  const titleEl = document.getElementById("mySheetModalTitle");
-  const descEl = document.getElementById("mySheetModalDesc");
-  if (fromCopy) {
-    titleEl.textContent = "📑 시트 사본 만들기 → 내 시트 연결";
-    descEl.textContent = "새 탭에서 사본을 만든 뒤, 생성된 내 구글 시트 주소만 붙여넣고 [저장 및 내 시트 바로 열기]를 누르세요. 다음부터는 [📊 내 시트 가기] 버튼으로 바로 열립니다.";
-  } else {
-    titleEl.textContent = "📊 내 사본 시트 연결";
-    descEl.textContent = "사본으로 복사한 내 구글 시트 주소를 한 번만 등록해 두면 [📊 내 시트 가기] 버튼으로 바로 연결됩니다.";
-  }
-  document.getElementById("peerSheetUrlInput").value = localStorage.getItem("myPeerSheetUrl") || "";
-  modal.classList.add("open");
+function openMySheetConnectModal() {
+  // 수동 붙여넣기 팝업 없이 바로 연결된 시트를 열거나 새 사본을 생성
+  openMySheet();
 }
 
 function closeMySheetConnectModal() {
-  document.getElementById("mySheetConnectModal").classList.remove("open");
+  const m = document.getElementById("mySheetConnectModal");
+  if (m) m.classList.remove("open");
 }
 
 function saveAndOpenMySheet() {
-  const sheetInput = document.getElementById("peerSheetUrlInput").value.trim();
-  if (!sheetInput) {
-    alert("사본으로 만든 내 구글 시트 주소를 붙여넣어 주세요.");
-    return;
-  }
-  const cleanSheetUrl = sheetInput.replace(/\/copy.*$/, "/edit");
-  localStorage.setItem("myPeerSheetUrl", cleanSheetUrl);
-  localStorage.setItem("sheetUrl", cleanSheetUrl);
-  closeMySheetConnectModal();
-  window.open(cleanSheetUrl, "_blank");
+  openMySheet();
 }
 
 function applyUrlMode() {
