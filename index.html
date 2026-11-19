@@ -1329,6 +1329,142 @@ function getStudentFormPayload() {
   };
 }
 
+function findBookMetaByTitle(title) {
+  const clean = String(title || "").replace(/[《》『』]/g, "").trim();
+  return ALL_BOOKS.find(function(b) {
+    return b.title === clean || clean.indexOf(b.title) >= 0 || b.title.indexOf(clean) >= 0;
+  }) || {
+    title: clean,
+    subtitle: "핵심 문제의식과 가치 탐구",
+    theme: clean + "의 핵심 주제와 시사점",
+    cat: "인문사회"
+  };
+}
+
+function generateBookSpecificInquiry(baseData) {
+  const bookObj = findBookMetaByTitle(baseData.bookTitle);
+  const t = String(bookObj.title || "");
+  const theme = String(bookObj.theme || t);
+  const sub = String(bookObj.subtitle || "");
+  const subj = String(baseData.subject || "교과");
+  const metaShort = String(baseData.metaphor || "").split(".")[0].trim().slice(0, 26);
+
+  if (t.indexOf("열하일기") >= 0) {
+    return (
+      "1. 《열하일기》에서 박지원이 청나라의 문물과 풍속을 살필 때 단순 모방이 아니라 조선의 실정에 맞는 개혁 시각을 유지한 점은 " +
+      subj +
+      " 관점에서 어떤 의미를 지닐까요?\n" +
+      "2. '" +
+      metaShort +
+      "' 메타포를 바탕으로, 선진 풍속·제도의 수용과 조선 발전 염원이 어떻게 연결되는지 추가 성찰을 구체적으로 적어보세요."
+    );
+  }
+  if (t.indexOf("몰입") >= 0) {
+    return (
+      "1. 《몰입의 즐거움》이 말하는 자발적 몰입이 외적 보상이나 의무감과 구별되는 지점은 무엇이며, " +
+      subj +
+      " 탐구에서 몰입 상태를 이끄는 조건은 무엇일까요?\n" +
+      "2. '" +
+      metaShort +
+      "' 메타포를 중심으로, 인물이나 작품의 창작·탐구 태도를 비교한 내용을 덧붙여 보세요."
+    );
+  }
+  if (t.indexOf("언어") >= 0) {
+    return (
+      "1. 《언어의 줄다리기》에서 다룬 언어 속 프레임이나 맥락 차이가 " +
+      subj +
+      " 탐구에서 어떤 의미 해석을 이끌어낼까요?\n" +
+      "2. '" +
+      metaShort +
+      "' 메타포와 연결하여 구체적인 비교·사례 성찰을 아래에 적어 보세요."
+    );
+  }
+
+  return (
+    "1. 《" +
+    t +
+    "》이(가) '" +
+    sub +
+    "'를 통해 던지는 핵심 주제(" +
+    theme +
+    ")는 " +
+    subj +
+    " 개념과 어떻게 맞닿아 있을까요?\n" +
+    "2. '" +
+    metaShort +
+    "' 메타포를 바탕으로, 도서의 핵심 내용이나 인물·사례를 비교·분석한 추가 성찰을 덧붙여 보세요."
+  );
+}
+
+function extractFocusKeywords(text) {
+  const raw = String(text || "");
+  const list = [];
+  const candidates = ["열하일기", "풍속", "조선 발전", "개혁", "선진문물", "탐구정신", "이백", "두보", "비교", "성찰", "연대", "존엄", "자유", "책임", "사회", "역사", "문화"];
+  candidates.forEach(function(k) {
+    if (raw.indexOf(k) >= 0 && list.indexOf(k) < 0) list.push(k);
+  });
+  return list.slice(0, 3).join("·");
+}
+
+function composeTailoredSaenggibu(baseData, addText) {
+  const bookObj = findBookMetaByTitle(baseData.bookTitle);
+  const subj = String(baseData.subject || "교과");
+  const metaClause = String(baseData.metaphor || "").split(".")[0].replace(/["']/g, "").trim().slice(0, 20) || (bookObj.title + " 탐구");
+  const cleanAdd = String(addText || "").replace(/\s+/g, " ").replace(/["']/g, "").trim();
+  const cleanBase = String(baseData.reflection || "").replace(/\s+/g, " ").replace(/["']/g, "").trim();
+  const focusTags = extractFocusKeywords(cleanAdd + " " + cleanBase) || "핵심 주제 탐구";
+
+  let draft = "";
+  if (cleanAdd) {
+    if (cleanAdd.indexOf("열하일기") >= 0 || cleanAdd.indexOf("풍속") >= 0 || cleanAdd.indexOf("조선") >= 0) {
+      draft =
+        "『" +
+        bookObj.title +
+        "』을 '" +
+        metaClause +
+        "' 메타포로 탐구함. AI 피드백을 반영해 풍속 수용과 조선 발전 염원을 " +
+        focusTags +
+        " 관점으로 심화하고, " +
+        subj +
+        " 개념과 연계하여 주체적 개혁 의지를 성찰함.";
+    } else {
+      const addSnippet = cleanAdd.slice(0, 26).replace(/[다요함임.\s]+$/g, "");
+      draft =
+        "『" +
+        bookObj.title +
+        "』을 '" +
+        metaClause +
+        "' 메타포로 해석함. AI 피드백을 바탕으로 '" +
+        addSnippet +
+        "' 성찰을 " +
+        focusTags +
+        " 시각에서 비교·고찰하며 " +
+        subj +
+        " 탐구의 깊이를 확장함.";
+    }
+  } else {
+    const baseSnippet = cleanBase.slice(0, 26).replace(/[다요함임.\s]+$/g, "");
+    draft =
+      "『" +
+      bookObj.title +
+      "』을 '" +
+      metaClause +
+      "' 메타포로 탐구함. " +
+      (baseSnippet || (bookObj.title + " 핵심 내용")) +
+      "을 바탕으로 주제를 분석하고, " +
+      subj +
+      " 개념과 연결하여 비판적이고 주체적인 시각을 정립함.";
+  }
+
+  if (draft.length < 110) {
+    draft = draft.replace(/\.$/, "") + "며 탐구 역량을 심화함.";
+  }
+  if (draft.length > 148) {
+    draft = draft.slice(0, 145).replace(/[ ,·]+$/g, "") + "함.";
+  }
+  return draft;
+}
+
 async function requestAiFeedback() {
   const baseData = getStudentFormPayload();
   if (!baseData) return;
@@ -1336,30 +1472,36 @@ async function requestAiFeedback() {
   const gasUrl = getActiveGasUrl();
   const btn = document.getElementById("aiFeedbackBtn");
   btn.disabled = true;
-  btn.textContent = "⏳ AI 생기부 초안 및 탐구 질문 생성 중...";
+  btn.textContent = "⏳ 도서 맞춤형 AI 피드백 및 생기부 초안 생성 중...";
   document.getElementById("finalCompleteBanner").style.display = "none";
+
+  const localInquiry = generateBookSpecificInquiry(baseData);
+  const localSaenggibu = composeTailoredSaenggibu(baseData, "");
 
   try {
     const response = await fetch(gasUrl, {
       method: "POST",
       headers: { "Content-Type": "text/plain;charset=utf-8" },
-      body: JSON.stringify(Object.assign({}, baseData, { action: "feedback_only" }))
+      body: JSON.stringify(Object.assign({}, baseData, {
+        action: "feedback_only",
+        clientInquiry: localInquiry,
+        clientSaenggibu: localSaenggibu
+      }))
     });
     const result = await response.json();
     if (result.status === "success") {
-      cachedAiResult = { saenggibu: result.saenggibu, inquiry: result.inquiry };
-      document.getElementById("resSaenggibu").textContent = result.saenggibu;
-      document.getElementById("resInquiry").textContent = result.inquiry;
+      cachedAiResult = {
+        saenggibu: result.saenggibu || localSaenggibu,
+        inquiry: result.inquiry || localInquiry
+      };
+      document.getElementById("resSaenggibu").textContent = cachedAiResult.saenggibu;
+      document.getElementById("resInquiry").textContent = cachedAiResult.inquiry;
       document.getElementById("aiResultBox").style.display = "block";
     } else {
       throw new Error(result.message || "AI 응답 오류");
     }
   } catch (err) {
-    const shortMeta = baseData.metaphor.split(".")[0];
-    cachedAiResult = {
-      saenggibu: "『" + baseData.bookTitle + "』을(를) 읽고 '" + shortMeta + "'라는 메타포로 핵심 주제를 통찰하였으며, " + baseData.subject + " 교과 개념과 연계하여 논리적으로 성찰함.",
-      inquiry: "1. 이 메타포가 오늘날 우리 사회에 주는 시사점은 무엇인가요?\n2. 관련 교과 단원 개념과 연결해 추가 성찰을 적어보세요."
-    };
+    cachedAiResult = { saenggibu: localSaenggibu, inquiry: localInquiry };
     document.getElementById("resSaenggibu").textContent = cachedAiResult.saenggibu;
     document.getElementById("resInquiry").textContent = cachedAiResult.inquiry;
     document.getElementById("aiResultBox").style.display = "block";
@@ -1379,10 +1521,18 @@ async function submitFinalToSheet(withAi) {
     ? baseData.reflection + "\n\n[AI 피드백 반영 추가 성찰]\n" + addText
     : baseData.reflection;
 
+  const tailoredSaenggibu = withAi
+    ? composeTailoredSaenggibu(baseData, addText)
+    : composeTailoredSaenggibu(baseData, "");
+
+  document.getElementById("resSaenggibu").textContent = tailoredSaenggibu;
+
   const payload = Object.assign({}, baseData, {
     reflection: combinedReflection,
+    additionalReflection: addText,
     action: withAi ? "submit_with_feedback" : "submit_direct",
-    preGeneratedSaenggibu: withAi ? cachedAiResult.saenggibu : "",
+    preGeneratedSaenggibu: tailoredSaenggibu,
+    tailoredSaenggibu: tailoredSaenggibu,
     preGeneratedInquiry: withAi ? cachedAiResult.inquiry : ""
   });
 
@@ -1399,9 +1549,11 @@ async function submitFinalToSheet(withAi) {
     });
     const result = await response.json();
     if (result.status === "success") {
+      const finalDraft = (result.saenggibu && result.saenggibu.length >= 100) ? result.saenggibu : tailoredSaenggibu;
+      document.getElementById("resSaenggibu").textContent = finalDraft;
       const sheetInfo = result.classSheetName ? " [" + result.classSheetName + " / 전체수합] 시트에 " : " 구글 시트에 ";
       document.getElementById("finalCompleteMsg").textContent =
-        baseData.studentName + "(" + (result.normalizedId || baseData.studentId) + ") 학생의 소감문이" + sheetInfo + "성공적으로 저장되었습니다!";
+        baseData.studentName + "(" + (result.normalizedId || baseData.studentId) + ") 학생의 소감문과 반영된 생기부 문구(" + finalDraft.length + "자)가" + sheetInfo + "성공적으로 저장되었습니다!";
       document.getElementById("finalCompleteBanner").style.display = "block";
       document.getElementById("finalCompleteBanner").scrollIntoView({ behavior: "smooth" });
     } else {
