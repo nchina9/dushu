@@ -307,6 +307,7 @@
       <button class="btn btn-add teacher-only" onclick="openAddBookModal()">➕ 교사 도서 1PAGE 추가</button>
       <button class="btn btn-copy teacher-only" onclick="copyTeacherSheet()">📑 시트 사본 만들기</button>
       <button class="btn btn-mysheet teacher-only" onclick="openMySheet()">📊 내 시트 가기</button>
+      <button class="btn teacher-only" style="background:#38bdf8; color:#0f172a;" onclick="openMySheetConnectModal(false)" title="내 사본 시트 주소 변경">🔗 시트연결</button>
       <button class="btn btn-setting teacher-only admin-only" onclick="openSettings()">⚙️ 교사 설정</button>
     </div>
   </div>
@@ -563,6 +564,27 @@
     <div style="display:flex; justify-content:flex-end; gap:0.5rem;">
       <button type="button" class="btn" style="background:#e2e8f0;" onclick="closeSettings()">닫기</button>
       <button type="button" class="btn btn-submit" style="width:auto; padding:0.5rem 1rem; margin:0;" onclick="saveSettings()">저장</button>
+    </div>
+  </div>
+</div>
+
+
+<div id="mySheetConnectModal" class="modal">
+  <div class="modal-content" style="max-width:560px;">
+    <h3 id="mySheetModalTitle" style="color:#0284c7; margin-bottom:0.5rem;">📊 내 사본 시트 자동 연결</h3>
+    <p id="mySheetModalDesc" style="font-size:0.85rem; color:#475569; margin-bottom:1rem; line-height:1.55;"></p>
+    <div class="form-group">
+      <label>1. 사본으로 만든 내 구글 스프레드시트 URL *</label>
+      <input type="url" id="peerSheetUrlInput" class="form-control" placeholder="https://docs.google.com/spreadsheets/d/내시트ID/edit">
+    </div>
+    <div class="form-group">
+      <label>2. 내 시트의 Apps Script 웹 앱 URL (학생 제출 연동용 · 선택)</label>
+      <input type="url" id="peerGasUrlInput" class="form-control" placeholder="https://script.google.com/macros/s/.../exec">
+      <small style="color:#64748b; display:block; margin-top:4px;">* 시트 상단 메뉴 [확장 프로그램 → Apps Script → 배포] 후 나온 웹 앱 주소를 넣으면 학생 QR 코드도 선생님 시트로 자동 연결됩니다.</small>
+    </div>
+    <div style="display:flex; justify-content:flex-end; gap:0.5rem; margin-top:1rem;">
+      <button type="button" class="btn" style="background:#e2e8f0;" onclick="closeMySheetConnectModal()">닫기</button>
+      <button type="button" class="btn btn-mysheet" onclick="saveAndOpenMySheet()">✅ 저장 및 내 시트 바로 열기</button>
     </div>
   </div>
 </div>
@@ -1118,8 +1140,9 @@ function getActiveGasUrl() {
   if (p.get("gas")) {
     localStorage.setItem("gasUrl", p.get("gas").trim());
   }
+  const peerGas = (localStorage.getItem("myPeerGasUrl") || "").trim();
   const saved = (localStorage.getItem("gasUrl") || "").trim();
-  return saved || DEFAULT_GAS_URL;
+  return peerGas || saved || DEFAULT_GAS_URL;
 }
 
 function normalizeStudentId(raw) {
@@ -1275,12 +1298,58 @@ function saveSettings() {
   closeSettings();
 }
 function copyTeacherSheet() {
-  const u = localStorage.getItem("sheetUrl") || DEFAULT_SHEET_URL;
+  const u = DEFAULT_SHEET_URL;
   window.open(u.replace(/\/(edit|view).*$/, "/copy"), "_blank");
+  // 사본 생성 후 바로 내 사본 시트와 웹 앱 주소를 연결할 수 있도록 연결 안내 창 자동 오픈
+  openMySheetConnectModal(true);
 }
+
 function openMySheet() {
-  const u = localStorage.getItem("sheetUrl") || DEFAULT_SHEET_URL;
-  window.open(u.replace(/\/copy.*$/, "/edit"), "_blank");
+  const savedMySheet = (localStorage.getItem("myPeerSheetUrl") || "").trim();
+  const savedMyGas = (localStorage.getItem("myPeerGasUrl") || "").trim();
+  if (!savedMySheet) {
+    openMySheetConnectModal(false);
+    return;
+  }
+  window.open(savedMySheet.replace(/\/copy.*$/, "/edit"), "_blank");
+}
+
+function openMySheetConnectModal(fromCopy) {
+  const modal = document.getElementById("mySheetConnectModal");
+  const titleEl = document.getElementById("mySheetModalTitle");
+  const descEl = document.getElementById("mySheetModalDesc");
+  if (fromCopy) {
+    titleEl.textContent = "📑 시트 사본 생성 완료 → 내 시트 자동 연결";
+    descEl.textContent = "새 탭에서 [사본 만들기]를 누른 뒤, 생성된 내 구글 시트 URL(및 배포한 Apps Script URL)을 아래에 붙여넣고 [저장 및 바로 열기]를 누르세요. 이후 [📊 내 시트 가기]와 [📱 학생 배포용 QR·링크]가 선생님 사본 시트로 자동 연결됩니다.";
+  } else {
+    titleEl.textContent = "📊 내 사본 시트 연결 및 바로 가기";
+    descEl.textContent = "사본으로 복사한 선생님의 구글 시트 URL과 웹 앱 URL을 등록하면 버튼 클릭 한 번으로 내 시트가 열리고 학생 QR 링크도 자동 연동됩니다.";
+  }
+  document.getElementById("peerSheetUrlInput").value = localStorage.getItem("myPeerSheetUrl") || "";
+  document.getElementById("peerGasUrlInput").value = localStorage.getItem("myPeerGasUrl") || "";
+  modal.classList.add("open");
+}
+
+function closeMySheetConnectModal() {
+  document.getElementById("mySheetConnectModal").classList.remove("open");
+}
+
+function saveAndOpenMySheet() {
+  const sheetInput = document.getElementById("peerSheetUrlInput").value.trim();
+  const gasInput = document.getElementById("peerGasUrlInput").value.trim();
+  if (!sheetInput) {
+    alert("사본으로 생성된 내 구글 시트 주소를 붙여넣어 주세요.");
+    return;
+  }
+  const cleanSheetUrl = sheetInput.replace(/\/copy.*$/, "/edit");
+  localStorage.setItem("myPeerSheetUrl", cleanSheetUrl);
+  localStorage.setItem("sheetUrl", cleanSheetUrl);
+  if (gasInput) {
+    localStorage.setItem("myPeerGasUrl", gasInput);
+    localStorage.setItem("gasUrl", gasInput);
+  }
+  closeMySheetConnectModal();
+  window.open(cleanSheetUrl, "_blank");
 }
 
 function applyUrlMode() {
