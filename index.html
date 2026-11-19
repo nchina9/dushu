@@ -446,23 +446,30 @@
   </div>
 </div>
 
-<!-- 타교사 자료 모달 -->
+<!-- 타교사 자료 모달 (한 페이지 일러스트 보기 + 별표 5점 평가 + 10명 2.5점 이하 자동삭제) -->
 <div id="sharedBooksModal" class="modal">
-  <div class="modal-content">
-    <h3 style="color:#be185d; margin-bottom:0.5rem;">📚 교사 추천도서 누적 자료실 (별표 5점 평가 · 10명 2.5점 이하 자동삭제)</h3>
+  <div class="modal-content" style="max-width:860px;">
+    <h3 style="color:#be185d; margin-bottom:0.4rem;">📚 교사 추천도서 누적 자료실 (한 페이지 일러스트 보기 · 별표 5점 평가)</h3>
+    <p style="font-size:0.84rem; color:#64748b; margin-bottom:0.8rem;">
+      카드를 누르면 한 페이지 소개·일러스트 뷰어에 바로 열리며, 하단 별표(★ 1~5점)로 평가할 수 있습니다. (10명 이상 평가 후 평균 2.5점 이하 자동 삭제)
+    </p>
     <div style="display:grid; grid-template-columns:1fr 1.5fr; gap:0.6rem; margin-bottom:0.9rem;">
       <select id="sharedSubjectFilter" class="form-control" onchange="renderSharedBooksList()">
         <option value="ALL">📂 전체 교과 분류</option>
         <option value="국어·문학">국어·문학</option>
-        <option value="수학">수학</option>
+        <option value="윤리·철학·심리">윤리·철학·심리</option>
         <option value="사회·역사·지리">사회·역사·지리</option>
+        <option value="경제·정치·법">경제·정치·법</option>
+        <option value="수학">수학</option>
         <option value="물리·지구과학">물리·지구과학</option>
         <option value="화학·생명과학">화학·생명과학</option>
         <option value="정보·AI">정보·AI</option>
+        <option value="중국어·세계문화">중국어·세계문화</option>
+        <option value="미술·예술·진로">미술·예술·진로</option>
       </select>
       <input type="text" id="sharedSearchInput" class="form-control" placeholder="도서명, 주제, 교사명 검색..." oninput="renderSharedBooksList()">
     </div>
-    <div id="sharedBooksContainer" style="display:grid; grid-template-columns:repeat(auto-fill, minmax(210px, 1fr)); gap:0.75rem; max-height:340px; overflow-y:auto;"></div>
+    <div id="sharedBooksContainer" style="display:grid; grid-template-columns:repeat(auto-fill, minmax(230px, 1fr)); gap:0.85rem; max-height:420px; overflow-y:auto;"></div>
     <div style="display:flex; justify-content:flex-end; margin-top:1rem;">
       <button type="button" class="btn" style="background:#e2e8f0;" onclick="closeSharedBooksModal()">닫기</button>
     </div>
@@ -504,17 +511,111 @@
 
 <script>
 const BOOKS = [
+  // PART 3: 인문사회 계열 책 읽기 (BOOK 1 ~ BOOK 47)
   { id: 1, cat: "인문사회", title: "존엄하게 산다는 것", subtitle: "존엄을 잃게 만드는 사회에서 어떻게 인간답게 살 것인가?", theme: "인간의 존엄성과 사회적 연대", subjects: ["윤리·철학·심리", "사회·역사·지리", "국어·문학"] },
   { id: 2, cat: "인문사회", title: "유튜브는 책을 집어삼킬 것인가", subtitle: "우리 시대 문해력에 대한 논의", theme: "디지털 미디어 시대의 비판적 문해력", subjects: ["국어·문학", "정보·AI", "사회·역사·지리"] },
-  { id: 3, cat: "인문사회", title: "언어의 줄다리기", subtitle: "우리가 몰랐던 언어 속의 숨은 의미 파헤치기", theme: "언어와 권력, 사회문화적 맥락", subjects: ["국어·문학", "사회·역사·지리"] },
+  { id: 3, cat: "인문사회", title: "언어의 줄다리기", subtitle: "우리가 몰랐던 언어 속의 숨은 의미 파헤치기", theme: "언어와 권력, 사회문화적 맥락", subjects: ["국어·문학", "사회·역사·지리", "중국어·세계문화"] },
+  { id: 4, cat: "인문사회", title: "몰입의 즐거움", subtitle: "한 번이라도 몰입해본 인생은 얼마나 아름다운가", theme: "자기주도적 몰입과 행복의 심리학", subjects: ["윤리·철학·심리", "미술·예술·진로"] },
+  { id: 5, cat: "인문사회", title: "인간관계론", subtitle: "성공하는 인간관계를 맺으려면?", theme: "공감과 경청을 통한 대인관계의 원리", subjects: ["윤리·철학·심리", "국어·문학", "미술·예술·진로"] },
+  { id: 6, cat: "인문사회", title: "책은 도끼다", subtitle: "얼어붙은 감수성을 깨뜨리는 우리의 '도끼'들", theme: "깊이 읽기를 통한 인문학적 감수성 회복", subjects: ["국어·문학", "윤리·철학·심리", "미술·예술·진로"] },
   { id: 7, cat: "인문사회", title: "인간 본성의 법칙", subtitle: "인간의 내면을 해독하는 열쇠를 얻고 싶다면", theme: "인간 심리의 심층 구조와 행동 동인", subjects: ["윤리·철학·심리", "사회·역사·지리"] },
-  { id: 15, cat: "인문사회", title: "페스트", subtitle: "시대를 아우르는 한 권의 고전", theme: "재난 속 인간의 연대와 실존적 저항", subjects: ["국어·문학", "윤리·철학·심리"] },
-  { id: 19, cat: "인문사회", title: "땀 흘리는 소설", subtitle: "'을'로서 살아가는 청춘들의 땀을 담은 이야기", theme: "노동의 가치와 청년 세대의 현실", subjects: ["국어·문학", "사회·역사·지리"] },
-  { id: 20, cat: "인문사회", title: "평균의 종말", subtitle: "평균주의가 망친 교육, 아이들의 진정한 재능을 찾으려면?", theme: "개별성과 다양성을 존중하는 교육", subjects: ["사회·역사·지리", "수학"] },
-  { id: 48, cat: "과학", title: "인류세 쫌 아는 10대", subtitle: "우리가 지구의 마지막 세대가 되지 않으려면", theme: "인류세의 개념과 기후 위기 대응", subjects: ["물리·지구과학", "화학·생명과학"] },
-  { id: 59, cat: "과학", title: "이상한 미래 연구소", subtitle: "우주 여행에서부터 뇌과학까지, 미래를 내다보는 상상", theme: "첨단 과학기술과 미래 시나리오", subjects: ["물리·지구과학", "정보·AI"] },
-  { id: 76, cat: "수학", title: "더 이상한 수학책", subtitle: "미적분학을 바라보는 다양한 시각", theme: "극한, 무한, 변화율을 탐구하는 미적분", subjects: ["수학", "물리·지구과학"] },
-  { id: 85, cat: "수학", title: "한국사에서 수학을 보다", subtitle: "문과생에게는 수학의 매력을, 이과생에게는 인문학적 교양을", theme: "한국사 유물과 제도 속 수학적 원리", subjects: ["수학", "사회·역사·지리"] }
+  { id: 8, cat: "인문사회", title: "철학의 역사", subtitle: "소크라테스부터 피터 싱어까지, 위대한 철학자 40인으로 살펴보는 철학의 역사", theme: "서양 지성사의 흐름과 핵심 사유", subjects: ["윤리·철학·심리", "사회·역사·지리", "중국어·세계문화"] },
+  { id: 9, cat: "인문사회", title: "강원국의 글쓰기", subtitle: "내 글을 쓴다는 건 나답게 산다는 것", theme: "생각을 정리하고 표현하는 글쓰기의 힘", subjects: ["국어·문학", "미술·예술·진로"] },
+  { id: 10, cat: "인문사회", title: "나는 생각하고 말하는 사람이 되기로 했다", subtitle: "'올바른 말하기'를 배우는 언어 감수성 수업", theme: "차별과 혐오를 넘어서는 언어 감수성", subjects: ["국어·문학", "윤리·철학·심리", "사회·역사·지리"] },
+  { id: 11, cat: "인문사회", title: "진작 이렇게 책을 읽었더라면", subtitle: "읽은 것이 고스란히 배움이 되는, 생산적 책 읽기", theme: "지식을 내면화하는 능동적 독서 전략", subjects: ["국어·문학", "미술·예술·진로"] },
+  { id: 12, cat: "인문사회", title: "철학적 시 읽기의 즐거움", subtitle: "우리 시와 현대 철학이 만났을 때", theme: "문학과 철학의 통섭적 해석", subjects: ["국어·문학", "윤리·철학·심리"] },
+  { id: 13, cat: "인문사회", title: "문학의 숲을 거닐다", subtitle: "문학의 숲에서 사랑을 만나고, 삶의 길을 찾는다", theme: "고전과 현대 문학이 건네는 삶의 성찰", subjects: ["국어·문학", "윤리·철학·심리"] },
+  { id: 14, cat: "인문사회", title: "서른세 번의 만남, 백석과 동주", subtitle: "백석과 윤동주의 연결고리를 찾는 탐험", theme: "일제강점기 두 시인의 문학적 교감과 시대정신", subjects: ["국어·문학", "사회·역사·지리"] },
+  { id: 15, cat: "인문사회", title: "페스트", subtitle: "시대를 아우르는 한 권의 고전", theme: "재난 속 인간의 연대와 실존적 저항", subjects: ["국어·문학", "윤리·철학·심리", "중국어·세계문화", "화학·생명과학"] },
+  { id: 16, cat: "인문사회", title: "광장", subtitle: "밀실과 광장 사이에 선 한 인간의 고뇌", theme: "분단 이데올로기와 개인의 실존적 선택", subjects: ["국어·문학", "사회·역사·지리", "윤리·철학·심리", "중국어·세계문화"] },
+  { id: 17, cat: "인문사회", title: "난장이가 쏘아올린 작은 공", subtitle: "우리 사회의 그림자를 폭로한 한국 문학 대표작", theme: "산업화 시대의 소외와 구조적 불평등", subjects: ["국어·문학", "사회·역사·지리", "경제·정치·법"] },
+  { id: 18, cat: "인문사회", title: "작별인사", subtitle: "'진정한 인간다움이란 무엇인가?'를 묻는 책", theme: "포스트휴먼 시대의 정체성과 존재의 의미", subjects: ["국어·문학", "윤리·철학·심리", "정보·AI"] },
+  { id: 19, cat: "인문사회", title: "땀 흘리는 소설", subtitle: "'을'로서 살아가는 청춘들의 땀을 담은 이야기", theme: "노동의 가치와 청년 세대의 현실", subjects: ["국어·문학", "경제·정치·법", "사회·역사·지리"] },
+  { id: 20, cat: "인문사회", title: "평균의 종말", subtitle: "평균주의가 망친 교육, 아이들의 진정한 재능을 찾으려면?", theme: "개별성과 다양성을 존중하는 교육 패러다임", subjects: ["사회·역사·지리", "수학", "윤리·철학·심리", "미술·예술·진로"] },
+  { id: 21, cat: "인문사회", title: "교사와 학생 사이", subtitle: "'사랑만으로는 안 된다.' 교사에게 필요한 가르침의 기술을 논하는 책", theme: "존중과 소통에 기반한 교육적 관계", subjects: ["윤리·철학·심리", "국어·문학", "미술·예술·진로"] },
+  { id: 22, cat: "인문사회", title: "공부의 미래", subtitle: "내가 지금 하는 공부가 10년 후에는 아무 쓸모 없어진다면?", theme: "AI 시대 미래 역량과 배움의 본질", subjects: ["정보·AI", "사회·역사·지리", "미술·예술·진로"] },
+  { id: 23, cat: "인문사회", title: "팩트풀니스", subtitle: "'세상이 생각보다 괜찮은 이유'를 명확한 근거로 설명하는 책", theme: "편향을 극복하고 데이터로 세계를 바라보는 태도", subjects: ["사회·역사·지리", "수학", "경제·정치·법", "중국어·세계문화"] },
+  { id: 24, cat: "인문사회", title: "아주 작은 습관의 힘", subtitle: "습관 하나만 바뀌어도 인생이 바뀐다", theme: "시스템과 환경 설계를 통한 행동 변화", subjects: ["윤리·철학·심리", "미술·예술·진로"] },
+  { id: 25, cat: "인문사회", title: "포노 사피엔스", subtitle: "스마트폰을 손에 쥔 신인류가 세상을 바꾼다", theme: "디지털 문명의 전환과 소비·소통 방식의 변화", subjects: ["사회·역사·지리", "정보·AI", "경제·정치·법"] },
+  { id: 26, cat: "인문사회", title: "선량한 차별주의자", subtitle: "차별에 대한 예민한 감각 깨우기", theme: "일상 속 무의식적 편견과 구조적 차별 성찰", subjects: ["사회·역사·지리", "윤리·철학·심리", "경제·정치·법", "중국어·세계문화"] },
+  { id: 27, cat: "인문사회", title: "공정하다는 착각", subtitle: "'우리는 모두 공정한 기회를 누리고 있는가?'를 묻는 책", theme: "능력주의의 한계와 공동선·정의의 재구성", subjects: ["윤리·철학·심리", "경제·정치·법", "사회·역사·지리"] },
+  { id: 28, cat: "인문사회", title: "거꾸로 읽는 세계사", subtitle: "최고의 이야기꾼이 들려주는, 가장 격동적이었던 100년의 역사", theme: "비판적 역사 인식과 현대 세계사의 이면", subjects: ["사회·역사·지리", "중국어·세계문화", "경제·정치·법"] },
+  { id: 29, cat: "인문사회", title: "무심코 지나쳤던 우리동네 독립운동가 이야기", subtitle: "우리가 오롯이 기억해야 할 35년 한국 독립사", theme: "지역사 기반의 독립운동 재조명", subjects: ["사회·역사·지리", "국어·문학", "중국어·세계문화"] },
+  { id: 30, cat: "인문사회", title: "빈곤의 연대기", subtitle: "'가난한 나라는 왜 계속 가난한가?'에 대한 진지한 고찰", theme: "세계 불평등의 역사적·구조적 원인", subjects: ["경제·정치·법", "사회·역사·지리", "중국어·세계문화"] },
+  { id: 31, cat: "인문사회", title: "착한 소비는 없다", subtitle: "미래의 지구를 위해 내가 할 수 있는 일", theme: "윤리적 소비의 한계와 시스템 전환의 필요성", subjects: ["경제·정치·법", "윤리·철학·심리", "화학·생명과학", "사회·역사·지리"] },
+  { id: 32, cat: "인문사회", title: "문학 속의 지리 이야기", subtitle: "국어와 지리의 콜라보, 교과 통합의 전형", theme: "문학 작품의 배경이 된 공간과 인문지리적 해석", subjects: ["국어·문학", "사회·역사·지리", "중국어·세계문화"] },
+  { id: 33, cat: "인문사회", title: "동물들의 위대한 법정", subtitle: "멸종 위기에 처한 동물들이 인간에게 판결을 내릴 수 있다면?", theme: "생태 정의와 동물권, 환경 법학", subjects: ["윤리·철학·심리", "경제·정치·법", "화학·생명과학"] },
+  { id: 34, cat: "인문사회", title: "심리학이 이토록 재미있을 줄이야", subtitle: "백설공주는 왜 자꾸만 낯선 사람에게 문을 열어줄까?", theme: "일상과 동화 속 심리기제의 과학적 이해", subjects: ["윤리·철학·심리", "국어·문학"] },
+  { id: 35, cat: "인문사회", title: "클라우스 슈밥의 제4차 산업혁명 THE NEXT", subtitle: "인류가 맞이한 4차 산업혁명, 우리는 무엇을 준비하고 실천해야 하는가?", theme: "초연결 기술 혁명과 사회적 대응 전략", subjects: ["정보·AI", "경제·정치·법", "사회·역사·지리"] },
+  { id: 36, cat: "인문사회", title: "지리의 힘", subtitle: "삶의 모든 것이 시작되는 '땅'에 대해 공부한다", theme: "지정학적 조건이 국제 정치와 역사에 미치는 영향", subjects: ["사회·역사·지리", "경제·정치·법", "중국어·세계문화"] },
+  { id: 37, cat: "인문사회", title: "도시의 승리", subtitle: "사람은 왜 도시로 몰리는가, 도시는 사람을 어떻게 행복하게 만드는가?", theme: "도시 집적의 경제학과 지속가능한 도시 설계", subjects: ["사회·역사·지리", "경제·정치·법", "미술·예술·진로"] },
+  { id: 38, cat: "인문사회", title: "공간의 미래", subtitle: "건축가의 시선으로 바라보는 포스트 코로나 시대 '관계와 공간'에 대한 이야기", theme: "사회 변화에 따른 건축 공간의 진화", subjects: ["사회·역사·지리", "미술·예술·진로", "물리·지구과학"] },
+  { id: 39, cat: "인문사회", title: "트렌드 코리아 2023", subtitle: "새로운 1년을 미리 비춰주는 열 가지 키워드", theme: "사회·소비 트렌드 분석과 시대 변화 읽기", subjects: ["경제·정치·법", "사회·역사·지리", "미술·예술·진로"] },
+  { id: 40, cat: "인문사회", title: "왜 법이 문제일까?", subtitle: "우리 사회의 뼈대인 '법' 바로 알기", theme: "법치주의의 원리와 일상 속 법적 쟁점", subjects: ["경제·정치·법", "사회·역사·지리", "윤리·철학·심리"] },
+  { id: 41, cat: "인문사회", title: "내가 만난 소년에 대하여", subtitle: "소년 범죄를 어떤 시선으로 바라보아야 할까?", theme: "소년 사법 제도와 회복적 정의의 모색", subjects: ["경제·정치·법", "윤리·철학·심리", "사회·역사·지리"] },
+  { id: 42, cat: "인문사회", title: "헌법의 자리", subtitle: "대통령 탄핵부터 간통죄까지, 우리 헌법이 걸어온 길과 가야 할 길", theme: "헌법 정신과 기본권 보장의 역사", subjects: ["경제·정치·법", "사회·역사·지리"] },
+  { id: 43, cat: "인문사회", title: "생각에 관한 생각", subtitle: "인간의 행동을 지배하는 '생각'에 대하여", theme: "이중 처리 이론(시스템 1·2)과 행동경제학", subjects: ["윤리·철학·심리", "경제·정치·법", "수학"] },
+  { id: 44, cat: "인문사회", title: "죽은 경제학자의 살아있는 아이디어", subtitle: "세계를 움직인 경제학자들의 지혜를 만난다", theme: "경제사상사의 핵심 이론과 현대 경제 적용", subjects: ["경제·정치·법", "사회·역사·지리"] },
+  { id: 45, cat: "인문사회", title: "EBS 다큐프라임 자본주의", subtitle: "우리가 몰랐던 자본주의의 이면", theme: "금융 자본주의의 작동 원리와 화폐 시스템", subjects: ["경제·정치·법", "사회·역사·지리", "수학"] },
+  { id: 46, cat: "인문사회", title: "무엇이 행동하게 하는가", subtitle: "독창적인 현장 실험으로 살아 있는 경제학을 탐구한다", theme: "행동경제학 현장 실험과 넛지의 힘", subjects: ["경제·정치·법", "윤리·철학·심리", "수학"] },
+  { id: 47, cat: "인문사회", title: "아트인문학", subtitle: "미술의 패러다임을 바꾼 열 번의 순간을 들여다보다", theme: "예술사의 전환점과 시대를 바꾼 창의적 사유", subjects: ["미술·예술·진로", "사회·역사·지리", "윤리·철학·심리", "중국어·세계문화"] },
+
+  // PART 4: 과학 계열 책 읽기 (BOOK 48 ~ BOOK 70)
+  { id: 48, cat: "과학", title: "인류세 쫌 아는 10대", subtitle: "우리가 지구의 마지막 세대가 되지 않으려면", theme: "인류세의 개념과 기후 위기 대응", subjects: ["물리·지구과학", "화학·생명과학", "사회·역사·지리", "윤리·철학·심리"] },
+  { id: 49, cat: "과학", title: "지속가능한 미래를 위한 기후변화 데이터북", subtitle: "데이터를 통해 객관적으로 바라보는 기후 변화", theme: "기후 데이터의 과학적 분석과 탄소중립", subjects: ["물리·지구과학", "수학", "정보·AI", "사회·역사·지리"] },
+  { id: 50, cat: "과학", title: "천 개의 뇌", subtitle: "뇌 과학과 인공지능에 대한 새로운 통찰", theme: "신피질의 작동 원리와 차세대 인공지능 모델", subjects: ["화학·생명과학", "정보·AI", "윤리·철학·심리"] },
+  { id: 51, cat: "과학", title: "협력의 유전자", subtitle: "인류가 진화하고 발전하는 원동력 '협력'의 비밀", theme: "진화생물학 관점에서 본 이타성과 협력의 메커니즘", subjects: ["화학·생명과학", "사회·역사·지리", "윤리·철학·심리"] },
+  { id: 52, cat: "과학", title: "세상은 온통 화학이야", subtitle: "유쾌한 화학자의 하루로 들여다보는 화학의 매력", theme: "일상 속 물질의 화학 반응과 원리", subjects: ["화학·생명과학", "물리·지구과학"] },
+  { id: 53, cat: "과학", title: "걱정 많은 어른들을 위한 화학 이야기", subtitle: "제대로 알고 안전하게 쓰는 화학제품 이야기", theme: "화학 물질의 독성과 과학적 위해성 평가", subjects: ["화학·생명과학", "사회·역사·지리"] },
+  { id: 54, cat: "과학", title: "비커 군과 실험실 친구들 / 비커 군과 실험 기구 선배들", subtitle: "실험실의 신나는 주인공, 실험기구들을 따라 배우는 과학", theme: "과학 실험 기구의 원리와 탐구 기초", subjects: ["화학·생명과학", "물리·지구과학"] },
+  { id: 55, cat: "과학", title: "화학에서 인생을 배우다", subtitle: "정확하고 공정한 '화학' 같은 인생을 살 수 있다면", theme: "화학 평형과 반응 원리로 풀어낸 삶의 지혜", subjects: ["화학·생명과학", "윤리·철학·심리", "국어·문학"] },
+  { id: 56, cat: "과학", title: "인류에게 필요한 11가지 약 이야기 / 인류를 구한 12가지 약 이야기", subtitle: "우리에게 없어선 안 될 중요한 약들의 비하인드 스토리", theme: "의약품 개발의 역사와 생명과학적 작용 원리", subjects: ["화학·생명과학", "사회·역사·지리"] },
+  { id: 57, cat: "과학", title: "세상을 바꿀 미래 의학 설명서", subtitle: "의학과 공학의 융합으로 달라지는 세상", theme: "의공학, 유전자 치료, 정밀 의학의 미래", subjects: ["화학·생명과학", "정보·AI", "미술·예술·진로"] },
+  { id: 58, cat: "과학", title: "상상이 현실이 되는 순간", subtitle: "SF 작가들이 오늘 발명한 것들은 내일 현실이 된다", theme: "과학적 상상력과 기술 혁신의 공진화", subjects: ["물리·지구과학", "정보·AI", "국어·문학"] },
+  { id: 59, cat: "과학", title: "이상한 미래 연구소", subtitle: "우주 여행에서부터 뇌과학까지, 미래를 내다보는 엉뚱하고 유쾌한 상상", theme: "첨단 과학기술의 현재와 미래 시나리오", subjects: ["물리·지구과학", "화학·생명과학", "정보·AI"] },
+  { id: 60, cat: "과학", title: "곽재식의 세균 박람회", subtitle: "작디작은 세균 속에서 크고 먼 미래를 내다본다", theme: "미생물 생태계와 인류 문명의 공생", subjects: ["화학·생명과학", "사회·역사·지리"] },
+  { id: 61, cat: "과학", title: "과학자의 미술관", subtitle: "과학의 프리즘으로 보는 예술", theme: "명화 속에 숨겨진 광학·화학·천문학 원리", subjects: ["미술·예술·진로", "물리·지구과학", "화학·생명과학"] },
+  { id: 62, cat: "과학", title: "미드 보다 과학에 빠지다", subtitle: "미드를 통해 배우는 흥미로운 과학 상식", theme: "대중문화 속 과학적 오류와 실제 물리·생물 법칙", subjects: ["물리·지구과학", "화학·생명과학", "중국어·세계문화"] },
+  { id: 63, cat: "과학", title: "광물, 그 호기심의 문을 열다", subtitle: "광물 콜렉터가 소개하는 아름다운 광물 이야기", theme: "결정 구조와 지구과학적 광물 생성 원리", subjects: ["물리·지구과학", "화학·생명과학"] },
+  { id: 64, cat: "과학", title: "우주 패권의 시대, 4차원의 우주이야기", subtitle: "세계 강국들이 앞다퉈 우주 개발에 집중하는 이유는?", theme: "뉴스페이스 시대의 우주 탐사와 우주 산업", subjects: ["물리·지구과학", "경제·정치·법", "중국어·세계문화"] },
+  { id: 65, cat: "과학", title: "오늘의 천체관측", subtitle: "천체 관측을 꿈꾸는 초보자를 위한 친절한 입문서", theme: "망원경의 원리와 밤하늘 천체 관측 가이드", subjects: ["물리·지구과학", "수학"] },
+  { id: 66, cat: "과학", title: "우주의 끝을 찾아서", subtitle: "우주의 비밀에 다가선 과학자들의 이야기로 우주론과 친숙해진다", theme: "빅뱅 우주론, 암흑물질과 현대 천체물리학", subjects: ["물리·지구과학", "수학"] },
+  { id: 67, cat: "과학", title: "수학 없는 물리", subtitle: "수식 없이도 제대로 이해하는 물리", theme: "직관과 개념 중심으로 이해하는 물리학의 핵심 법칙", subjects: ["물리·지구과학", "수학"] },
+  { id: 68, cat: "과학", title: "데이터 과학자의 일", subtitle: "데이터 과학자는 어디에서 무슨 일을 할까?", theme: "빅데이터 분석 프로세스와 데이터 기반 의사결정", subjects: ["정보·AI", "수학", "경제·정치·법", "미술·예술·진로"] },
+  { id: 69, cat: "과학", title: "도시를 움직이는 모든 것들의 과학", subtitle: "과학은 어떻게 거대한 도시를 움직이는가?", theme: "도시 인프라 속에 숨겨진 공학과 물리학 원리", subjects: ["물리·지구과학", "사회·역사·지리", "정보·AI"] },
+  { id: 70, cat: "과학", title: "SEASON 과학서평매거진", subtitle: "좋은 과학책을 소개하는 과학 서평 잡지", theme: "최신 과학 담론의 비판적 읽기와 과학 커뮤니케이션", subjects: ["물리·지구과학", "화학·생명과학", "국어·문학"] },
+
+  // PART 5: 수학 계열 책 읽기 (BOOK 71 ~ BOOK 100)
+  { id: 71, cat: "수학", title: "수학을 낳은 위대한 질문들", subtitle: "수학의 다채로운 역사를 보여주는 20가지 질문들", theme: "수학적 개념의 탄생 배경과 수학사의 결정적 질문", subjects: ["수학", "사회·역사·지리"] },
+  { id: 72, cat: "수학", title: "수학의 밀레니엄 문제들 7", subtitle: "100만 달러의 현상금을 내건 일곱 개의 수학 난제", theme: "현대 수학의 7대 미해결 난제와 그 의의", subjects: ["수학", "정보·AI", "물리·지구과학"] },
+  { id: 73, cat: "수학", title: "위대한 수학자의 수학의 즐거움", subtitle: "피타고라스부터 노이만까지, 위대한 수학자들의 삶과 업적", theme: "수학자들의 탐구 정신과 주요 정리의 발전", subjects: ["수학", "사회·역사·지리"] },
+  { id: 74, cat: "수학", title: "발칙한 수학책", subtitle: "이야기와 그림으로 논리적 감수성을 자극한다", theme: "기하학과 논리 퍼즐을 통한 수학적 직관", subjects: ["수학", "미술·예술·진로"] },
+  { id: 75, cat: "수학", title: "수학은 실험이다", subtitle: "다양한 실험으로 배우는 살아 있는 수학", theme: "구체적 조작과 실험으로 증명하는 수학적 원리", subjects: ["수학", "물리·지구과학"] },
+  { id: 76, cat: "수학", title: "더 이상한 수학책", subtitle: "미적분학을 바라보는 다양한 시각", theme: "극한, 무한, 변화율을 탐구하는 미적분의 본질", subjects: ["수학", "물리·지구과학"] },
+  { id: 77, cat: "수학", title: "인생에도 수학처럼 답이 있다면", subtitle: "현실 세계의 문제를 해석하고 해결하는 수학 모델링", theme: "사회·자연 현상을 수식으로 구현하는 수학적 모델링", subjects: ["수학", "경제·정치·법", "정보·AI"] },
+  { id: 78, cat: "수학", title: "고교수학의 아름다운 이야기", subtitle: "간결한 증명과 신기한 공식을 얻을 수 있는 보물지도 같은 책", theme: "고등학교 수학 개념의 심화 증명과 아름다움", subjects: ["수학"] },
+  { id: 79, cat: "수학", title: "야밤의 공대생 만화", subtitle: "지식과 개그를 절묘하게 엮은 수학 만화", theme: "공학 수학의 핵심 아이디어와 과학기술사 에피소드", subjects: ["수학", "물리·지구과학", "정보·AI"] },
+  { id: 80, cat: "수학", title: "수학님은 어디에나 계셔", subtitle: "보이지 않는 곳에서 우리를 도와주는 '수학님'을 만난다", theme: "일상생활과 첨단 기술에 스며든 응용수학", subjects: ["수학", "정보·AI"] },
+  { id: 81, cat: "수학", title: "모든 것의 수다", subtitle: "한국을 대표하는 수학자 열 명에게 듣는 '수학의 쓸모'", theme: "현대 산업과 기초과학을 이끄는 수학의 역할", subjects: ["수학", "정보·AI", "미술·예술·진로"] },
+  { id: 82, cat: "수학", title: "일하는 수학", subtitle: "25가지 직업으로 만나보는 수학의 세계", theme: "진로·직업 현장에서 활용되는 실용 수학", subjects: ["수학", "미술·예술·진로", "경제·정치·법"] },
+  { id: 83, cat: "수학", title: "수학대백과사전", subtitle: "두루 써먹을 수 있는 기초 교양 수학", theme: "수, 도형, 함수, 확률의 체계적 개념 정리", subjects: ["수학"] },
+  { id: 84, cat: "수학", title: "물리가 쉬워지는 미적분", subtitle: "미적분과 물리의 연결고리로 두 과목을 동시에 잡는다", theme: "속도·가속도·운동 방정식으로 이해하는 미적분", subjects: ["수학", "물리·지구과학"] },
+  { id: 85, cat: "수학", title: "한국사에서 수학을 보다", subtitle: "문과생에게는 수학의 매력을, 이과생에게는 인문학적 교양을", theme: "한국사 유물과 제도 속에 담긴 수학적 원리", subjects: ["수학", "사회·역사·지리", "중국어·세계문화"] },
+  { id: 86, cat: "수학", title: "미술관에 간 수학자", subtitle: "아름다운 명화로 수학을 감상한다", theme: "황금비, 원근법, 대칭 등 미술 속 기하학", subjects: ["수학", "미술·예술·진로"] },
+  { id: 87, cat: "수학", title: "프로그래머, 수학으로 생각하라", subtitle: "실력 있는 프로그래머에게 필요한 수학적 사고력", theme: "이산수학, 논리, 알고리즘적 문제 해결력", subjects: ["수학", "정보·AI"] },
+  { id: 88, cat: "수학", title: "다시, 수학이 필요한 순간", subtitle: "수학의 거장과 함께하는 교양 수학 세미나", theme: "수학적 사고의 본질과 추상화의 힘", subjects: ["수학", "윤리·철학·심리"] },
+  { id: 89, cat: "수학", title: "미적분으로 바라본 하루", subtitle: "일상에서 최적의 길을 찾아주는 미적분", theme: "최적화 문제와 변화율로 해석하는 일상의 현상", subjects: ["수학", "경제·정치·법", "물리·지구과학"] },
+  { id: 90, cat: "수학", title: "오일러가 사랑한 수 e", subtitle: "위대한 수 e와 한걸음 가까워진다", theme: "자연상수 e의 정의, 성질과 자연현상 속 지수함수", subjects: ["수학", "화학·생명과학", "경제·정치·법"] },
+  { id: 91, cat: "수학", title: "x의 즐거움", subtitle: "수학을 안다는 것이 이토록 즐거울 줄이야", theme: "수의 탄생부터 미적분까지 수학의 큰 그림", subjects: ["수학"] },
+  { id: 92, cat: "수학", title: "수학의 쓸모", subtitle: "인공지능 시대, 우리에게는 여전히 수학이 필요하다", theme: "머신러닝과 AI 알고리즘의 토대가 되는 확률·선형대수", subjects: ["수학", "정보·AI", "경제·정치·법"] },
+  { id: 93, cat: "수학", title: "이 문제 풀 수 있겠어?", subtitle: "125개의 퍼즐과 함께하는 '즐거운 고통'의 시간", theme: "논리적 추론과 창의적 문제 해결 전략", subjects: ["수학", "정보·AI"] },
+  { id: 94, cat: "수학", title: "수학책을 탈출한 미적분", subtitle: "공포의 미적분이 만만해지는 책", theme: "개념과 직관으로 쉽게 풀어낸 미분과 적분", subjects: ["수학", "물리·지구과학"] },
+  { id: 95, cat: "수학", title: "페르마의 마지막 정리", subtitle: "350년간 전 세계 수학자들을 사로잡았던 하나의 문제", theme: "정수론의 위대한 난제와 수학자들의 집념", subjects: ["수학", "사회·역사·지리"] },
+  { id: 96, cat: "수학", title: "처음 시작하는 만화 통계학", subtitle: "만화로 쉽고 재미있게 배우는 개념 통계학", theme: "평균, 분산, 확률분포 등 기초 통계 개념", subjects: ["수학", "사회·역사·지리"] },
+  { id: 97, cat: "수학", title: "벌거벗은 통계학", subtitle: "확률과 통계의 두 가지 얼굴을 읽는다", theme: "통계적 추론의 원리와 데이터 해석의 함정", subjects: ["수학", "경제·정치·법", "사회·역사·지리", "정보·AI"] },
+  { id: 98, cat: "수학", title: "새빨간 거짓말, 통계", subtitle: "통계가 어떻게 사람을 속일 수 있는지 알려주는 책", theme: "그래프 왜곡과 표본 편향을 가려내는 통계 리터러시", subjects: ["수학", "경제·정치·법", "국어·문학", "사회·역사·지리"] },
+  { id: 99, cat: "수학", title: "수학은 어떻게 문명을 만들었는가", subtitle: "인간의 위대한 업적, 수학에 관한 역사 교양서", theme: "인류 문명 발전의 핵심 동력으로서의 수학사", subjects: ["수학", "사회·역사·지리", "중국어·세계문화"] },
+  { id: 100, cat: "수학", title: "수학이 좋아지는 수학", subtitle: "유쾌한 입담으로 풀어내는 수학 이야기", theme: "생활 속 수학적 원리의 재발견과 수학적 사고", subjects: ["수학"] }
 ];
 
 let ALL_BOOKS = [];
@@ -609,7 +710,7 @@ function renderOnePage(idx) {
         '<div class="info-box"><h3>📖 핵심 줄거리 및 내용 요약</h3><p>' + summary + '</p></div>' +
         '<div class="info-box" style="border-left-color:var(--accent);"><h3>🎯 핵심 주제 및 메타포 팁</h3><p><strong>핵심 주제:</strong> ' + book.theme + '<br><em>"『' + book.title + '』은(는) [사물/현상]이다"</em> 형식으로 메타포를 써보세요.</p></div>' +
       '</div>' +
-      '<div class="illustration-box"><h3>🖼️ 한 장 그림으로 도서 내용 표현하기</h3><div class="svg-stage">' + visual + '</div></div>' +
+      '<div class="illustration-box"><h3>🖼️ 한 장 그림으로 도서 내용 표현하기</h3><div class="svg-stage">' + visual + '</div>' + (book.isCustom ? '<div class="star-rating-box"><div style="display:flex;justify-content:space-between;align-items:center;"><span style="font-size:0.8rem;font-weight:700;color:#475569;">교사 추천 별점 평가</span><span class="rating-badge">★ ' + (Number(book.ratingCount||0)>0 ? (Number(book.ratingSum||0)/Number(book.ratingCount||1)).toFixed(1) : '0.0') + ' (' + Number(book.ratingCount||0) + '명)</span></div><div class="star-btns" style="margin-top:4px;">' + [1,2,3,4,5].map(function(sc){return '<button type="button" class="star-btn ' + (sc <= Math.round((Number(book.ratingCount||0)>0 ? Number(book.ratingSum||0)/Number(book.ratingCount||1) : 0)) ? 'filled' : '') + '" onclick="rateBook('' + book.title.replace(/'/g,"") + '',' + sc + ');renderOnePage(' + idx + ');">★</button>';}).join('') + '</div></div>' : '') + '</div>' +
     '</div>' +
     '<div class="page-nav">' +
       '<button class="btn" style="background:#e2e8f0;" onclick="renderOnePage(' + (idx - 1) + ')">◀ 이전 도서</button>' +
@@ -722,14 +823,28 @@ function renderSharedBooksList() {
   document.getElementById("sharedBooksContainer").innerHTML = filtered.length ? filtered.map(function(b) {
     const c = Number(b.ratingCount || 0);
     const avg = c > 0 ? (Number(b.ratingSum || 0) / c).toFixed(1) : "0.0";
+    const gIdx = ALL_BOOKS.findIndex(function(item) { return item.title === b.title; });
+    const miniPoster = b.customImageUrl
+      ? '<img src="' + b.customImageUrl + '" alt="' + b.title + '" style="width:100%;height:150px;object-fit:contain;background:#0f172a;border-radius:8px;margin-bottom:0.5rem;">'
+      : '<div style="height:150px;border-radius:8px;overflow:hidden;margin-bottom:0.5rem;background:#0f172a;">' + generateBookPosterSVG(b) + '</div>';
     const stars = [1, 2, 3, 4, 5].map(function(sc) {
-      return '<button type="button" class="star-btn ' + (sc <= Math.round(Number(avg)) ? 'filled' : '') + '" onclick="rateBook(\'' + b.title.replace(/'/g, "") + '\',' + sc + ')">★</button>';
+      return '<button type="button" class="star-btn ' + (sc <= Math.round(Number(avg)) ? 'filled' : '') + '" onclick="event.stopPropagation();rateBook('' + b.title.replace(/'/g, "") + '',' + sc + ')">★</button>';
     }).join("");
-    return '<div class="mini-card custom-book">' +
-      '<div style="display:flex;justify-content:space-between;"><span class="num">' + (b.teacherName || '교사 추천') + '</span><span class="rating-badge">★ ' + avg + ' (' + c + '명)</span></div>' +
+    return '<div class="mini-card custom-book" onclick="openSharedBookInOnePage(' + gIdx + ')">' +
+      miniPoster +
+      '<div style="display:flex;justify-content:space-between;align-items:center;"><span class="num">' + (b.teacherName || '교사 추천') + '</span><span class="rating-badge">★ ' + avg + ' (' + c + '명)</span></div>' +
       '<div class="title">《' + b.title + '》</div><div class="desc">' + b.subtitle + '</div>' +
-      '<div class="star-rating-box">' + stars + '</div></div>';
+      '<div class="star-rating-box" onclick="event.stopPropagation();"><div class="star-btns">' + stars + '</div></div></div>';
   }).join("") : '<p style="grid-column:1/-1;text-align:center;color:#64748b;padding:1.5rem;">등록된 교사 추천도서가 없습니다.</p>';
+}
+
+function openSharedBookInOnePage(gIdx) {
+  closeSharedBooksModal();
+  switchTab("viewer");
+  if (gIdx >= 0) {
+    renderOnePage(gIdx);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
 }
 
 function rateBook(title, score) {
