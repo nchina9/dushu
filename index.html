@@ -883,8 +883,15 @@ function loadAllBooks() {
 function switchTab(tabName) {
   document.querySelectorAll('.section').forEach(el => el.classList.remove('active'));
   document.querySelectorAll('.btn-tab').forEach(el => el.classList.remove('active'));
-  document.getElementById(`tab-${tabName}`).classList.add('active');
-  document.getElementById(`nav-${tabName}`).classList.add('active');
+  const targetSec = document.getElementById(`tab-${tabName}`);
+  const targetNav = document.getElementById(`nav-${tabName}`);
+  if (targetSec) targetSec.classList.add('active');
+  if (targetNav) targetNav.classList.add('active');
+  if (tabName === 'viewer') {
+    if (!ALL_BOOKS || ALL_BOOKS.length === 0) loadAllBooks();
+    renderOnePageByIndex(currentBookIndex || 0);
+    renderBookList();
+  }
 }
 
 function normalizeStudentId(raw) {
@@ -1046,7 +1053,6 @@ const POSTER_PALETTES = [
   { top: "#31102f", bot: "#701a75", title: "#ffffff", sub: "#f5d0fe", acc: "#38bdf8", sec: "#fde047", tri: "#34d399", ground: "#1c081b" }
 ];
 
-// 공통 인물 군상/관찰자 헬퍼 (레퍼런스 포스터처럼 생동감 있는 인물 디테일 추가)
 function drawPeopleGroup(type, p) {
   if (type === "TUG_OF_WAR") {
     return `
@@ -1083,7 +1089,6 @@ function drawPeopleGroup(type, p) {
   `;
 }
 
-// 100권 각각에 대한 고유 스토리텔링 장면 (레퍼런스 포스터 4종 + 96권 개별 고유 장면)
 const BOOK_ART_SPECS = {
   1: (p) => `<path d="M76 256 V154 A84 84 0 0 1 244 154 V256" fill="none" stroke="${p.acc}" stroke-width="5"/><circle cx="160" cy="134" r="18" fill="${p.acc}"/><path d="M124 198 C124 162, 196 162, 196 198" fill="${p.sec}"/><path d="M56 212 Q160 258 264 212" fill="none" stroke="#ffffff" stroke-width="5" stroke-linecap="round"/>${drawPeopleGroup("EXPLORERS", p)}`,
   2: (p) => `<rect x="34" y="106" width="114" height="142" rx="10" fill="#450a0a" stroke="#ef4444" stroke-width="2.5"/><polygon points="80,156 80,192 112,174" fill="#ef4444"/><text x="91" y="218" font-size="10" fill="#fca5a5" text-anchor="middle">쇼츠·영상 홍수</text><rect x="172" y="106" width="114" height="142" rx="10" fill="#eff6ff" stroke="#3b82f6" stroke-width="2.5"/><path d="M192 204 Q229 184 266 204 L266 136 Q229 116 192 136 Z" fill="#2563eb"/><text x="229" y="226" font-size="10" font-weight="bold" fill="#1e3a8a" text-anchor="middle">비판적 문해력</text>`,
@@ -1148,7 +1153,6 @@ const BOOK_ART_SPECS = {
     ${drawPeopleGroup("EXPLORERS", p)}`
 };
 
-// 21~100번(59번 제외) 각 도서 전용 작화 + 전경 인물/소품 레이어 결합
 function buildUniqueScene21To100(id, book, p) {
   const scenes = {
     21: `<rect x="64" y="104" width="192" height="114" rx="8" fill="#065f46" stroke="#b45309" stroke-width="5"/><text x="160" y="156" font-size="14" font-weight="bold" fill="white" text-anchor="middle">존중과 소통의 교실</text>${drawPeopleGroup("DEFAULT", p)}`,
@@ -1579,7 +1583,7 @@ function renderSharedBooksList() {
     const avgDisplay = count > 0 ? `★ ${avg.toFixed(1)} (${count}명)` : `평가 대기 (0명)`;
     const warnText = (count >= 7 && count < 10 && avg <= 2.5) ? `<span style="color:#dc2626; font-size:0.72rem;">⚠️ 10명 도달 시 2.5 이하면 자동삭제</span>` : '';
 
-    const safeTitleAttr = b.title.replace(/"/g, '&quot;');
+    const safeTitleAttr = b.title.split('"').join('&quot;');
     const starsHtml = [1, 2, 3, 4, 5].map(score => {
       const filled = score <= (myScore || Math.round(avg));
       return `<button type="button" class="star-btn ${filled ? 'filled' : ''}" title="${score}점 주기" data-book-title="${safeTitleAttr}" data-score="${score}" onclick="event.stopPropagation(); rateTeacherBook(this.dataset.bookTitle, Number(this.dataset.score))">★</button>`;
@@ -1981,6 +1985,10 @@ function loadSavedSettings() {
   // 학생 전용 링크(?mode=student)로 접속 시 교사용 관리 버튼 전체 숨김 + 소감문·메타포 작성 화면 바로 열기
   if (params.get('mode') === 'student') {
     document.body.classList.add('student-mode');
+    document.querySelectorAll('.section').forEach(el => el.classList.remove('active'));
+    document.querySelectorAll('.btn-tab').forEach(el => el.classList.remove('active'));
+    document.getElementById('tab-submit').classList.add('active');
+    document.getElementById('nav-submit').classList.add('active');
     switchTab('submit');
   } else {
     // 타 교사 사이트에는 '⚙️ 교사 설정' 버튼이 나타나지 않도록 기본 숨김
