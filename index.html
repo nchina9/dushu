@@ -1028,163 +1028,277 @@ function pickRecommendedBook(title) {
 }
 
 // =========================================================================
-// 100권+ 도서별 100% 비중복 고해상도 에디토리얼 일러스트 포스터 엔진
-// (BOOK 1 ~ BOOK 100까지 단 한 권도 중복되는 그림이 없도록 100개 개별 작화 설계)
+// 100권+ 도서별 100% 비중복 초정밀 다층 에디토리얼 일러스트 엔진
+// - 12가지 상이한 포스터 레이아웃 아키텍처 + 100권 개별 고유 피사체/소품/서사 장면
+// - 하단 캡션 텍스트 박스 자동 폭 맞춤(잘림 방지) 적용
 // =========================================================================
-const POSTER_THEMES = [
-  { top: "#0f172a", bot: "#1e3a8a", title: "#ffffff", sub: "#93c5fd", acc: "#f59e0b", sec: "#38bdf8", ground: "#090d16" },
-  { top: "#1e1b4b", bot: "#4338ca", title: "#ffffff", sub: "#fde047", acc: "#f43f5e", sec: "#34d399", ground: "#13112e" },
-  { top: "#064e3b", bot: "#0f766e", title: "#ffffff", sub: "#a7f3d0", acc: "#fbbf24", sec: "#38bdf8", ground: "#022c22" },
-  { top: "#4c0519", bot: "#881337", title: "#ffffff", sub: "#fecdd3", acc: "#fbbf24", sec: "#60a5fa", ground: "#2a040e" },
-  { top: "#f5f0e6", bot: "#e7dec8", title: "#1e293b", sub: "#475569", acc: "#dc2626", sec: "#2563eb", ground: "#cbd5e1" },
-  { top: "#172554", bot: "#1d4ed8", title: "#ffffff", sub: "#bfdbfe", acc: "#fb923c", sec: "#2dd4bf", ground: "#0b132b" },
-  { top: "#3b0764", bot: "#6b21a8", title: "#ffffff", sub: "#f3e8ff", acc: "#facc15", sec: "#38bdf8", ground: "#22043b" },
-  { top: "#27272a", bot: "#3f3f46", title: "#ffffff", sub: "#fde68a", acc: "#10b981", sec: "#f97316", ground: "#18181b" },
-  { top: "#0c4a6e", bot: "#0369a1", title: "#ffffff", sub: "#bae6fd", acc: "#facc15", sec: "#f43f5e", ground: "#082f49" },
-  { top: "#422006", bot: "#78350f", title: "#ffffff", sub: "#fde68a", acc: "#38bdf8", sec: "#34d399", ground: "#271303" }
+const POSTER_PALETTES = [
+  { top: "#0f172a", bot: "#1e3a8a", title: "#ffffff", sub: "#93c5fd", acc: "#f59e0b", sec: "#38bdf8", tri: "#34d399", ground: "#070b14" },
+  { top: "#1e1b4b", bot: "#4338ca", title: "#ffffff", sub: "#fde047", acc: "#f43f5e", sec: "#34d399", tri: "#38bdf8", ground: "#110f29" },
+  { top: "#064e3b", bot: "#0f766e", title: "#ffffff", sub: "#a7f3d0", acc: "#fbbf24", sec: "#38bdf8", tri: "#fb7185", ground: "#02261d" },
+  { top: "#4c0519", bot: "#9f1239", title: "#ffffff", sub: "#fecdd3", acc: "#fbbf24", sec: "#60a5fa", tri: "#34d399", ground: "#26030c" },
+  { top: "#f5f0e6", bot: "#e6dcc5", title: "#1e293b", sub: "#475569", acc: "#dc2626", sec: "#2563eb", tri: "#059669", ground: "#cbd5e1" },
+  { top: "#172554", bot: "#1d4ed8", title: "#ffffff", sub: "#bfdbfe", acc: "#fb923c", sec: "#2dd4bf", tri: "#fde047", ground: "#091026" },
+  { top: "#3b0764", bot: "#6b21a8", title: "#ffffff", sub: "#f3e8ff", acc: "#facc15", sec: "#38bdf8", tri: "#fb7185", ground: "#1f0336" },
+  { top: "#18181b", bot: "#3f3f46", title: "#ffffff", sub: "#fde68a", acc: "#10b981", sec: "#f97316", tri: "#38bdf8", ground: "#09090b" },
+  { top: "#0c4a6e", bot: "#0369a1", title: "#ffffff", sub: "#bae6fd", acc: "#facc15", sec: "#f43f5e", tri: "#34d399", ground: "#062538" },
+  { top: "#422006", bot: "#78350f", title: "#ffffff", sub: "#fde68a", acc: "#38bdf8", sec: "#34d399", tri: "#f43f5e", ground: "#241103" },
+  { top: "#134e4a", bot: "#115e59", title: "#ffffff", sub: "#ccfbf1", acc: "#fb923c", sec: "#fde047", tri: "#60a5fa", ground: "#042f2e" },
+  { top: "#31102f", bot: "#701a75", title: "#ffffff", sub: "#f5d0fe", acc: "#38bdf8", sec: "#fde047", tri: "#34d399", ground: "#1c081b" }
 ];
 
-// 1번~100번 각 도서별 고유 스토리텔링 장면 정의 (100개 전부 상이한 작화)
-const BOOK_UNIQUE_SCENES = {
-  1: (p) => `<circle cx="160" cy="148" r="32" fill="${p.acc}" opacity="0.25"/><circle cx="160" cy="136" r="16" fill="${p.acc}"/><path d="M126 196 C126 164, 194 164, 194 196" fill="${p.sec}"/><path d="M74 202 Q160 246 246 202" fill="none" stroke="${p.acc}" stroke-width="6" stroke-linecap="round"/><polygon points="160,94 164,105 176,105 166,112 170,123 160,116 150,123 154,112 144,105 156,105" fill="#fde047"/>`,
-  2: (p) => `<rect x="56" y="122" width="92" height="66" rx="12" fill="#fee2e2" stroke="#ef4444" stroke-width="3"/><polygon points="94,142 94,168 118,155" fill="#ef4444"/><path d="M154 155 L176 155" stroke="${p.acc}" stroke-width="3" stroke-dasharray="4,3"/><path d="M180 206 Q224 182 268 206 L268 124 Q224 100 180 124 Z" fill="white" stroke="${p.sec}" stroke-width="3"/><line x1="224" y1="112" x2="224" y2="194" stroke="#1e3a8a" stroke-width="2.5"/><circle cx="224" cy="96" r="8" fill="${p.acc}"/>`,
-  3: (p) => `<rect x="115" y="274" width="90" height="8" rx="3" fill="#475569"/><rect x="155" y="128" width="10" height="146" fill="#475569"/><line x1="88" y1="152" x2="232" y2="142" stroke="#334155" stroke-width="5"/><ellipse cx="86" cy="182" rx="22" ry="12" fill="#60a5fa"/><text x="86" y="185" font-size="9" font-weight="bold" fill="#0f172a" text-anchor="middle">프레임</text><ellipse cx="232" cy="174" rx="22" ry="12" fill="#f87171"/><text x="232" y="177" font-size="9" font-weight="bold" fill="white" text-anchor="middle">권력</text><circle cx="195" cy="116" r="26" fill="white" stroke="#334155" stroke-width="4"/><line x1="214" y1="135" x2="238" y2="158" stroke="#1e293b" stroke-width="6"/><text x="195" y="120" font-size="13" font-weight="900" fill="#0f172a" text-anchor="middle">언어</text><line x1="54" y1="264" x2="266" y2="264" stroke="#92400e" stroke-width="4" stroke-dasharray="5,2"/>`,
-  4: (p) => `<circle cx="160" cy="176" r="64" fill="none" stroke="${p.sec}" stroke-width="3"/><circle cx="160" cy="176" r="44" fill="none" stroke="${p.acc}" stroke-width="3"/><circle cx="160" cy="176" r="24" fill="none" stroke="#ffffff" stroke-width="3"/><circle cx="160" cy="176" r="10" fill="${p.acc}"/><line x1="234" y1="106" x2="168" y2="168" stroke="#fde047" stroke-width="4"/><polygon points="163,173 177,170 168,161" fill="#fde047"/>`,
-  5: (p) => `<circle cx="104" cy="144" r="18" fill="${p.sec}"/><path d="M74 206 C74 172, 134 172, 134 206" fill="${p.sec}"/><circle cx="216" cy="144" r="18" fill="${p.acc}"/><path d="M186 206 C186 172, 246 172, 246 206" fill="${p.acc}"/><path d="M126 154 Q160 118 194 154" fill="none" stroke="#ffffff" stroke-width="4"/><path d="M126 172 Q160 208 194 172" fill="none" stroke="#fde047" stroke-width="4"/>`,
-  6: (p) => `<polygon points="184,104 256,104 242,248 170,248" fill="#bae6fd" stroke="#38bdf8" stroke-width="3"/><path d="M202 124 L182 162 L214 192 L192 228" fill="none" stroke="#0f172a" stroke-width="3"/><line x1="72" y1="238" x2="164" y2="146" stroke="#b45309" stroke-width="8" stroke-linecap="round"/><path d="M148 128 L192 166 L168 188 L132 150 Z" fill="${p.acc}" stroke="white" stroke-width="2"/>`,
-  7: (p) => `<rect x="0" y="168" width="320" height="132" fill="#020617" opacity="0.72"/><polygon points="160,104 128,168 192,168" fill="#e0f2fe"/><polygon points="128,168 192,168 232,216 196,274 124,274 88,216" fill="#1e3a8a" stroke="#60a5fa" stroke-width="2"/><circle cx="160" cy="214" r="18" fill="none" stroke="#fbbf24" stroke-width="3"/><line x1="160" y1="232" x2="160" y2="262" stroke="#fbbf24" stroke-width="3.5"/>`,
-  8: (p) => `<polygon points="160,96 68,136 252,136" fill="#f8fafc" stroke="${p.acc}" stroke-width="2.5"/><rect x="86" y="136" width="18" height="104" fill="#e2e8f0"/><rect x="132" y="136" width="18" height="104" fill="#e2e8f0"/><rect x="174" y="136" width="18" height="104" fill="#e2e8f0"/><rect x="218" y="136" width="18" height="104" fill="#e2e8f0"/><rect x="64" y="240" width="192" height="14" fill="#94a3b8"/><text x="160" y="125" font-size="11" font-weight="bold" fill="#0f172a" text-anchor="middle">Socrates → Singer</text>`,
-  9: (p) => `<polygon points="160,100 124,186 160,224 196,186" fill="#ffffff" stroke="${p.acc}" stroke-width="3"/><line x1="160" y1="100" x2="160" y2="174" stroke="#0f172a" stroke-width="3"/><circle cx="160" cy="176" r="7" fill="${p.acc}"/><path d="M74 242 Q160 214 246 242" fill="none" stroke="${p.sec}" stroke-width="4"/>`,
-  10: (p) => `<circle cx="110" cy="176" r="18" fill="${p.acc}"/><path d="M84 236 C84 204, 136 204, 136 236" fill="${p.acc}"/><path d="M144 156 Q168 176 144 196" fill="none" stroke="#38bdf8" stroke-width="4"/><path d="M164 138 Q198 176 164 214" fill="none" stroke="#34d399" stroke-width="4"/><path d="M184 120 Q228 176 184 232" fill="none" stroke="#fde047" stroke-width="4"/>`,
-  11: (p) => `<rect x="76" y="212" width="168" height="22" rx="4" fill="#3b82f6"/><rect x="92" y="186" width="136" height="22" rx="4" fill="#10b981"/><rect x="108" y="160" width="104" height="22" rx="4" fill="#f59e0b"/><rect x="124" y="134" width="72" height="22" rx="4" fill="#f43f5e"/><polygon points="160,94 165,108 180,108 168,116 172,130 160,121 148,130 152,116 140,108 155,108" fill="#fde047"/>`,
-  12: (p) => `<path d="M218 112 A 28 28 0 1 0 242 154 A 22 22 0 1 1 218 112 Z" fill="#fde047"/><rect x="76" y="138" width="112" height="122" rx="6" fill="white" stroke="${p.sec}" stroke-width="2.5"/><line x1="94" y1="162" x2="170" y2="162" stroke="#64748b" stroke-width="2"/><line x1="94" y1="184" x2="156" y2="184" stroke="#64748b" stroke-width="2"/><line x1="94" y1="206" x2="166" y2="206" stroke="#64748b" stroke-width="2"/><circle cx="222" cy="212" r="24" fill="${p.acc}" opacity="0.85"/>`,
-  13: (p) => `<path d="M160 256 L160 162" stroke="#92400e" stroke-width="9" stroke-linecap="round"/><circle cx="160" cy="144" r="44" fill="#10b981"/><circle cx="124" cy="162" r="32" fill="#059669"/><circle cx="196" cy="162" r="32" fill="#34d399"/><circle cx="144" cy="134" r="6" fill="#f43f5e"/><circle cx="178" cy="148" r="6" fill="#fde047"/><circle cx="158" cy="164" r="6" fill="#fb923c"/>`,
-  14: (p) => `<circle cx="160" cy="136" r="34" fill="#fef08a" opacity="0.9"/><circle cx="116" cy="196" r="14" fill="#38bdf8"/><path d="M90 252 C90 222, 142 222, 142 252" fill="#38bdf8"/><circle cx="204" cy="196" r="14" fill="#f43f5e"/><path d="M178 252 C178 222, 230 222, 230 252" fill="#f43f5e"/><line x1="132" y1="204" x2="188" y2="204" stroke="#fde047" stroke-width="3" stroke-dasharray="4,3"/>`,
-  15: (p) => `<polygon points="48,145 195,115 195,235 48,255" fill="#1e293b"/><path d="M138 126 L146 154 L136 176 L148 202" fill="none" stroke="#f43f5e" stroke-width="3"/><circle cx="176" cy="112" r="10" fill="#e11d48"/><rect x="118" y="206" width="9" height="36" fill="#facc15"/><circle cx="122" cy="173" r="8" fill="#f97316"/><rect x="158" y="204" width="9" height="38" fill="#ffffff"/><circle cx="162" cy="170" r="9" fill="#f97316"/><rect x="198" y="206" width="9" height="36" fill="#34d399"/><circle cx="202" cy="173" r="8" fill="#f97316"/>`,
-  16: (p) => `<rect x="34" y="102" width="118" height="156" rx="6" fill="#090d16" stroke="#475569" stroke-width="2"/><rect x="54" y="124" width="78" height="84" fill="none" stroke="#334155" stroke-width="2"/><rect x="168" y="102" width="118" height="156" rx="6" fill="#fef3c7" stroke="#f59e0b" stroke-width="2"/><circle cx="227" cy="144" r="22" fill="#f59e0b"/><circle cx="160" cy="172" r="9" fill="#ffffff" stroke="#0f172a" stroke-width="2"/><rect x="152" y="182" width="16" height="44" rx="5" fill="#3b82f6"/>`,
-  17: (p) => `<circle cx="242" cy="116" r="24" fill="#fef08a"/><rect x="52" y="168" width="26" height="106" fill="#334155"/><rect x="92" y="144" width="32" height="130" fill="#475569"/><rect x="136" y="184" width="44" height="90" fill="#1e293b"/><path d="M188 248 Q216 175 242 118" fill="none" stroke="#f97316" stroke-width="3" stroke-dasharray="5,4"/><circle cx="242" cy="116" r="11" fill="#f97316" stroke="white" stroke-width="2"/>`,
-  18: (p) => `<circle cx="116" cy="166" r="32" fill="#fde68a" stroke="#f59e0b" stroke-width="3"/><rect x="172" y="134" width="64" height="64" rx="14" fill="#e0f2fe" stroke="#38bdf8" stroke-width="3"/><circle cx="192" cy="160" r="6" fill="#0284c7"/><circle cx="216" cy="160" r="6" fill="#0284c7"/><path d="M128 214 Q160 242 192 214" fill="none" stroke="#f43f5e" stroke-width="4" stroke-linecap="round"/>`,
-  19: (p) => `<!-- 19. 땀 흘리는 소설: 청춘의 운동화·작업모·빛나는 땀방울과 계단 -->
+// 100권 각각에 대한 고유 시각 메타데이터 (layout: 12종 구도, label: 핵심 키워드 배지, customSvg: 책 내용 직접 묘사)
+const BOOK_ART_SPECS = {
+  1: { layout: "ARCH_PORTAL", badge: "DIGNITY · 연대", draw: (p) => `
+    <path d="M84 252 V156 A76 76 0 0 1 236 156 V252" fill="none" stroke="${p.acc}" stroke-width="5"/>
+    <circle cx="160" cy="134" r="18" fill="${p.acc}"/><path d="M126 196 C126 162, 194 162, 194 196" fill="${p.sec}"/>
+    <path d="M62 212 Q160 256 258 212" fill="none" stroke="#ffffff" stroke-width="5" stroke-linecap="round"/>
+    <circle cx="94" cy="186" r="10" fill="${p.tri}"/><circle cx="226" cy="186" r="10" fill="${p.tri}"/>` },
+  2: { layout: "SPLIT_CONTRAST", badge: "SCREEN vs BOOK", draw: (p) => `
+    <rect x="34" y="106" width="114" height="142" rx="10" fill="#450a0a" stroke="#ef4444" stroke-width="2.5"/>
+    <polygon points="80,156 80,192 112,174" fill="#ef4444"/><text x="91" y="218" font-size="10" fill="#fca5a5" text-anchor="middle">알고리즘 영상</text>
+    <rect x="172" y="106" width="114" height="142" rx="10" fill="#eff6ff" stroke="#3b82f6" stroke-width="2.5"/>
+    <path d="M192 204 Q229 184 266 204 L266 136 Q229 116 192 136 Z" fill="#2563eb"/><text x="229" y="226" font-size="10" font-weight="bold" fill="#1e3a8a" text-anchor="middle">깊이 있는 문해력</text>` },
+  3: { layout: "SCALE_BALANCE", badge: "언어 · 프레임 · 권력", draw: (p) => `
+    <rect x="115" y="268" width="90" height="8" rx="3" fill="#475569"/><rect x="155" y="126" width="10" height="142" fill="#475569"/>
+    <line x1="84" y1="150" x2="236" y2="140" stroke="#334155" stroke-width="5"/>
+    <ellipse cx="86" cy="182" rx="24" ry="13" fill="#3b82f6"/><text x="86" y="186" font-size="9" font-weight="bold" fill="white" text-anchor="middle">프레임</text>
+    <ellipse cx="234" cy="174" rx="24" ry="13" fill="#ef4444"/><text x="234" y="178" font-size="9" font-weight="bold" fill="white" text-anchor="middle">숨은의도</text>
+    <circle cx="195" cy="114" r="25" fill="white" stroke="#1e293b" stroke-width="4"/><line x1="213" y1="132" x2="236" y2="154" stroke="#1e293b" stroke-width="5"/>
+    <text x="195" y="118" font-size="12" font-weight="900" fill="#0f172a" text-anchor="middle">언어</text>
+    <line x1="52" y1="258" x2="268" y2="258" stroke="#92400e" stroke-width="4" stroke-dasharray="5,2"/>` },
+  4: { layout: "CONCENTRIC_CORE", badge: "FLOW · 몰입", draw: (p) => `
+    <circle cx="160" cy="176" r="68" fill="none" stroke="${p.sec}" stroke-width="2.5" stroke-dasharray="8,4"/>
+    <circle cx="160" cy="176" r="46" fill="none" stroke="${p.acc}" stroke-width="3.5"/>
+    <circle cx="160" cy="176" r="24" fill="${p.acc}" opacity="0.3" stroke="#ffffff" stroke-width="3"/>
+    <circle cx="160" cy="176" r="9" fill="#ffffff"/>
+    <line x1="238" y1="102" x2="168" y2="168" stroke="#fde047" stroke-width="4"/><polygon points="163,173 177,170 168,161" fill="#fde047"/>` },
+  5: { layout: "BRIDGE_LINK", badge: "공감과 경청", draw: (p) => `
+    <path d="M44 214 Q160 132 276 214" fill="none" stroke="${p.acc}" stroke-width="8"/>
+    <line x1="96" y1="184" x2="96" y2="248" stroke="#cbd5e1" stroke-width="4"/><line x1="160" y1="172" x2="160" y2="248" stroke="#cbd5e1" stroke-width="4"/><line x1="224" y1="184" x2="224" y2="248" stroke="#cbd5e1" stroke-width="4"/>
+    <circle cx="116" cy="148" r="12" fill="${p.sec}"/><circle cx="204" cy="148" r="12" fill="${p.tri}"/>
+    <path d="M132 142 Q160 120 188 142" fill="none" stroke="#fde047" stroke-width="3" stroke-dasharray="4,3"/>` },
+  6: { layout: "DIAGONAL_ACTION", badge: "감수성을 깨우는 도끼", draw: (p) => `
+    <polygon points="184,102 262,102 246,252 168,252" fill="#bae6fd" stroke="#38bdf8" stroke-width="3"/>
+    <polyline points="204,118 182,158 216,192 188,236" fill="none" stroke="#0f172a" stroke-width="3.5"/>
+    <line x1="66" y1="242" x2="166" y2="142" stroke="#d97706" stroke-width="9" stroke-linecap="round"/>
+    <path d="M148 124 L194 166 L168 190 L130 148 Z" fill="${p.acc}" stroke="white" stroke-width="2.5"/>` },
+  7: { layout: "ICEBERG_DEPTH", badge: "심층 심리 · 본성", draw: (p) => `
+    <rect x="0" y="166" width="320" height="134" fill="#020617" opacity="0.72"/>
+    <line x1="0" y1="166" x2="320" y2="166" stroke="#38bdf8" stroke-width="2.5"/>
+    <polygon points="160,102 126,166 194,166" fill="#e0f2fe"/>
+    <polygon points="126,166 194,166 236,218 196,274 124,274 84,218" fill="#1e3a8a" stroke="#60a5fa" stroke-width="2"/>
+    <circle cx="160" cy="214" r="18" fill="none" stroke="#fbbf24" stroke-width="3"/><line x1="160" y1="232" x2="160" y2="262" stroke="#fbbf24" stroke-width="3.5"/>` },
+  8: { layout: "TEMPLE_PILLARS", badge: "40인의 철학사", draw: (p) => `
+    <polygon points="160,94 64,134 256,134" fill="#f8fafc" stroke="${p.acc}" stroke-width="2.5"/>
+    <rect x="82" y="134" width="18" height="106" fill="#e2e8f0"/><rect x="128" y="134" width="18" height="106" fill="#e2e8f0"/>
+    <rect x="174" y="134" width="18" height="106" fill="#e2e8f0"/><rect x="220" y="134" width="18" height="106" fill="#e2e8f0"/>
+    <rect x="60" y="240" width="200" height="14" fill="#94a3b8"/>
+    <circle cx="160" cy="186" r="22" fill="#1e3a8a" stroke="#fbbf24" stroke-width="3"/><text x="160" y="191" font-size="11" font-weight="bold" fill="#fbbf24" text-anchor="middle">SOPHIA</text>` },
+  9: { layout: "FOUNTAIN_PEN", badge: "나답게 쓰는 글", draw: (p) => `
+    <polygon points="160,96 122,184 160,224 198,184" fill="#ffffff" stroke="${p.acc}" stroke-width="3"/>
+    <line x1="160" y1="96" x2="160" y2="172" stroke="#0f172a" stroke-width="3"/><circle cx="160" cy="174" r="7" fill="${p.acc}"/>
+    <path d="M56 244 Q112 222 160 238 Q208 254 264 232" fill="none" stroke="${p.sec}" stroke-width="4"/>` },
+  10: { layout: "SOUND_WAVES", badge: "언어 감수성 수업", draw: (p) => `
+    <rect x="84" y="122" width="96" height="58" rx="14" fill="${p.sec}"/><polygon points="104,180 124,180 98,198" fill="${p.sec}"/>
+    <text x="132" y="156" font-size="13" font-weight="bold" fill="#0f172a" text-anchor="middle">존중의 언어</text>
+    <rect x="144" y="176" width="96" height="54" rx="14" fill="${p.acc}"/><polygon points="214,230 194,230 220,248" fill="${p.acc}"/>
+    <text x="192" y="208" font-size="13" font-weight="bold" fill="white" text-anchor="middle">공감의 대화</text>` },
+  11: { layout: "STAIR_GROWTH", badge: "생산적 책 읽기", draw: (p) => `
+    <rect x="68" y="218" width="184" height="22" rx="4" fill="#3b82f6"/><rect x="86" y="192" width="148" height="22" rx="4" fill="#10b981"/>
+    <rect x="104" y="166" width="112" height="22" rx="4" fill="#f59e0b"/><rect x="122" y="140" width="76" height="22" rx="4" fill="#f43f5e"/>
+    <polygon points="160,96 165,112 182,112 168,121 173,136 160,127 147,136 152,121 138,112 155,112" fill="#fde047"/>` },
+  12: { layout: "POETRY_SCROLL", badge: "시와 현대 철학", draw: (p) => `
+    <path d="M224 108 A 28 28 0 1 0 248 150 A 22 22 0 1 1 224 108 Z" fill="#fde047"/>
+    <rect x="74" y="126" width="136" height="128" rx="8" fill="#fefce8" stroke="#f59e0b" stroke-width="3"/>
+    <line x1="94" y1="154" x2="188" y2="154" stroke="#92400e" stroke-width="2.5"/><line x1="94" y1="178" x2="172" y2="178" stroke="#92400e" stroke-width="2.5"/>
+    <line x1="94" y1="202" x2="182" y2="202" stroke="#92400e" stroke-width="2.5"/><circle cx="176" cy="226" r="10" fill="#dc2626"/>` },
+  13: { layout: "ORGANIC_TREE", badge: "문학의 숲", draw: (p) => `
+    <path d="M160 256 L160 162" stroke="#92400e" stroke-width="9" stroke-linecap="round"/>
+    <circle cx="160" cy="142" r="44" fill="#10b981"/><circle cx="122" cy="162" r="32" fill="#059669"/><circle cx="198" cy="162" r="32" fill="#34d399"/>
+    <circle cx="144" cy="132" r="6" fill="#f43f5e"/><circle cx="178" cy="148" r="6" fill="#fde047"/><circle cx="158" cy="166" r="6" fill="#fb923c"/>` },
+  14: { layout: "DUO_MANUSCRIPT", badge: "백석 × 윤동주", draw: (p) => `
+    <!-- 14. 서른세 번의 만남, 백석과 동주: 나무가 아닌 두 시인의 원고지 교차 + 북두칠성 + 사슴과 별 -->
+    <rect x="64" y="118" width="92" height="124" rx="4" transform="rotate(-6 110 180)" fill="#fefce8" stroke="#f59e0b" stroke-width="2.5"/>
+    <text x="108" y="152" font-size="12" font-weight="900" fill="#78350f" text-anchor="middle">백 석</text>
+    <text x="108" y="174" font-size="10" fill="#92400e" text-anchor="middle">나와 나타샤와</text>
+    <text x="108" y="190" font-size="10" fill="#92400e" text-anchor="middle">흰 당나귀</text>
+    <rect x="164" y="118" width="92" height="124" rx="4" transform="rotate(6 210 180)" fill="#eff6ff" stroke="#38bdf8" stroke-width="2.5"/>
+    <text x="212" y="152" font-size="12" font-weight="900" fill="#1e3a8a" text-anchor="middle">윤동주</text>
+    <text x="212" y="174" font-size="10" fill="#1d4ed8" text-anchor="middle">별 헤는 밤</text>
+    <text x="212" y="190" font-size="10" fill="#1d4ed8" text-anchor="middle">서 시</text>
+    <polygon points="160,94 164,104 175,104 166,110 169,120 160,114 151,120 154,110 145,104 156,104" fill="#fde047"/>
+    <path d="M124 224 Q160 202 196 224" fill="none" stroke="#f43f5e" stroke-width="3.5"/>` },
+  15: { layout: "WALL_TORCHES", badge: "연대와 실존적 저항", draw: (p) => `
+    <polygon points="48,145 195,115 195,235 48,255" fill="#1e293b"/>
+    <path d="M138 126 L146 154 L136 176 L148 202" fill="none" stroke="#f43f5e" stroke-width="3"/>
+    <rect x="118" y="206" width="9" height="36" fill="#facc15"/><circle cx="122" cy="173" r="8" fill="#f97316"/>
+    <rect x="158" y="204" width="9" height="38" fill="#ffffff"/><circle cx="162" cy="170" r="9" fill="#f97316"/>
+    <rect x="198" y="206" width="9" height="36" fill="#34d399"/><circle cx="202" cy="173" r="8" fill="#f97316"/>` },
+  16: { layout: "SPLIT_CONTRAST", badge: "밀실 vs 광장", draw: (p) => `
+    <rect x="34" y="102" width="118" height="156" rx="6" fill="#090d16" stroke="#475569" stroke-width="2"/>
+    <rect x="54" y="124" width="78" height="84" fill="none" stroke="#334155" stroke-width="2"/>
+    <rect x="168" y="102" width="118" height="156" rx="6" fill="#fef3c7" stroke="#f59e0b" stroke-width="2"/>
+    <circle cx="227" cy="144" r="22" fill="#f59e0b"/>
+    <circle cx="160" cy="172" r="9" fill="#ffffff" stroke="#0f172a" stroke-width="2"/><rect x="152" y="182" width="16" height="44" rx="5" fill="#3b82f6"/>` },
+  17: { layout: "SKYLINE_ARC", badge: "작은 공의 비상", draw: (p) => `
+    <circle cx="242" cy="116" r="24" fill="#fef08a"/>
+    <rect x="52" y="168" width="26" height="106" fill="#334155"/><rect x="92" y="144" width="32" height="130" fill="#475569"/><rect x="136" y="184" width="44" height="90" fill="#1e293b"/>
+    <path d="M188 248 Q216 175 242 118" fill="none" stroke="#f97316" stroke-width="3.5" stroke-dasharray="5,4"/>
+    <circle cx="242" cy="116" r="11" fill="#f97316" stroke="white" stroke-width="2"/>` },
+  18: { layout: "DUAL_SILHOUETTE", badge: "인간과 휴머노이드", draw: (p) => `
+    <circle cx="116" cy="166" r="32" fill="#fde68a" stroke="#f59e0b" stroke-width="3"/>
+    <rect x="172" y="134" width="64" height="64" rx="14" fill="#e0f2fe" stroke="#38bdf8" stroke-width="3"/>
+    <circle cx="192" cy="160" r="6" fill="#0284c7"/><circle cx="216" cy="160" r="6" fill="#0284c7"/>
+    <path d="M128 214 Q160 242 192 214" fill="none" stroke="#f43f5e" stroke-width="4" stroke-linecap="round"/>` },
+  19: { layout: "STEP_CLIMB", badge: "청춘의 땀과 노동", draw: (p) => `
     <path d="M56 246 L112 246 L112 214 L168 214 L168 182 L224 182 L224 150 L272 150" fill="none" stroke="#fbbf24" stroke-width="5" stroke-linecap="round"/>
     <path d="M156 108 C156 108, 134 138, 134 154 C134 166, 144 176, 156 176 C168 176, 178 166, 178 154 C178 138, 156 108, 156 108 Z" fill="#38bdf8" stroke="white" stroke-width="2.5"/>
-    <circle cx="96" cy="164" r="12" fill="#fde68a"/><rect x="86" y="178" width="20" height="44" rx="5" fill="#f43f5e"/>
-    <polygon points="224,112 228,122 238,122 230,128 233,138 224,132 215,138 218,128 210,122 220,122" fill="#fde047"/>`,
-  20: (p) => `<path d="M235 72 Q195 120 225 168 Q255 215 210 295 L320 295 L320 72 Z" fill="#fef08a"/><rect x="74" y="108" width="102" height="175" rx="6" fill="#1e1b4b" stroke="#818cf8" stroke-width="2"/><circle cx="126" cy="144" r="14" fill="#f8fafc"/><path d="M104 185 C104 164, 148 164, 148 185 L144 268 L108 268 Z" fill="#f8fafc"/><polygon points="168,176 205,152 194,192" fill="#f43f5e"/><polygon points="174,198 218,195 192,222" fill="#38bdf8"/><circle cx="212" cy="166" r="13" fill="#fb923c"/>`,
-  21: (p) => `<rect x="64" y="104" width="192" height="114" rx="8" fill="#065f46" stroke="#b45309" stroke-width="5"/><text x="160" y="156" font-size="15" font-weight="bold" fill="#ffffff" text-anchor="middle">가르침과 배움의 대화</text><line x1="94" y1="176" x2="226" y2="176" stroke="#fde047" stroke-width="2.5" stroke-dasharray="5,3"/><circle cx="118" cy="236" r="11" fill="#fde68a"/><circle cx="202" cy="242" r="9" fill="#38bdf8"/>`,
-  22: (p) => `<rect x="92" y="114" width="136" height="92" rx="10" fill="#1e293b" stroke="#38bdf8" stroke-width="3"/><circle cx="160" cy="154" r="22" fill="${p.acc}"/><path d="M148 182 H172" stroke="white" stroke-width="4" stroke-linecap="round"/><path d="M84 238 L160 214 L236 238" fill="none" stroke="#34d399" stroke-width="4"/>`,
-  23: (p) => `<circle cx="160" cy="176" r="56" fill="#0284c7" stroke="#38bdf8" stroke-width="3"/><path d="M126 162 Q154 138 184 156 Q198 184 166 206 Q134 198 126 162 Z" fill="#10b981"/><rect x="74" y="218" width="172" height="28" rx="14" fill="white"/><text x="160" y="236" font-size="12" font-weight="900" fill="#0f172a" text-anchor="middle">DATA · FACTFULNESS</text>`,
-  24: (p) => `<rect x="62" y="222" width="38" height="24" fill="#60a5fa"/><rect x="100" y="198" width="38" height="48" fill="#3b82f6"/><rect x="138" y="172" width="38" height="74" fill="#2563eb"/><rect x="176" y="144" width="38" height="102" fill="#10b981"/><rect x="214" y="114" width="38" height="132" fill="#f59e0b"/><path d="M76 212 Q156 176 232 104" fill="none" stroke="#fde047" stroke-width="3.5"/>`,
-  25: (p) => `<rect x="116" y="102" width="88" height="154" rx="14" fill="#0f172a" stroke="#38bdf8" stroke-width="4"/><circle cx="160" cy="168" r="28" fill="#3b82f6" opacity="0.8"/><path d="M84 146 Q104 176 84 206 M236 146 Q216 176 236 206" fill="none" stroke="#fde047" stroke-width="3.5"/>`,
-  26: (p) => `<polygon points="160,104 94,226 226,226" fill="white" fill-opacity="0.15" stroke="white" stroke-width="3"/><line x1="54" y1="168" x2="128" y2="168" stroke="#ffffff" stroke-width="5"/><line x1="192" y1="152" x2="266" y2="136" stroke="#f43f5e" stroke-width="4"/><line x1="194" y1="168" x2="266" y2="168" stroke="#facc15" stroke-width="4"/><line x1="192" y1="184" x2="266" y2="200" stroke="#38bdf8" stroke-width="4"/>`,
-  27: (p) => `<polygon points="160,126 138,244 182,244" fill="#f59e0b"/><line x1="76" y1="142" x2="244" y2="142" stroke="#ffffff" stroke-width="5"/><circle cx="96" cy="124" r="16" fill="#38bdf8"/><circle cx="224" cy="124" r="16" fill="#f43f5e"/><text x="160" y="108" font-size="13" font-weight="bold" fill="#fde047" text-anchor="middle">공동선과 정의</text>`,
-  28: (p) => `<circle cx="160" cy="176" r="58" fill="#1e3a8a" stroke="#fbbf24" stroke-width="4"/><path d="M114 156 Q160 124 206 156 M114 196 Q160 228 206 196" fill="none" stroke="#38bdf8" stroke-width="2.5"/><path d="M226 132 A 74 74 0 1 0 226 220" fill="none" stroke="#f43f5e" stroke-width="4"/><polygon points="226,124 218,138 234,138" fill="#f43f5e"/>`,
-  29: (p) => `<circle cx="160" cy="176" r="54" fill="white" stroke="#1e293b" stroke-width="3"/><path d="M106 176 A 27 27 0 0 1 160 176 A 27 27 0 0 0 214 176 A 54 54 0 0 1 106 176 Z" fill="#2563eb"/><path d="M106 176 A 54 54 0 0 1 214 176 A 27 27 0 0 1 160 176 A 27 27 0 0 0 106 176 Z" fill="#dc2626"/>`,
-  30: (p) => `<rect x="64" y="132" width="76" height="114" fill="#fbbf24" rx="4"/><rect x="180" y="206" width="76" height="40" fill="#64748b" rx="4"/><path d="M140 168 L180 206" stroke="#f43f5e" stroke-width="4" stroke-dasharray="5,3"/><text x="160" y="114" font-size="13" font-weight="bold" fill="#fde047" text-anchor="middle">GLOBAL INEQUALITY</text>`,
-  31: (p) => `<path d="M104 148 H216 L204 236 H116 Z" fill="#10b981" stroke="white" stroke-width="3"/><path d="M134 148 C134 120, 186 120, 186 148" fill="none" stroke="#fde047" stroke-width="4"/><circle cx="160" cy="192" r="20" fill="#0284c7"/><path d="M148 188 Q160 178 172 190" fill="none" stroke="#a7f3d0" stroke-width="3"/>`,
-  32: (p) => `<polygon points="56,236 116,134 176,236" fill="#059669"/><polygon points="136,236 198,148 264,236" fill="#10b981"/><path d="M84 124 Q160 96 236 124 L236 164 Q160 136 84 164 Z" fill="white" opacity="0.92"/>`,
-  33: (p) => `<circle cx="160" cy="174" r="48" fill="#fef3c7" stroke="#f59e0b" stroke-width="4"/><circle cx="144" cy="162" r="7" fill="#1e293b"/><circle cx="176" cy="162" r="7" fill="#1e293b"/><polygon points="160,174 152,184 168,184" fill="#f97316"/><path d="M122 132 L134 148 M198 132 L186 148" stroke="#f59e0b" stroke-width="6" stroke-linecap="round"/>`,
-  34: (p) => `<ellipse cx="160" cy="182" rx="64" ry="86" fill="#1e1b4b" stroke="#fbbf24" stroke-width="5"/><path d="M160 116 A 46 56 0 0 0 160 228 Z" fill="#38bdf8"/><path d="M160 116 A 46 56 0 0 1 160 228 Z" fill="#f43f5e"/><circle cx="74" cy="224" r="16" fill="#ef4444"/>`,
-  35: (p) => `<circle cx="160" cy="176" r="24" fill="${p.acc}"/><circle cx="92" cy="132" r="14" fill="${p.sec}"/><circle cx="228" cy="132" r="14" fill="${p.sec}"/><circle cx="92" cy="220" r="14" fill="#34d399"/><circle cx="228" cy="220" r="14" fill="#34d399"/><line x1="160" y1="176" x2="92" y2="132" stroke="white" stroke-width="3"/><line x1="160" y1="176" x2="228" y2="132" stroke="white" stroke-width="3"/><line x1="160" y1="176" x2="92" y2="220" stroke="white" stroke-width="3"/><line x1="160" y1="176" x2="228" y2="220" stroke="white" stroke-width="3"/>`,
-  36: (p) => `<circle cx="160" cy="176" r="56" fill="#0369a1" stroke="#38bdf8" stroke-width="3"/><path d="M118 152 L148 142 L168 164 L198 154 L188 198 L144 206 Z" fill="#10b981"/><path d="M160 104 C146 104, 138 114, 138 126 C138 142, 160 158, 160 158 C160 158, 182 142, 182 126 C182 114, 174 104, 160 104 Z" fill="#f43f5e"/>`,
-  37: (p) => `<rect x="52" y="176" width="32" height="88" fill="#334155"/><rect x="92" y="138" width="38" height="126" fill="#3b82f6"/><rect x="138" y="114" width="44" height="150" fill="#1d4ed8"/><rect x="190" y="148" width="36" height="116" fill="#0ea5e9"/><rect x="234" y="168" width="34" height="96" fill="#475569"/><path d="M40 246 Q160 212 280 246" fill="none" stroke="#f59e0b" stroke-width="4"/>`,
-  38: (p) => `<polygon points="160,104 72,162 248,162" fill="none" stroke="#38bdf8" stroke-width="4"/><rect x="92" y="162" width="136" height="88" fill="none" stroke="#ffffff" stroke-width="3"/><line x1="160" y1="104" x2="160" y2="250" stroke="#fbbf24" stroke-width="2" stroke-dasharray="4,3"/><circle cx="160" cy="196" r="20" fill="${p.acc}" opacity="0.8"/>`,
-  39: (p) => `<circle cx="160" cy="176" r="56" fill="white" stroke="${p.acc}" stroke-width="4"/><polygon points="160,126 172,176 160,226 148,176" fill="#dc2626"/><polygon points="110,176 160,164 210,176 160,188" fill="#2563eb"/><circle cx="160" cy="176" r="8" fill="#0f172a"/>`,
-  40: (p) => `<rect x="96" y="114" width="128" height="136" rx="8" fill="#1e3a8a" stroke="#fbbf24" stroke-width="4"/><text x="160" y="176" font-size="28" font-weight="900" fill="#fbbf24" text-anchor="middle">LAW</text><line x1="120" y1="198" x2="200" y2="198" stroke="white" stroke-width="3"/>`,
-  41: (p) => `<path d="M160 244 L160 166" stroke="#10b981" stroke-width="6" stroke-linecap="round"/><path d="M160 198 Q128 176 122 152 Q148 156 160 186" fill="#34d399"/><path d="M160 186 Q192 164 198 140 Q172 144 160 174" fill="#10b981"/><circle cx="160" cy="132" r="18" fill="#fde047" opacity="0.85"/>`,
-  42: (p) => `<path d="M160 102 L226 128 V182 C226 222 160 252 160 252 C160 252 94 222 94 182 V128 Z" fill="#1e3a8a" stroke="#fbbf24" stroke-width="4"/><text x="160" y="182" font-size="22" font-weight="900" fill="#fbbf24" text-anchor="middle">憲法</text>`,
-  43: (p) => `<path d="M156 116 C112 116, 94 156, 108 196 C116 220, 138 232, 156 232 Z" fill="#f43f5e"/><path d="M164 116 C208 116, 226 156, 212 196 C204 220, 182 232, 164 232 Z" fill="#38bdf8"/><text x="130" y="180" font-size="12" font-weight="bold" fill="white" text-anchor="middle">직관</text><text x="190" y="180" font-size="12" font-weight="bold" fill="#0f172a" text-anchor="middle">숙고</text>`,
-  44: (p) => `<circle cx="132" cy="166" r="32" fill="none" stroke="#fbbf24" stroke-width="6" stroke-dasharray="10,5"/><circle cx="192" cy="196" r="24" fill="none" stroke="#38bdf8" stroke-width="5" stroke-dasharray="8,4"/><text x="160" y="114" font-size="13" font-weight="bold" fill="#fde047" text-anchor="middle">INVISIBLE HAND</text>`,
-  45: (p) => `<circle cx="116" cy="176" r="46" fill="#0284c7" stroke="#38bdf8" stroke-width="3"/><path d="M88 164 Q116 144 142 166 Q128 196 96 188 Z" fill="#10b981"/><circle cx="226" cy="196" r="28" fill="#f59e0b" stroke="#fef08a" stroke-width="3"/><text x="226" y="204" font-size="22" font-weight="900" fill="white" text-anchor="middle">₩</text>`,
-  46: (p) => `<path d="M160 248 V176 L112 124" fill="none" stroke="#64748b" stroke-width="6" stroke-linecap="round"/><path d="M160 176 L208 124" fill="none" stroke="#10b981" stroke-width="7" stroke-linecap="round"/><polygon points="214,118 196,122 208,134" fill="#10b981"/><text x="216" y="108" font-size="12" font-weight="bold" fill="#fde047" text-anchor="middle">NUDGE</text>`,
-  47: (p) => `<line x1="160" y1="96" x2="112" y2="274" stroke="#b45309" stroke-width="6"/><line x1="160" y1="96" x2="208" y2="274" stroke="#b45309" stroke-width="6"/><rect x="88" y="112" width="144" height="106" rx="6" fill="#fef3c7" stroke="#f59e0b" stroke-width="6"/><circle cx="132" cy="144" r="14" fill="#f97316"/><polygon points="102,206 148,154 188,206" fill="#2563eb"/>`,
-  48: (p) => `<circle cx="148" cy="176" r="54" fill="#0284c7" stroke="#38bdf8" stroke-width="3"/><path d="M114 162 Q142 138 172 156 Q186 184 154 206 Q122 198 114 162 Z" fill="#10b981"/><rect x="234" y="114" width="16" height="92" rx="8" fill="white" stroke="#ef4444" stroke-width="3"/><circle cx="242" cy="212" r="14" fill="#ef4444"/>`,
-  49: (p) => `<polyline points="56,226 108,214 156,192 204,154 264,112" fill="none" stroke="#ef4444" stroke-width="5" stroke-linecap="round"/><line x1="56" y1="234" x2="264" y2="234" stroke="#94a3b8" stroke-width="2"/><text x="160" y="106" font-size="13" font-weight="bold" fill="#fca5a5" text-anchor="middle">+1.5°C CLIMATE DATA</text>`,
-  50: (p) => `<rect x="104" y="122" width="112" height="108" rx="14" fill="#1e1b4b" stroke="#38bdf8" stroke-width="3"/><circle cx="136" cy="154" r="10" fill="#f43f5e"/><circle cx="184" cy="154" r="10" fill="#34d399"/><circle cx="160" cy="196" r="10" fill="#fbbf24"/><line x1="136" y1="154" x2="184" y2="154" stroke="white" stroke-width="2.5"/><line x1="136" y1="154" x2="160" y2="196" stroke="white" stroke-width="2.5"/><line x1="184" y1="154" x2="160" y2="196" stroke="white" stroke-width="2.5"/>`,
-  51: (p) => `<path d="M118 98 Q168 134 118 170 Q68 206 118 242" fill="none" stroke="#38bdf8" stroke-width="5"/><path d="M202 98 Q152 134 202 170 Q252 206 202 242" fill="none" stroke="#f43f5e" stroke-width="5"/><line x1="126" y1="116" x2="194" y2="116" stroke="#fde047" stroke-width="3"/><line x1="126" y1="188" x2="194" y2="188" stroke="#fde047" stroke-width="3"/>`,
-  52: (p) => `<polygon points="160,114 212,144 212,204 160,234 108,204 108,144" fill="none" stroke="#34d399" stroke-width="4"/><circle cx="160" cy="174" r="24" fill="none" stroke="#fbbf24" stroke-width="3"/><text x="160" y="179" font-size="14" font-weight="bold" fill="white" text-anchor="middle">H₂O</text>`,
-  53: (p) => `<path d="M160 106 L222 132 V182 C222 218 160 246 160 246 C160 246 98 218 98 182 V132 Z" fill="#065f46" stroke="#34d399" stroke-width="3.5"/><path d="M138 176 L154 192 L186 156" fill="none" stroke="#fde047" stroke-width="5" stroke-linecap="round"/>`,
-  54: (p) => `<polygon points="142,108 178,108 218,244 102,244" fill="#ffffff" stroke="#34d399" stroke-width="4"/><polygon points="118,186 202,186 215,241 105,241" fill="#10b981"/><circle cx="144" cy="212" r="7" fill="#a7f3d0"/><circle cx="172" cy="222" r="9" fill="#a7f3d0"/>`,
-  55: (p) => `<line x1="84" y1="176" x2="236" y2="176" stroke="#fbbf24" stroke-width="5"/><polygon points="160,176 144,236 176,236" fill="#38bdf8"/><circle cx="106" cy="152" r="18" fill="#f43f5e"/><circle cx="214" cy="152" r="18" fill="#10b981"/><text x="160" y="120" font-size="14" font-weight="bold" fill="#fde047" text-anchor="middle">A + B ⇌ C + D</text>`,
-  56: (p) => `<rect x="96" y="148" width="128" height="54" rx="27" transform="rotate(-25 160 175)" fill="#f43f5e" stroke="white" stroke-width="3"/><path d="M160 148 L184 198 L216 184 A 27 27 0 0 0 192 134 Z" fill="#38bdf8"/>`,
-  57: (p) => `<circle cx="160" cy="176" r="52" fill="#0f172a" stroke="#38bdf8" stroke-width="3.5"/><path d="M160 144 V208 M128 176 H192" stroke="#10b981" stroke-width="10" stroke-linecap="round"/><circle cx="160" cy="176" r="14" fill="#fde047"/>`,
-  58: (p) => `<path d="M74 218 Q160 184 246 218 L246 144 Q160 112 74 144 Z" fill="#f8fafc" stroke="#38bdf8" stroke-width="3"/><polygon points="160,96 174,132 146,132" fill="#f97316"/><rect x="150" y="132" width="20" height="44" fill="#3b82f6"/>`,
-  59: (p) => `<rect x="108" y="136" width="104" height="66" rx="6" fill="#312e81" stroke="#38bdf8" stroke-width="3"/><path d="M160 104 C172 122 172 164 168 186 L152 186 C148 164 148 122 160 104 Z" fill="#f8fafc"/><line x1="215" y1="242" x2="256" y2="218" stroke="#a855f7" stroke-width="7" stroke-linecap="round"/>`,
-  60: (p) => `<circle cx="160" cy="176" r="64" fill="#065f46" stroke="#34d399" stroke-width="4"/><circle cx="142" cy="158" r="16" fill="#fde047"/><circle cx="182" cy="184" r="14" fill="#38bdf8"/><rect x="134" y="192" width="32" height="14" rx="7" fill="#f43f5e"/>`,
-  61: (p) => `<rect x="88" y="112" width="144" height="106" rx="6" fill="#1e1b4b" stroke="#fbbf24" stroke-width="5"/><polygon points="94,166 152,148 152,174" fill="white"/><line x1="168" y1="148" x2="226" y2="132" stroke="#ef4444" stroke-width="4"/><line x1="168" y1="162" x2="226" y2="162" stroke="#22c55e" stroke-width="4"/><line x1="168" y1="176" x2="226" y2="192" stroke="#3b82f6" stroke-width="4"/>`,
-  62: (p) => `<rect x="76" y="118" width="168" height="112" rx="10" fill="#0f172a" stroke="#f59e0b" stroke-width="3.5"/><ellipse cx="160" cy="174" rx="54" ry="20" transform="rotate(-25 160 174)" fill="none" stroke="#38bdf8" stroke-width="2.5"/><ellipse cx="160" cy="174" rx="54" ry="20" transform="rotate(25 160 174)" fill="none" stroke="#f43f5e" stroke-width="2.5"/><circle cx="160" cy="174" r="10" fill="#fde047"/>`,
-  63: (p) => `<polygon points="160,98 214,142 196,236 124,236 106,142" fill="#38bdf8" fill-opacity="0.45" stroke="#bae6fd" stroke-width="3.5"/><polygon points="160,98 186,148 160,236 134,148" fill="#ffffff" fill-opacity="0.65"/>`,
-  64: (p) => `<path d="M160 98 C178 128 178 184 172 216 L148 216 C142 184 142 128 160 98 Z" fill="#f8fafc" stroke="#38bdf8" stroke-width="2.5"/><polygon points="160,98 172,122 148,122" fill="#dc2626"/><polygon points="150,216 170,216 160,248" fill="#f97316"/>`,
-  65: (p) => `<circle cx="216" cy="136" r="28" fill="#f59e0b"/><ellipse cx="216" cy="136" rx="54" ry="13" transform="rotate(-22 216 136)" fill="none" stroke="#fde047" stroke-width="4"/><line x1="86" y1="218" x2="156" y2="176" stroke="#e2e8f0" stroke-width="11" stroke-linecap="round"/><line x1="118" y1="200" x2="100" y2="256" stroke="#94a3b8" stroke-width="3.5"/><line x1="118" y1="200" x2="136" y2="256" stroke="#94a3b8" stroke-width="3.5"/>`,
-  66: (p) => `<circle cx="160" cy="176" r="16" fill="#ffffff"/><circle cx="160" cy="176" r="34" fill="none" stroke="#fde047" stroke-width="2.5" stroke-dasharray="6,4"/><circle cx="160" cy="176" r="56" fill="none" stroke="#38bdf8" stroke-width="2.5" stroke-dasharray="8,5"/><circle cx="160" cy="176" r="78" fill="none" stroke="#f43f5e" stroke-width="2" stroke-dasharray="4,4"/>`,
-  67: (p) => `<line x1="92" y1="104" x2="228" y2="104" stroke="#94a3b8" stroke-width="4"/><line x1="120" y1="104" x2="120" y2="196" stroke="white" stroke-width="2"/><circle cx="120" cy="196" r="14" fill="#38bdf8"/><line x1="148" y1="104" x2="148" y2="196" stroke="white" stroke-width="2"/><circle cx="148" cy="196" r="14" fill="#38bdf8"/><line x1="176" y1="104" x2="216" y2="184" stroke="white" stroke-width="2"/><circle cx="216" cy="184" r="14" fill="#f59e0b"/>`,
-  68: (p) => `<rect x="64" y="114" width="192" height="124" rx="10" fill="#0f172a" stroke="#38bdf8" stroke-width="3"/><circle cx="116" cy="162" r="14" fill="#34d399"/><circle cx="160" cy="142" r="14" fill="#fbbf24"/><circle cx="204" cy="178" r="14" fill="#f43f5e"/><line x1="116" y1="162" x2="160" y2="142" stroke="white" stroke-width="2.5"/><line x1="160" y1="142" x2="204" y2="178" stroke="white" stroke-width="2.5"/>`,
-  69: (p) => `<rect x="68" y="124" width="184" height="112" rx="8" fill="#1e293b" stroke="#f59e0b" stroke-width="3"/><circle cx="124" cy="180" r="24" fill="none" stroke="#38bdf8" stroke-width="5" stroke-dasharray="8,4"/><circle cx="192" cy="180" r="24" fill="none" stroke="#10b981" stroke-width="5" stroke-dasharray="8,4"/>`,
-  70: (p) => `<rect x="92" y="104" width="136" height="154" rx="6" fill="white" stroke="#0284c7" stroke-width="4"/><rect x="92" y="104" width="136" height="36" fill="#0284c7"/><text x="160" y="128" font-size="14" font-weight="900" fill="white" text-anchor="middle">SEASON SCIENCE</text><circle cx="160" cy="196" r="28" fill="#10b981" opacity="0.8"/>`,
-  71: (p) => `<text x="160" y="196" font-size="96" font-weight="900" fill="#fde047" text-anchor="middle">?</text><circle cx="160" cy="176" r="64" fill="none" stroke="#38bdf8" stroke-width="3" stroke-dasharray="6,4"/>`,
-  72: (p) => `<polygon points="160,104 222,148 198,224 122,224 98,148" fill="none" stroke="#fbbf24" stroke-width="3.5"/><text x="160" y="178" font-size="22" font-weight="900" fill="white" text-anchor="middle">P = NP ?</text>`,
-  73: (p) => `<circle cx="160" cy="176" r="56" fill="#f59e0b" stroke="#fef08a" stroke-width="4"/><text x="160" y="186" font-size="34" font-weight="900" fill="white" text-anchor="middle">π · ∑</text>`,
-  74: (p) => `<rect x="96" y="122" width="60" height="60" fill="#f43f5e" rx="6"/><rect x="164" y="122" width="60" height="60" fill="#38bdf8" rx="6"/><rect x="130" y="164" width="60" height="60" fill="#fde047" rx="6" stroke="#0f172a" stroke-width="2.5"/>`,
-  75: (p) => `<polygon points="160,108 92,226 228,226" fill="none" stroke="#34d399" stroke-width="4"/><polygon points="160,166 126,226 194,226" fill="#34d399" opacity="0.4"/><circle cx="160" cy="186" r="14" fill="#fbbf24"/>`,
-  76: (p) => `<path d="M52 238 Q125 112 185 168 T276 105 L276 245 L52 245 Z" fill="#38bdf8" opacity="0.3"/><path d="M52 238 Q125 112 185 168 T276 105" fill="none" stroke="#38bdf8" stroke-width="4"/><line x1="78" y1="188" x2="188" y2="118" stroke="#f43f5e" stroke-width="3"/>`,
-  77: (p) => `<rect x="64" y="118" width="192" height="118" rx="10" fill="#1e293b" stroke="#10b981" stroke-width="3"/><text x="160" y="174" font-size="18" font-weight="bold" fill="#34d399" text-anchor="middle">f(x) = ax² + bx + c</text><path d="M84 214 Q160 154 236 214" fill="none" stroke="#fbbf24" stroke-width="3"/>`,
-  78: (p) => `<circle cx="160" cy="176" r="56" fill="none" stroke="#38bdf8" stroke-width="3"/><polygon points="160,120 208,204 112,204" fill="none" stroke="#fde047" stroke-width="3"/><circle cx="160" cy="176" r="28" fill="none" stroke="#f43f5e" stroke-width="2.5"/>`,
-  79: (p) => `<rect x="74" y="114" width="172" height="122" rx="12" fill="white" stroke="#0f172a" stroke-width="3.5"/><text x="160" y="172" font-size="20" font-weight="900" fill="#1e3a8a" text-anchor="middle">E = mc² · ∫dx</text><polygon points="130,236 150,236 124,258" fill="white"/>`,
-  80: (p) => `<circle cx="160" cy="176" r="58" fill="#1e3a8a" stroke="#fde047" stroke-width="3"/><text x="160" y="166" font-size="16" font-weight="bold" fill="white" text-anchor="middle">1 · 1 · 2 · 3 · 5 · 8</text><text x="160" y="194" font-size="14" fill="#fde047" text-anchor="middle">Fibonacci Everywhere</text>`,
-  81: (p) => `<circle cx="160" cy="176" r="54" fill="none" stroke="#38bdf8" stroke-width="3"/><circle cx="160" cy="122" r="8" fill="#f43f5e"/><circle cx="212" cy="160" r="8" fill="#fbbf24"/><circle cx="192" cy="220" r="8" fill="#34d399"/><circle cx="128" cy="220" r="8" fill="#a855f7"/><circle cx="108" cy="160" r="8" fill="#38bdf8"/>`,
-  82: (p) => `<rect x="92" y="136" width="136" height="96" rx="10" fill="#b45309" stroke="#fde68a" stroke-width="3"/><path d="M134 136 V116 H186 V136" fill="none" stroke="#fde68a" stroke-width="4"/><text x="160" y="192" font-size="18" font-weight="900" fill="white" text-anchor="middle">MATH × JOB</text>`,
-  83: (p) => `<rect x="92" y="106" width="136" height="148" rx="8" fill="#1d4ed8" stroke="#93c5fd" stroke-width="3"/><rect x="108" y="124" width="104" height="44" rx="4" fill="white"/><text x="160" y="152" font-size="15" font-weight="900" fill="#1d4ed8" text-anchor="middle">수학대백과</text><text x="160" y="210" font-size="18" font-weight="bold" fill="#fde047" text-anchor="middle">∑ √ ∞ π</text>`,
-  84: (p) => `<path d="M64 226 Q142 114 256 164" fill="none" stroke="#f97316" stroke-width="4.5"/><circle cx="148" cy="148" r="14" fill="#38bdf8"/><line x1="148" y1="148" x2="212" y2="148" stroke="#fde047" stroke-width="3.5"/><polygon points="218,148 206,142 206,154" fill="#fde047"/>`,
-  85: (p) => `<circle cx="236" cy="116" r="26" fill="#fef3c7"/><rect x="122" y="238" width="76" height="14" fill="#d6d3d1"/><path d="M132 238 Q138 185 142 145 L178 145 Q182 185 188 238 Z" fill="#e7e5e4"/><polygon points="160,126 116,245 204,245" fill="none" stroke="#fbbf24" stroke-width="2" stroke-dasharray="5,3"/><text x="82" y="134" font-size="13" font-weight="bold" fill="#fde047">φ = 1.618</text>`,
-  86: (p) => `<rect x="88" y="112" width="144" height="106" rx="6" fill="#fef3c7" stroke="#f59e0b" stroke-width="5"/><line x1="88" y1="165" x2="232" y2="165" stroke="#dc2626" stroke-width="2" stroke-dasharray="4,3"/><line x1="160" y1="112" x2="160" y2="218" stroke="#2563eb" stroke-width="2" stroke-dasharray="4,3"/><circle cx="160" cy="165" r="26" fill="none" stroke="#059669" stroke-width="3"/>`,
-  87: (p) => `<rect x="74" y="114" width="172" height="122" rx="10" fill="#090d16" stroke="#10b981" stroke-width="3"/><text x="160" y="162" font-size="15" font-weight="bold" fill="#34d399" text-anchor="middle">if (logic) { solve(); }</text><text x="160" y="194" font-size="13" fill="#38bdf8" text-anchor="middle">01011010 · Algorithm</text>`,
-  88: (p) => `<circle cx="160" cy="176" r="56" fill="white" stroke="#1e3a8a" stroke-width="4"/><line x1="160" y1="176" x2="160" y2="134" stroke="#dc2626" stroke-width="4" stroke-linecap="round"/><line x1="160" y1="176" x2="194" y2="176" stroke="#1e3a8a" stroke-width="4" stroke-linecap="round"/>`,
-  89: (p) => `<path d="M56 218 C108 114, 212 238, 264 134" fill="none" stroke="#38bdf8" stroke-width="4.5"/><circle cx="114" cy="154" r="9" fill="#fde047"/><circle cx="206" cy="198" r="9" fill="#f43f5e"/>`,
-  90: (p) => `<path d="M46 244 Q156 238 256 106" fill="none" stroke="#38bdf8" stroke-width="4.5"/><circle cx="144" cy="154" r="36" fill="#1e1b4b" stroke="#fbbf24" stroke-width="3.5"/><text x="144" y="166" font-size="34" font-weight="900" font-style="italic" fill="#fbbf24" text-anchor="middle">e</text>`,
-  91: (p) => `<line x1="112" y1="128" x2="208" y2="224" stroke="#f43f5e" stroke-width="12" stroke-linecap="round"/><line x1="208" y1="128" x2="112" y2="224" stroke="#38bdf8" stroke-width="12" stroke-linecap="round"/><circle cx="160" cy="176" r="14" fill="#fde047"/>`,
-  92: (p) => `<rect x="84" y="122" width="152" height="108" rx="12" fill="#1e1b4b" stroke="#a855f7" stroke-width="3"/><text x="160" y="168" font-size="16" font-weight="900" fill="#fde047" text-anchor="middle">AI = Matrix × Prob</text><text x="160" y="196" font-size="13" fill="#38bdf8" text-anchor="middle">P(A|B) · Vector Space</text>`,
-  93: (p) => `<rect x="104" y="120" width="52" height="52" fill="#3b82f6" stroke="white" stroke-width="2"/><rect x="164" y="120" width="52" height="52" fill="#f59e0b" stroke="white" stroke-width="2"/><rect x="104" y="180" width="52" height="52" fill="#10b981" stroke="white" stroke-width="2"/><rect x="164" y="180" width="52" height="52" fill="#f43f5e" stroke="white" stroke-width="2"/>`,
-  94: (p) => `<rect x="92" y="114" width="136" height="128" rx="8" fill="#1e3a8a" stroke="#38bdf8" stroke-width="3"/><path d="M160 176 Q216 132 256 106" fill="none" stroke="#fde047" stroke-width="4"/><polygon points="262,102 246,104 254,116" fill="#fde047"/>`,
-  95: (p) => `<polygon points="136,144 136,204 196,204" fill="#fde047" stroke="white" stroke-width="2.5"/><rect x="76" y="144" width="60" height="60" fill="#38bdf8" fill-opacity="0.4" stroke="#38bdf8" stroke-width="2.5"/><rect x="136" y="204" width="60" height="60" fill="#f43f5e" fill-opacity="0.4" stroke="#f43f5e" stroke-width="2.5"/><text x="160" y="114" font-size="15" font-weight="900" fill="#fde047" text-anchor="middle">xⁿ + yⁿ ≠ zⁿ</text>`,
-  96: (p) => `<path d="M52 228 Q112 226 160 124 Q208 226 268 228" fill="#38bdf8" fill-opacity="0.35" stroke="#38bdf8" stroke-width="4"/><line x1="160" y1="124" x2="160" y2="232" stroke="#fde047" stroke-width="3" stroke-dasharray="4,3"/>`,
-  97: (p) => `<circle cx="160" cy="176" r="56" fill="#3b82f6"/><path d="M160 176 L160 120 A 56 56 0 0 1 212 196 Z" fill="#f59e0b"/><path d="M160 176 L212 196 A 56 56 0 0 1 124 218 Z" fill="#10b981"/>`,
-  98: (p) => `<rect x="74" y="122" width="172" height="114" rx="8" fill="white" stroke="#ef4444" stroke-width="3.5"/><polyline points="92,212 136,192 178,198 226,136" fill="none" stroke="#ef4444" stroke-width="4.5"/><circle cx="226" cy="136" r="10" fill="#ef4444"/>`,
-  99: (p) => `<polygon points="160,104 74,232 246,232" fill="#f59e0b" stroke="#fef08a" stroke-width="3"/><polygon points="160,104 160,232 246,232" fill="#d97706"/><text x="160" y="256" font-size="12" font-weight="bold" fill="#fde047" text-anchor="middle">PYRAMID · GEOMETRY</text>`,
-  100: (p) => `<path d="M160 228 C160 228 96 184 96 144 C96 122 114 108 134 108 C148 108 156 116 160 124 C164 116 172 108 186 108 C206 108 224 122 224 144 C224 184 160 228 160 228 Z" fill="#f43f5e" stroke="white" stroke-width="3"/><text x="160" y="168" font-size="18" font-weight="900" fill="white" text-anchor="middle">I ♥ MATH</text>`
+    <circle cx="96" cy="164" r="12" fill="#fde68a"/><rect x="86" y="178" width="20" height="44" rx="5" fill="#f43f5e"/>` },
+  20: { layout: "RULER_BREAK", badge: "표준을 깨는 개성", draw: (p) => `
+    <path d="M235 72 Q195 120 225 168 Q255 215 210 295 L320 295 L320 72 Z" fill="#fef08a"/>
+    <rect x="74" y="108" width="102" height="175" rx="6" fill="#1e1b4b" stroke="#818cf8" stroke-width="2"/>
+    <circle cx="126" cy="144" r="14" fill="#f8fafc"/><path d="M104 185 C104 164, 148 164, 148 185 L144 268 L108 268 Z" fill="#f8fafc"/>
+    <polygon points="168,176 205,152 194,192" fill="#f43f5e"/><polygon points="174,198 218,195 192,222" fill="#38bdf8"/><circle cx="212" cy="166" r="13" fill="#fb923c"/>` }
 };
 
-// 교사 추가 도서(101+)는 제목+부제+주제 문자열 해시를 이용해 100가지 장면 중 가장 연관성 높은 장면 + 고유 배지 조합 생성
-function getSceneForCustomBook(book, p) {
-  const t = `${book.title} ${book.subtitle} ${book.theme}`;
-  let sceneId = 13;
-  if (t.includes("아q") || t.includes("회초리")) sceneId = 6;
-  else if (t.includes("낙타") || t.includes("노동") || t.includes("소주")) sceneId = 19;
-  else if (t.includes("열하") || t.includes("여행") || t.includes("지리")) sceneId = 36;
-  else if (t.includes("언어") || t.includes("말")) sceneId = 3;
-  else if (t.includes("심리") || t.includes("본성")) sceneId = 7;
-  else if (t.includes("역사") || t.includes("한국사")) sceneId = 85;
-  else if (t.includes("기후") || t.includes("환경")) sceneId = 48;
-  else if (t.includes("과학") || t.includes("화학")) sceneId = 54;
-  else if (t.includes("수학") || t.includes("미적분")) sceneId = 76;
-  else if (t.includes("우주") || t.includes("천체")) sceneId = 65;
-  else {
-    let hash = 0;
-    for (let i = 0; i < t.length; i++) hash = (hash * 31 + t.charCodeAt(i)) % 100;
-    sceneId = hash + 1;
+// 21~100번 도서도 각기 완전히 다른 고유 장면 생성기 (책 제목·핵심 개념 텍스트 + 고유 조형물 + 다층 배경)
+function buildUniqueScene21To100(id, book, p) {
+  const scenes = {
+    21: `<rect x="64" y="104" width="192" height="114" rx="8" fill="#065f46" stroke="#b45309" stroke-width="5"/><text x="160" y="156" font-size="14" font-weight="bold" fill="white" text-anchor="middle">존중과 소통의 교실</text><circle cx="118" cy="238" r="11" fill="#fde68a"/><circle cx="202" cy="242" r="9" fill="#38bdf8"/>`,
+    22: `<rect x="88" y="114" width="144" height="94" rx="10" fill="#1e293b" stroke="#38bdf8" stroke-width="3"/><text x="160" y="154" font-size="13" font-weight="bold" fill="#fde047" text-anchor="middle">FUTURE LEARNING</text><text x="160" y="178" font-size="11" fill="#38bdf8" text-anchor="middle">질문하는 인간 × AI</text>`,
+    23: `<circle cx="160" cy="174" r="56" fill="#0284c7" stroke="#38bdf8" stroke-width="3"/><path d="M126 160 Q154 136 184 154 Q198 182 166 204 Q134 196 126 160 Z" fill="#10b981"/><rect x="74" y="218" width="172" height="26" rx="13" fill="white"/><text x="160" y="235" font-size="11" font-weight="900" fill="#0f172a" text-anchor="middle">FACTFULNESS · DATA</text>`,
+    24: `<circle cx="160" cy="176" r="24" fill="${p.acc}"/><circle cx="160" cy="176" r="44" fill="none" stroke="${p.sec}" stroke-width="3" stroke-dasharray="6,4"/><circle cx="160" cy="176" r="64" fill="none" stroke="#ffffff" stroke-width="2"/><text x="160" y="181" font-size="13" font-weight="900" fill="white" text-anchor="middle">+1%</text>`,
+    25: `<rect x="116" y="102" width="88" height="154" rx="14" fill="#0f172a" stroke="#38bdf8" stroke-width="4"/><circle cx="160" cy="168" r="28" fill="#3b82f6" opacity="0.8"/><path d="M84 146 Q104 176 84 206 M236 146 Q216 176 236 206" fill="none" stroke="#fde047" stroke-width="3.5"/>`,
+    26: `<polygon points="160,104 94,226 226,226" fill="white" fill-opacity="0.15" stroke="white" stroke-width="3"/><line x1="54" y1="168" x2="128" y2="168" stroke="#ffffff" stroke-width="5"/><line x1="192" y1="152" x2="266" y2="136" stroke="#f43f5e" stroke-width="4"/><line x1="194" y1="168" x2="266" y2="168" stroke="#facc15" stroke-width="4"/><line x1="192" y1="184" x2="266" y2="200" stroke="#38bdf8" stroke-width="4"/>`,
+    27: `<polygon points="160,126 138,244 182,244" fill="#f59e0b"/><line x1="76" y1="142" x2="244" y2="142" stroke="#ffffff" stroke-width="5"/><circle cx="96" cy="124" r="16" fill="#38bdf8"/><circle cx="224" cy="124" r="16" fill="#f43f5e"/>`,
+    28: `<circle cx="160" cy="176" r="58" fill="#1e3a8a" stroke="#fbbf24" stroke-width="4"/><path d="M226 132 A 74 74 0 1 0 226 220" fill="none" stroke="#f43f5e" stroke-width="4"/><polygon points="226,124 218,138 234,138" fill="#f43f5e"/>`,
+    29: `<circle cx="160" cy="176" r="54" fill="white" stroke="#1e293b" stroke-width="3"/><path d="M106 176 A 27 27 0 0 1 160 176 A 27 27 0 0 0 214 176 A 54 54 0 0 1 106 176 Z" fill="#2563eb"/><path d="M106 176 A 54 54 0 0 1 214 176 A 27 27 0 0 1 160 176 A 27 27 0 0 0 106 176 Z" fill="#dc2626"/>`,
+    30: `<rect x="64" y="132" width="76" height="114" fill="#fbbf24" rx="4"/><rect x="180" y="206" width="76" height="40" fill="#64748b" rx="4"/><path d="M140 168 L180 206" stroke="#f43f5e" stroke-width="4" stroke-dasharray="5,3"/>`,
+    31: `<path d="M104 148 H216 L204 236 H116 Z" fill="#10b981" stroke="white" stroke-width="3"/><path d="M134 148 C134 120, 186 120, 186 148" fill="none" stroke="#fde047" stroke-width="4"/><circle cx="160" cy="192" r="20" fill="#0284c7"/>`,
+    32: `<polygon points="56,236 116,134 176,236" fill="#059669"/><polygon points="136,236 198,148 264,236" fill="#10b981"/><path d="M84 124 Q160 96 236 124 L236 164 Q160 136 84 164 Z" fill="white" opacity="0.92"/>`,
+    33: `<circle cx="160" cy="174" r="48" fill="#fef3c7" stroke="#f59e0b" stroke-width="4"/><circle cx="144" cy="162" r="7" fill="#1e293b"/><circle cx="176" cy="162" r="7" fill="#1e293b"/><polygon points="160,174 152,184 168,184" fill="#f97316"/>`,
+    34: `<ellipse cx="160" cy="182" rx="64" ry="86" fill="#1e1b4b" stroke="#fbbf24" stroke-width="5"/><path d="M160 116 A 46 56 0 0 0 160 228 Z" fill="#38bdf8"/><path d="M160 116 A 46 56 0 0 1 160 228 Z" fill="#f43f5e"/><circle cx="74" cy="224" r="16" fill="#ef4444"/>`,
+    35: `<circle cx="160" cy="176" r="24" fill="${p.acc}"/><circle cx="92" cy="132" r="14" fill="${p.sec}"/><circle cx="228" cy="132" r="14" fill="${p.sec}"/><circle cx="92" cy="220" r="14" fill="#34d399"/><circle cx="228" cy="220" r="14" fill="#34d399"/><line x1="160" y1="176" x2="92" y2="132" stroke="white" stroke-width="3"/><line x1="160" y1="176" x2="228" y2="132" stroke="white" stroke-width="3"/>`,
+    36: `<circle cx="160" cy="176" r="56" fill="#0369a1" stroke="#38bdf8" stroke-width="3"/><path d="M118 152 L148 142 L168 164 L198 154 L188 198 L144 206 Z" fill="#10b981"/><circle cx="160" cy="124" r="10" fill="#f43f5e"/>`,
+    37: `<rect x="52" y="176" width="32" height="88" fill="#334155"/><rect x="92" y="138" width="38" height="126" fill="#3b82f6"/><rect x="138" y="114" width="44" height="150" fill="#1d4ed8"/><rect x="190" y="148" width="36" height="116" fill="#0ea5e9"/>`,
+    38: `<polygon points="160,104 72,162 248,162" fill="none" stroke="#38bdf8" stroke-width="4"/><rect x="92" y="162" width="136" height="88" fill="none" stroke="#ffffff" stroke-width="3"/><circle cx="160" cy="196" r="20" fill="${p.acc}" opacity="0.8"/>`,
+    39: `<circle cx="160" cy="176" r="56" fill="white" stroke="${p.acc}" stroke-width="4"/><polygon points="160,126 172,176 160,226 148,176" fill="#dc2626"/><polygon points="110,176 160,164 210,176 160,188" fill="#2563eb"/>`,
+    40: `<rect x="96" y="114" width="128" height="136" rx="8" fill="#1e3a8a" stroke="#fbbf24" stroke-width="4"/><text x="160" y="176" font-size="28" font-weight="900" fill="#fbbf24" text-anchor="middle">LAW</text>`,
+    41: `<path d="M160 244 L160 166" stroke="#10b981" stroke-width="6"/><path d="M160 198 Q128 176 122 152 Q148 156 160 186" fill="#34d399"/><circle cx="160" cy="132" r="18" fill="#fde047"/>`,
+    42: `<path d="M160 102 L226 128 V182 C226 222 160 252 160 252 C160 252 94 222 94 182 V128 Z" fill="#1e3a8a" stroke="#fbbf24" stroke-width="4"/><text x="160" y="182" font-size="22" font-weight="900" fill="#fbbf24" text-anchor="middle">憲法</text>`,
+    43: `<path d="M156 116 C112 116, 94 156, 108 196 C116 220, 138 232, 156 232 Z" fill="#f43f5e"/><path d="M164 116 C208 116, 226 156, 212 196 C204 220, 182 232, 164 232 Z" fill="#38bdf8"/><text x="130" y="180" font-size="12" font-weight="bold" fill="white" text-anchor="middle">직관</text><text x="190" y="180" font-size="12" font-weight="bold" fill="#0f172a" text-anchor="middle">숙고</text>`,
+    44: `<circle cx="132" cy="166" r="32" fill="none" stroke="#fbbf24" stroke-width="6" stroke-dasharray="10,5"/><circle cx="192" cy="196" r="24" fill="none" stroke="#38bdf8" stroke-width="5" stroke-dasharray="8,4"/>`,
+    45: `<circle cx="116" cy="176" r="46" fill="#0284c7" stroke="#38bdf8" stroke-width="3"/><circle cx="226" cy="196" r="28" fill="#f59e0b"/><text x="226" y="204" font-size="22" font-weight="900" fill="white" text-anchor="middle">₩</text>`,
+    46: `<path d="M160 248 V176 L112 124" fill="none" stroke="#64748b" stroke-width="6"/><path d="M160 176 L208 124" fill="none" stroke="#10b981" stroke-width="7"/><text x="216" y="108" font-size="12" font-weight="bold" fill="#fde047" text-anchor="middle">NUDGE</text>`,
+    47: `<line x1="160" y1="96" x2="112" y2="274" stroke="#b45309" stroke-width="6"/><line x1="160" y1="96" x2="208" y2="274" stroke="#b45309" stroke-width="6"/><rect x="88" y="112" width="144" height="106" rx="6" fill="#fef3c7" stroke="#f59e0b" stroke-width="6"/><circle cx="132" cy="144" r="14" fill="#f97316"/>`,
+    48: `<circle cx="148" cy="176" r="54" fill="#0284c7" stroke="#38bdf8" stroke-width="3"/><rect x="234" y="114" width="16" height="92" rx="8" fill="white" stroke="#ef4444" stroke-width="3"/><circle cx="242" cy="212" r="14" fill="#ef4444"/>`,
+    49: `<polyline points="56,226 108,214 156,192 204,154 264,112" fill="none" stroke="#ef4444" stroke-width="5"/><text x="160" y="106" font-size="13" font-weight="bold" fill="#fca5a5" text-anchor="middle">+1.5°C CLIMATE DATA</text>`,
+    50: `<rect x="104" y="122" width="112" height="108" rx="14" fill="#1e1b4b" stroke="#38bdf8" stroke-width="3"/><circle cx="136" cy="154" r="10" fill="#f43f5e"/><circle cx="184" cy="154" r="10" fill="#34d399"/><circle cx="160" cy="196" r="10" fill="#fbbf24"/>`,
+    51: `<path d="M118 98 Q168 134 118 170 Q68 206 118 242" fill="none" stroke="#38bdf8" stroke-width="5"/><path d="M202 98 Q152 134 202 170 Q252 206 202 242" fill="none" stroke="#f43f5e" stroke-width="5"/>`,
+    52: `<polygon points="160,114 212,144 212,204 160,234 108,204 108,144" fill="none" stroke="#34d399" stroke-width="4"/><text x="160" y="179" font-size="16" font-weight="bold" fill="white" text-anchor="middle">H₂O · CO₂</text>`,
+    53: `<path d="M160 106 L222 132 V182 C222 218 160 246 160 246 C160 246 98 218 98 182 V132 Z" fill="#065f46" stroke="#34d399" stroke-width="3.5"/><path d="M138 176 L154 192 L186 156" fill="none" stroke="#fde047" stroke-width="5"/>`,
+    54: `<polygon points="142,108 178,108 218,244 102,244" fill="#ffffff" stroke="#34d399" stroke-width="4"/><polygon points="118,186 202,186 215,241 105,241" fill="#10b981"/>`,
+    55: `<line x1="84" y1="176" x2="236" y2="176" stroke="#fbbf24" stroke-width="5"/><polygon points="160,176 144,236 176,236" fill="#38bdf8"/><circle cx="106" cy="152" r="18" fill="#f43f5e"/><circle cx="214" cy="152" r="18" fill="#10b981"/>`,
+    56: `<rect x="96" y="148" width="128" height="54" rx="27" transform="rotate(-25 160 175)" fill="#f43f5e" stroke="white" stroke-width="3"/><path d="M160 148 L184 198 L216 184 A 27 27 0 0 0 192 134 Z" fill="#38bdf8"/>`,
+    57: `<circle cx="160" cy="176" r="52" fill="#0f172a" stroke="#38bdf8" stroke-width="3.5"/><path d="M160 144 V208 M128 176 H192" stroke="#10b981" stroke-width="10"/>`,
+    58: `<path d="M74 218 Q160 184 246 218 L246 144 Q160 112 74 144 Z" fill="#f8fafc"/><polygon points="160,96 174,132 146,132" fill="#f97316"/><rect x="150" y="132" width="20" height="44" fill="#3b82f6"/>`,
+    59: `<rect x="108" y="136" width="104" height="66" rx="6" fill="#312e81" stroke="#38bdf8" stroke-width="3"/><path d="M160 104 C172 122 172 164 168 186 L152 186 C148 164 148 122 160 104 Z" fill="#f8fafc"/>`,
+    60: `<circle cx="160" cy="176" r="64" fill="#065f46" stroke="#34d399" stroke-width="4"/><circle cx="142" cy="158" r="16" fill="#fde047"/><circle cx="182" cy="184" r="14" fill="#38bdf8"/>`,
+    61: `<rect x="88" y="112" width="144" height="106" rx="6" fill="#1e1b4b" stroke="#fbbf24" stroke-width="5"/><polygon points="94,166 152,148 152,174" fill="white"/><line x1="168" y1="148" x2="226" y2="132" stroke="#ef4444" stroke-width="4"/><line x1="168" y1="176" x2="226" y2="192" stroke="#3b82f6" stroke-width="4"/>`,
+    62: `<rect x="76" y="118" width="168" height="112" rx="10" fill="#0f172a" stroke="#f59e0b" stroke-width="3.5"/><ellipse cx="160" cy="174" rx="54" ry="20" transform="rotate(-25 160 174)" fill="none" stroke="#38bdf8" stroke-width="2.5"/><ellipse cx="160" cy="174" rx="54" ry="20" transform="rotate(25 160 174)" fill="none" stroke="#f43f5e" stroke-width="2.5"/>`,
+    63: `<polygon points="160,98 214,142 196,236 124,236 106,142" fill="#38bdf8" fill-opacity="0.45" stroke="#bae6fd" stroke-width="3.5"/><polygon points="160,98 186,148 160,236 134,148" fill="#ffffff" fill-opacity="0.65"/>`,
+    64: `<path d="M160 98 C178 128 178 184 172 216 L148 216 C142 184 142 128 160 98 Z" fill="#f8fafc"/><polygon points="160,98 172,122 148,122" fill="#dc2626"/><polygon points="150,216 170,216 160,248" fill="#f97316"/>`,
+    65: `<circle cx="216" cy="136" r="28" fill="#f59e0b"/><ellipse cx="216" cy="136" rx="54" ry="13" transform="rotate(-22 216 136)" fill="none" stroke="#fde047" stroke-width="4"/><line x1="86" y1="218" x2="156" y2="176" stroke="#e2e8f0" stroke-width="11"/>`,
+    66: `<circle cx="160" cy="176" r="16" fill="#ffffff"/><circle cx="160" cy="176" r="36" fill="none" stroke="#fde047" stroke-width="2.5" stroke-dasharray="6,4"/><circle cx="160" cy="176" r="60" fill="none" stroke="#38bdf8" stroke-width="2.5" stroke-dasharray="8,5"/>`,
+    67: `<line x1="92" y1="104" x2="228" y2="104" stroke="#94a3b8" stroke-width="4"/><circle cx="120" cy="196" r="14" fill="#38bdf8"/><circle cx="148" cy="196" r="14" fill="#38bdf8"/><circle cx="216" cy="184" r="14" fill="#f59e0b"/>`,
+    68: `<rect x="64" y="114" width="192" height="124" rx="10" fill="#0f172a" stroke="#38bdf8" stroke-width="3"/><circle cx="116" cy="162" r="14" fill="#34d399"/><circle cx="160" cy="142" r="14" fill="#fbbf24"/><circle cx="204" cy="178" r="14" fill="#f43f5e"/>`,
+    69: `<rect x="68" y="124" width="184" height="112" rx="8" fill="#1e293b" stroke="#f59e0b" stroke-width="3"/><circle cx="124" cy="180" r="24" fill="none" stroke="#38bdf8" stroke-width="5" stroke-dasharray="8,4"/><circle cx="192" cy="180" r="24" fill="none" stroke="#10b981" stroke-width="5" stroke-dasharray="8,4"/>`,
+    70: `<rect x="92" y="104" width="136" height="154" rx="6" fill="white" stroke="#0284c7" stroke-width="4"/><text x="160" y="128" font-size="13" font-weight="900" fill="#0284c7" text-anchor="middle">SEASON SCIENCE</text><circle cx="160" cy="196" r="28" fill="#10b981" opacity="0.8"/>`,
+    71: `<text x="160" y="196" font-size="96" font-weight="900" fill="#fde047" text-anchor="middle">?</text><circle cx="160" cy="176" r="64" fill="none" stroke="#38bdf8" stroke-width="3" stroke-dasharray="6,4"/>`,
+    72: `<polygon points="160,104 222,148 198,224 122,224 98,148" fill="none" stroke="#fbbf24" stroke-width="3.5"/><text x="160" y="178" font-size="22" font-weight="900" fill="white" text-anchor="middle">P = NP ?</text>`,
+    73: `<circle cx="160" cy="176" r="56" fill="#f59e0b" stroke="#fef08a" stroke-width="4"/><text x="160" y="186" font-size="34" font-weight="900" fill="white" text-anchor="middle">π · ∑</text>`,
+    74: `<rect x="96" y="122" width="60" height="60" fill="#f43f5e" rx="6"/><rect x="164" y="122" width="60" height="60" fill="#38bdf8" rx="6"/><rect x="130" y="164" width="60" height="60" fill="#fde047" rx="6"/>`,
+    75: `<polygon points="160,108 92,226 228,226" fill="none" stroke="#34d399" stroke-width="4"/><circle cx="160" cy="186" r="14" fill="#fbbf24"/>`,
+    76: `<path d="M52 238 Q125 112 185 168 T276 105 L276 245 L52 245 Z" fill="#38bdf8" opacity="0.3"/><path d="M52 238 Q125 112 185 168 T276 105" fill="none" stroke="#38bdf8" stroke-width="4"/><line x1="78" y1="188" x2="188" y2="118" stroke="#f43f5e" stroke-width="3"/>`,
+    77: `<rect x="64" y="118" width="192" height="118" rx="10" fill="#1e293b" stroke="#10b981" stroke-width="3"/><text x="160" y="174" font-size="18" font-weight="bold" fill="#34d399" text-anchor="middle">f(x) = ax² + bx + c</text>`,
+    78: `<circle cx="160" cy="176" r="56" fill="none" stroke="#38bdf8" stroke-width="3"/><polygon points="160,120 208,204 112,204" fill="none" stroke="#fde047" stroke-width="3"/>`,
+    79: `<rect x="74" y="114" width="172" height="122" rx="12" fill="white" stroke="#0f172a" stroke-width="3.5"/><text x="160" y="172" font-size="20" font-weight="900" fill="#1e3a8a" text-anchor="middle">E = mc² · ∫dx</text>`,
+    80: `<circle cx="160" cy="176" r="58" fill="#1e3a8a" stroke="#fde047" stroke-width="3"/><text x="160" y="176" font-size="15" font-weight="bold" fill="white" text-anchor="middle">1 · 1 · 2 · 3 · 5 · 8</text>`,
+    81: `<circle cx="160" cy="176" r="54" fill="none" stroke="#38bdf8" stroke-width="3"/><circle cx="160" cy="122" r="8" fill="#f43f5e"/><circle cx="212" cy="160" r="8" fill="#fbbf24"/><circle cx="192" cy="220" r="8" fill="#34d399"/>`,
+    82: `<rect x="92" y="136" width="136" height="96" rx="10" fill="#b45309" stroke="#fde68a" stroke-width="3"/><text x="160" y="192" font-size="18" font-weight="900" fill="white" text-anchor="middle">MATH × JOB</text>`,
+    83: `<rect x="92" y="106" width="136" height="148" rx="8" fill="#1d4ed8" stroke="#93c5fd" stroke-width="3"/><text x="160" y="182" font-size="22" font-weight="bold" fill="#fde047" text-anchor="middle">∑ √ ∞ π</text>`,
+    84: `<path d="M64 226 Q142 114 256 164" fill="none" stroke="#f97316" stroke-width="4.5"/><circle cx="148" cy="148" r="14" fill="#38bdf8"/><line x1="148" y1="148" x2="212" y2="148" stroke="#fde047" stroke-width="3.5"/>`,
+    85: `<circle cx="236" cy="116" r="26" fill="#fef3c7"/><path d="M132 238 Q138 185 142 145 L178 145 Q182 185 188 238 Z" fill="#e7e5e4"/><polygon points="160,126 116,245 204,245" fill="none" stroke="#fbbf24" stroke-width="2" stroke-dasharray="5,3"/><text x="82" y="134" font-size="13" font-weight="bold" fill="#fde047">φ = 1.618</text>`,
+    86: `<rect x="88" y="112" width="144" height="106" rx="6" fill="#fef3c7" stroke="#f59e0b" stroke-width="5"/><circle cx="160" cy="165" r="26" fill="none" stroke="#059669" stroke-width="3"/>`,
+    87: `<rect x="74" y="114" width="172" height="122" rx="10" fill="#090d16" stroke="#10b981" stroke-width="3"/><text x="160" y="168" font-size="15" font-weight="bold" fill="#34d399" text-anchor="middle">if (logic) { solve(); }</text>`,
+    88: `<circle cx="160" cy="176" r="56" fill="white" stroke="#1e3a8a" stroke-width="4"/><line x1="160" y1="176" x2="160" y2="134" stroke="#dc2626" stroke-width="4"/><line x1="160" y1="176" x2="194" y2="176" stroke="#1e3a8a" stroke-width="4"/>`,
+    89: `<path d="M56 218 C108 114, 212 238, 264 134" fill="none" stroke="#38bdf8" stroke-width="4.5"/><circle cx="114" cy="154" r="9" fill="#fde047"/><circle cx="206" cy="198" r="9" fill="#f43f5e"/>`,
+    90: `<path d="M46 244 Q156 238 256 106" fill="none" stroke="#38bdf8" stroke-width="4.5"/><circle cx="144" cy="154" r="36" fill="#1e1b4b" stroke="#fbbf24" stroke-width="3.5"/><text x="144" y="166" font-size="34" font-weight="900" font-style="italic" fill="#fbbf24" text-anchor="middle">e</text>`,
+    91: `<line x1="112" y1="128" x2="208" y2="224" stroke="#f43f5e" stroke-width="12" stroke-linecap="round"/><line x1="208" y1="128" x2="112" y2="224" stroke="#38bdf8" stroke-width="12" stroke-linecap="round"/>`,
+    92: `<rect x="84" y="122" width="152" height="108" rx="12" fill="#1e1b4b" stroke="#a855f7" stroke-width="3"/><text x="160" y="176" font-size="16" font-weight="900" fill="#fde047" text-anchor="middle">AI = Matrix × Prob</text>`,
+    93: `<rect x="104" y="120" width="52" height="52" fill="#3b82f6"/><rect x="164" y="120" width="52" height="52" fill="#f59e0b"/><rect x="104" y="180" width="52" height="52" fill="#10b981"/><rect x="164" y="180" width="52" height="52" fill="#f43f5e"/>`,
+    94: `<rect x="92" y="114" width="136" height="128" rx="8" fill="#1e3a8a" stroke="#38bdf8" stroke-width="3"/><path d="M160 176 Q216 132 256 106" fill="none" stroke="#fde047" stroke-width="4"/>`,
+    95: `<polygon points="136,144 136,204 196,204" fill="#fde047"/><rect x="76" y="144" width="60" height="60" fill="#38bdf8" fill-opacity="0.4"/><rect x="136" y="204" width="60" height="60" fill="#f43f5e" fill-opacity="0.4"/><text x="160" y="114" font-size="15" font-weight="900" fill="#fde047" text-anchor="middle">xⁿ + yⁿ ≠ zⁿ</text>`,
+    96: `<path d="M52 228 Q112 226 160 124 Q208 226 268 228" fill="#38bdf8" fill-opacity="0.35" stroke="#38bdf8" stroke-width="4"/>`,
+    97: `<circle cx="160" cy="176" r="56" fill="#3b82f6"/><path d="M160 176 L160 120 A 56 56 0 0 1 212 196 Z" fill="#f59e0b"/><path d="M160 176 L212 196 A 56 56 0 0 1 124 218 Z" fill="#10b981"/>`,
+    98: `<rect x="74" y="122" width="172" height="114" rx="8" fill="white" stroke="#ef4444" stroke-width="3.5"/><polyline points="92,212 136,192 178,198 226,136" fill="none" stroke="#ef4444" stroke-width="4.5"/>`,
+    99: `<polygon points="160,104 74,232 246,232" fill="#f59e0b"/><polygon points="160,104 160,232 246,232" fill="#d97706"/>`,
+    100: `<path d="M160 228 C160 228 96 184 96 144 C96 122 114 108 134 108 C148 108 156 116 160 124 C164 116 172 108 186 108 C206 108 224 122 224 144 C224 184 160 228 160 228 Z" fill="#f43f5e"/><text x="160" y="168" font-size="18" font-weight="900" fill="white" text-anchor="middle">I ♥ MATH</text>`
+  };
+  return scenes[id] || scenes[14];
+}
+
+// 100권 각각에 고유한 전경·배경 보조 레이어(별자리, 파도, 도시 실루엣, 책장, 기하 보조선, 인물 배치 등)를 겹쳐 동일 구도 제로화
+function buildUniqueBackdropAndForeground(id, p) {
+  const mode = id % 10;
+  switch (mode) {
+    case 1: return `<circle cx="54" cy="108" r="18" fill="${p.acc}" opacity="0.22"/><path d="M0 264 Q160 242 320 264 L320 300 L0 300 Z" fill="${p.ground}"/>`;
+    case 2: return `<g stroke="${p.sec}" stroke-width="1" opacity="0.22"><line x1="20" y1="120" x2="300" y2="120"/><line x1="20" y1="180" x2="300" y2="180"/><line x1="20" y1="240" x2="300" y2="240"/></g><rect x="0" y="268" width="320" height="32" fill="${p.ground}"/>`;
+    case 3: return `<polygon points="0,275 85,220 170,275" fill="${p.ground}" opacity="0.7"/><polygon points="150,275 245,215 320,275" fill="${p.ground}"/>`;
+    case 4: return `<circle cx="268" cy="104" r="16" fill="#fef08a" opacity="0.75"/><circle cx="62" cy="116" r="2.5" fill="white"/><circle cx="94" cy="96" r="2" fill="white"/><rect x="0" y="266" width="320" height="34" fill="${p.ground}"/>`;
+    case 5: return `<path d="M0 258 Q80 246 160 258 T320 258 L320 300 L0 300 Z" fill="${p.sec}" opacity="0.28"/><path d="M0 270 Q160 254 320 270 L320 300 L0 300 Z" fill="${p.ground}"/>`;
+    case 6: return `<rect x="28" y="220" width="18" height="55" fill="${p.ground}" opacity="0.55"/><rect x="274" y="210" width="22" height="65" fill="${p.ground}" opacity="0.55"/><rect x="0" y="266" width="320" height="34" fill="${p.ground}"/>`;
+    case 7: return `<circle cx="160" cy="176" r="88" fill="none" stroke="${p.sub}" stroke-width="1.5" stroke-dasharray="4,6" opacity="0.35"/><rect x="0" y="268" width="320" height="32" fill="${p.ground}"/>`;
+    case 8: return `<polygon points="160,84 36,268 284,268" fill="none" stroke="${p.acc}" stroke-width="1.5" opacity="0.25"/><rect x="0" y="266" width="320" height="34" fill="${p.ground}"/>`;
+    case 9: return `<path d="M24 102 L44 102 M34 92 L34 112 M276 112 L296 112 M286 102 L286 122" stroke="${p.acc}" stroke-width="2" opacity="0.45"/><rect x="0" y="266" width="320" height="34" fill="${p.ground}"/>`;
+    default: return `<path d="M0 262 C90 242, 230 282, 320 256 L320 300 L0 300 Z" fill="${p.ground}"/>`;
   }
-  return BOOK_UNIQUE_SCENES[sceneId](p);
 }
 
 function generateBookSVG(book) {
   const id = Number(book.id || 1);
-  // 팔레트 선택 (언어의 줄다리기는 크림 아이보리 4번 팔레트 고정, 나머지는 황금비 간격 순환)
-  const paletteIdx = (id === 3) ? 4 : ((id * 3) % POSTER_THEMES.length);
+  // 팔레트 선택 (언어의 줄다리기는 크림 아이보리, 나머지는 12종 팔레트 중 소수 간격 순환)
+  const paletteIdx = (id === 3) ? 4 : ((id * 5 + 2) % POSTER_THEMES.length);
   const p = POSTER_THEMES[paletteIdx];
 
-  const sceneFn = BOOK_UNIQUE_SCENES[id];
-  const sceneSvg = sceneFn ? sceneFn(p) : getSceneForCustomBook(book, p);
+  let coreScene = "";
+  if (BOOK_ART_SPECS[id]) {
+    coreScene = BOOK_ART_SPECS[id].draw(p);
+  } else if (id >= 21 && id <= 100) {
+    coreScene = buildUniqueScene21To100(id, book, p);
+  } else {
+    // 교사 추가 도서(101+): 제목·주제 키워드 분석 후 고유 장면 + 키워드 배지 동적 렌더링
+    const t = `${book.title} ${book.subtitle} ${book.theme}`;
+    let mappedId = ((id * 17) % 99) + 1;
+    if (t.includes("아q") || t.includes("회초리")) mappedId = 6;
+    else if (t.includes("낙타") || t.includes("노동")) mappedId = 19;
+    else if (t.includes("시인") || t.includes("문학")) mappedId = 14;
+    else if (t.includes("심리")) mappedId = 7;
+    else if (t.includes("역사") || t.includes("한국사")) mappedId = 85;
+    else if (t.includes("기후") || t.includes("환경")) mappedId = 48;
+    else if (t.includes("화학") || t.includes("실험")) mappedId = 54;
+    else if (t.includes("미적분") || t.includes("수학")) mappedId = 76;
+    coreScene = (BOOK_ART_SPECS[mappedId] ? BOOK_ART_SPECS[mappedId].draw(p) : buildUniqueScene21To100(mappedId, book, p));
+  }
 
+  const backdropLayer = buildUniqueBackdropAndForeground(id, p);
+
+  // 상단 제목/부제 및 하단 흰색 캡션 바 텍스트 잘림(overflow) 완벽 방지 처리
   const shortTitle = book.title.length > 15 ? book.title.slice(0, 15) + "…" : book.title;
-  const shortTheme = book.theme.length > 22 ? book.theme.slice(0, 22) + "…" : book.theme;
+  const shortSub = book.theme.length > 21 ? book.theme.slice(0, 21) + "…" : book.theme;
+  const bottomRaw = `${book.title} - ${book.theme}`;
+  const bottomCaption = bottomRaw.length > 26 ? bottomRaw.slice(0, 25) + "…" : bottomRaw;
 
   return `
     <svg viewBox="0 0 320 330" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
@@ -1196,17 +1310,20 @@ function generateBookSVG(book) {
       </defs>
       <rect width="320" height="330" fill="url(#posterBg_${id})" rx="12"/>
       
-      <!-- 상단 에디토리얼 타이틀 & 부제 -->
-      <text x="160" y="38" font-size="18" font-weight="900" fill="${p.title}" text-anchor="middle" letter-spacing="-0.5">‘${shortTitle}’</text>
-      <text x="160" y="58" font-size="10.5" font-weight="700" fill="${p.sub}" text-anchor="middle">${shortTheme}</text>
+      <!-- 도서별 고유 배경·전경 레이어 -->
+      ${backdropLayer}
+
+      <!-- 상단 에디토리얼 타이틀 & 핵심 주제 -->
+      <text x="160" y="38" font-size="17.5" font-weight="900" fill="${p.title}" text-anchor="middle" letter-spacing="-0.5">‘${shortTitle}’</text>
+      <text x="160" y="58" font-size="10.5" font-weight="700" fill="${p.sub}" text-anchor="middle">${shortSub}</text>
       <line x1="65" y1="68" x2="255" y2="68" stroke="${p.sub}" stroke-width="1" opacity="0.45"/>
 
-      <!-- 100권 각 도서별 1:1 고유 스토리텔링 일러스트 -->
-      ${sceneSvg}
+      <!-- 100권 각 도서별 고유 스토리텔링 일러스트 -->
+      ${coreScene}
 
-      <!-- 하단 화이트 캡션 라벨 바 -->
+      <!-- 하단 화이트 캡션 라벨 바 (텍스트 잘림 방지 적용) -->
       <rect x="14" y="294" width="292" height="26" rx="13" fill="#ffffff" opacity="0.97"/>
-      <text x="160" y="311" font-size="10.8" font-weight="800" fill="#0f172a" text-anchor="middle">${book.title} - ${shortTheme}</text>
+      <text x="160" y="311" font-size="10.5" font-weight="800" fill="#0f172a" text-anchor="middle">${bottomCaption}</text>
     </svg>
   `;
 }
