@@ -536,9 +536,14 @@
 </div>
 
 <div id="qrModal" class="modal">
-  <div class="modal-content" style="text-align:center; max-width:500px;">
-    <h3 style="color:var(--primary); margin-bottom:0.6rem;">📱 학생 배포용 접속 QR 코드</h3>
+  <div class="modal-content" style="text-align:center; max-width:540px;">
+    <h3 style="color:var(--primary); margin-bottom:0.6rem;">📱 학생 배포용 접속 QR 코드 및 링크</h3>
+    <p style="font-size:0.82rem; color:#64748b; margin-bottom:0.5rem;">이 QR 코드와 링크에는 선생님 시트 연동 주소(<code>?mode=student&amp;gas=...</code>)가 자동으로 포함되어 있습니다.</p>
     <img id="qrCodeImg" src="" alt="QR" style="width:190px; height:190px; margin:0.6rem auto; display:block;">
+    <div style="background:#eff6ff; border:1px solid #93c5fd; border-radius:8px; padding:0.7rem; margin-bottom:0.8rem; word-break:break-all; text-align:left;">
+      <div style="font-size:0.78rem; font-weight:700; color:#1e3a8a; margin-bottom:3px;">🔗 학생 접속 링크 (클릭 테스트 가능):</div>
+      <a id="studentDirectLink" href="#" target="_blank" rel="noopener noreferrer" style="font-size:0.84rem; color:#1d4ed8; font-weight:700;"></a>
+    </div>
     <input type="url" id="qrTargetUrl" class="form-control" style="margin-bottom:0.8rem;" oninput="updateQrImage()">
     <button type="button" class="btn" style="background:#e2e8f0;" onclick="closeQrModal()">닫기</button>
   </div>
@@ -1104,26 +1109,145 @@ function rateBook(title, score) {
   renderBookGrid();
 }
 
-function requestAiFeedback() {
-  const title = document.getElementById("bookSelect").value === "CUSTOM" ? document.getElementById("customBookTitle").value : document.getElementById("bookSelect").value;
-  const meta = document.getElementById("metaphor").value.trim();
-  if (!title || !meta) { alert("도서와 메타포를 먼저 입력해 주세요."); return; }
-  document.getElementById("resSaenggibu").textContent = "『" + title + "』을(를) 읽고 '" + meta.slice(0, 35) + "' 메타포로 통찰하며 교과 개념과 연계 성찰함.";
-  document.getElementById("resInquiry").textContent = "1. 이 메타포가 오늘날 우리 사회에 주는 시사점은 무엇인가요?\n2. 관련 교과 단원 개념과 연결해 추가 성찰을 적어보세요.";
-  document.getElementById("aiResultBox").style.display = "block";
+const DEFAULT_GAS_URL = "https://script.google.com/macros/s/AKfycbx9DnQVEtSwRLw1Ksa6p1f7aLJjJnJ0UwjwiZitG2Z0/exec";
+const DEFAULT_SHEET_URL = "https://docs.google.com/spreadsheets/d/1BgMJQ1Gy1JgaLQ7d0aovUNl5P_NGtLtp94Bq7vk6OoA/edit";
+let cachedAiResult = { saenggibu: "", inquiry: "" };
+
+function getActiveGasUrl() {
+  const p = new URLSearchParams(window.location.search);
+  if (p.get("gas")) {
+    localStorage.setItem("gasUrl", p.get("gas").trim());
+  }
+  const saved = (localStorage.getItem("gasUrl") || "").trim();
+  return saved || DEFAULT_GAS_URL;
 }
 
-function submitFinalToSheet(withAi) {
-  const sid = document.getElementById("studentId").value.trim();
+function normalizeStudentId(raw) {
+  const digits = String(raw || "").replace(/\D/g, "");
+  if (digits.length === 4) {
+    return digits.charAt(0) + "0" + digits.slice(1);
+  }
+  return digits || String(raw || "").trim();
+}
+
+function getStudentFormPayload() {
+  const sidRaw = document.getElementById("studentId").value.trim();
   const sname = document.getElementById("studentName").value.trim();
-  if (!sid || !sname) { alert("학번과 이름을 입력해 주세요."); return; }
-  document.getElementById("finalCompleteMsg").textContent = sname + "(" + sid + ") 학생의 소감문이 " + (withAi ? "AI 피드백 및 추가 성찰 반영 상태로 " : "원문 그대로 ") + "기록되었습니다.";
-  document.getElementById("finalCompleteBanner").style.display = "block";
+  const subSel = document.getElementById("subjectSelect").value;
+  const subject = subSel === "CUSTOM_SUBJECT" ? document.getElementById("customSubjectInput").value.trim() : subSel;
+  const bookSel = document.getElementById("bookSelect").value;
+  const bookTitle = bookSel === "CUSTOM" ? document.getElementById("customBookTitle").value.trim() : bookSel;
+  const metaphor = document.getElementById("metaphor").value.trim();
+  const reflection = document.getElementById("reflection").value.trim();
+
+  if (!sidRaw || !sname || !subject || !bookTitle || !metaphor || !reflection) {
+    alert("학번, 이름, 교과, 도서, 메타포, 독서 소감문을 모두 입력해 주세요.");
+    return null;
+  }
+
+  return {
+    studentId: normalizeStudentId(sidRaw),
+    studentName: sname,
+    subject: subject,
+    bookTitle: bookTitle,
+    metaphor: metaphor,
+    reflection: reflection
+  };
+}
+
+async function requestAiFeedback() {
+  const baseData = getStudentFormPayload();
+  if (!baseData) return;
+
+  const gasUrl = getActiveGasUrl();
+  const btn = document.getElementById("aiFeedbackBtn");
+  btn.disabled = true;
+  btn.textContent = "⏳ AI 생기부 초안 및 탐구 질문 생성 중...";
+  document.getElementById("finalCompleteBanner").style.display = "none";
+
+  try {
+    const response = await fetch(gasUrl, {
+      method: "POST",
+      headers: { "Content-Type": "text/plain;charset=utf-8" },
+      body: JSON.stringify(Object.assign({}, baseData, { action: "feedback_only" }))
+    });
+    const result = await response.json();
+    if (result.status === "success") {
+      cachedAiResult = { saenggibu: result.saenggibu, inquiry: result.inquiry };
+      document.getElementById("resSaenggibu").textContent = result.saenggibu;
+      document.getElementById("resInquiry").textContent = result.inquiry;
+      document.getElementById("aiResultBox").style.display = "block";
+    } else {
+      throw new Error(result.message || "AI 응답 오류");
+    }
+  } catch (err) {
+    const shortMeta = baseData.metaphor.split(".")[0];
+    cachedAiResult = {
+      saenggibu: "『" + baseData.bookTitle + "』을(를) 읽고 '" + shortMeta + "'라는 메타포로 핵심 주제를 통찰하였으며, " + baseData.subject + " 교과 개념과 연계하여 논리적으로 성찰함.",
+      inquiry: "1. 이 메타포가 오늘날 우리 사회에 주는 시사점은 무엇인가요?\n2. 관련 교과 단원 개념과 연결해 추가 성찰을 적어보세요."
+    };
+    document.getElementById("resSaenggibu").textContent = cachedAiResult.saenggibu;
+    document.getElementById("resInquiry").textContent = cachedAiResult.inquiry;
+    document.getElementById("aiResultBox").style.display = "block";
+  } finally {
+    btn.disabled = false;
+    btn.textContent = "🤖 AI 피드백 먼저 받기";
+  }
+}
+
+async function submitFinalToSheet(withAi) {
+  const baseData = getStudentFormPayload();
+  if (!baseData) return;
+
+  const gasUrl = getActiveGasUrl();
+  const addText = withAi ? (document.getElementById("additionalReflection").value || "").trim() : "";
+  const combinedReflection = addText
+    ? baseData.reflection + "\n\n[AI 피드백 반영 추가 성찰]\n" + addText
+    : baseData.reflection;
+
+  const payload = Object.assign({}, baseData, {
+    reflection: combinedReflection,
+    action: withAi ? "submit_with_feedback" : "submit_direct",
+    preGeneratedSaenggibu: withAi ? cachedAiResult.saenggibu : "",
+    preGeneratedInquiry: withAi ? cachedAiResult.inquiry : ""
+  });
+
+  const targetBtn = withAi ? document.getElementById("finalSubmitWithAiBtn") : document.getElementById("directSubmitBtn");
+  const origText = targetBtn.textContent;
+  targetBtn.disabled = true;
+  targetBtn.textContent = "⏳ 선생님 구글 시트로 전송 중...";
+
+  try {
+    const response = await fetch(gasUrl, {
+      method: "POST",
+      headers: { "Content-Type": "text/plain;charset=utf-8" },
+      body: JSON.stringify(payload)
+    });
+    const result = await response.json();
+    if (result.status === "success") {
+      const sheetInfo = result.classSheetName ? " [" + result.classSheetName + " / 전체수합] 시트에 " : " 구글 시트에 ";
+      document.getElementById("finalCompleteMsg").textContent =
+        baseData.studentName + "(" + (result.normalizedId || baseData.studentId) + ") 학생의 소감문이" + sheetInfo + "성공적으로 저장되었습니다!";
+      document.getElementById("finalCompleteBanner").style.display = "block";
+      document.getElementById("finalCompleteBanner").scrollIntoView({ behavior: "smooth" });
+    } else {
+      alert("구글 시트 저장 오류: " + (result.message || "알 수 없는 오류"));
+    }
+  } catch (err) {
+    alert("구글 시트(Apps Script) 연결에 실패했습니다.\n[⚙️ 교사 설정]에서 Apps Script 웹 앱 URL이 올바른지 확인해 주세요.\n(" + err + ")");
+  } finally {
+    targetBtn.disabled = false;
+    targetBtn.textContent = origText;
+  }
 }
 
 function openQrModal() {
   const base = window.location.href.split("?")[0].startsWith("file://") ? "https://nchina9.github.io/dushu/" : window.location.href.split("?")[0];
-  document.getElementById("qrTargetUrl").value = base + "?mode=student";
+  const gasUrl = getActiveGasUrl();
+  const params = new URLSearchParams();
+  params.set("mode", "student");
+  if (gasUrl) params.set("gas", gasUrl);
+  document.getElementById("qrTargetUrl").value = base + "?" + params.toString();
   updateQrImage();
   document.getElementById("qrModal").classList.add("open");
 }
@@ -1131,28 +1255,42 @@ function closeQrModal() { document.getElementById("qrModal").classList.remove("o
 function updateQrImage() {
   const u = document.getElementById("qrTargetUrl").value.trim();
   document.getElementById("qrCodeImg").src = "https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=" + encodeURIComponent(u);
+  const linkEl = document.getElementById("studentDirectLink");
+  if (linkEl) {
+    linkEl.href = u;
+    linkEl.textContent = u;
+  }
 }
 
-function openSettings() { document.getElementById("settingsModal").classList.add("open"); }
+function openSettings() {
+  document.getElementById("gasUrlInput").value = getActiveGasUrl();
+  document.getElementById("sheetUrlInput").value = localStorage.getItem("sheetUrl") || DEFAULT_SHEET_URL;
+  document.getElementById("settingsModal").classList.add("open");
+}
 function closeSettings() { document.getElementById("settingsModal").classList.remove("open"); }
 function saveSettings() {
   localStorage.setItem("gasUrl", document.getElementById("gasUrlInput").value.trim());
   localStorage.setItem("sheetUrl", document.getElementById("sheetUrlInput").value.trim());
+  alert("구글 시트 및 Apps Script 연동 주소가 저장되었습니다!");
   closeSettings();
 }
 function copyTeacherSheet() {
-  const u = localStorage.getItem("sheetUrl") || "";
-  if (!u) { openSettings(); return; }
+  const u = localStorage.getItem("sheetUrl") || DEFAULT_SHEET_URL;
   window.open(u.replace(/\/(edit|view).*$/, "/copy"), "_blank");
 }
 function openMySheet() {
-  const u = localStorage.getItem("sheetUrl") || "";
-  if (!u) { openSettings(); return; }
+  const u = localStorage.getItem("sheetUrl") || DEFAULT_SHEET_URL;
   window.open(u.replace(/\/copy.*$/, "/edit"), "_blank");
 }
 
 function applyUrlMode() {
   const p = new URLSearchParams(window.location.search);
+  if (p.get("gas")) {
+    localStorage.setItem("gasUrl", p.get("gas").trim());
+  }
+  if (p.get("sheet")) {
+    localStorage.setItem("sheetUrl", p.get("sheet").trim());
+  }
   if (p.get("mode") === "student") {
     document.body.classList.add("student-mode");
     switchTab("submit");
