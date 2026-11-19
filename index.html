@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>교과 연계 추천 도서 100선 & 메타포 독서 탐구</title>
+<title>교과 연계 추천 도서 100선 &amp; 메타포 독서 탐구</title>
 <style>
   :root {
     --primary: #1e3a8a;
@@ -22,7 +22,7 @@
     background: linear-gradient(135deg, #1e3a8a 0%, #0f172a 100%);
     color: white;
     padding: 1.1rem 1.6rem;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.12);
     position: sticky;
     top: 0;
     z-index: 100;
@@ -34,9 +34,9 @@
     flex-wrap: wrap;
     justify-content: space-between;
     align-items: center;
-    gap: 0.7rem;
+    gap: 0.75rem;
   }
-  .header-title h1 { font-size: 1.3rem; font-weight: 700; }
+  .header-title h1 { font-size: 1.3rem; font-weight: 800; }
   .header-title p { font-size: 0.8rem; color: #cbd5e1; margin-top: 2px; }
   .nav-btns { display: flex; gap: 0.45rem; flex-wrap: wrap; }
   .btn {
@@ -102,7 +102,7 @@
     border: 2px solid #cbd5e1;
     box-shadow: 0 10px 25px rgba(0,0,0,0.06);
     padding: 2rem;
-    max-width: 960px;
+    max-width: 980px;
     margin: 0 auto 2rem auto;
   }
   .badge-row { display: flex; gap: 0.45rem; flex-wrap: wrap; align-items: center; margin-bottom: 0.7rem; }
@@ -173,29 +173,40 @@
     border-top: 1px solid var(--border);
   }
 
+  /* 그림 카드 그리드 (1PAGE 목록 및 추천도서 그림 선택용) */
   .book-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(255px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(235px, 1fr));
     gap: 1rem;
     margin-top: 1rem;
   }
   .mini-card {
     background: white;
     border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 1rem;
+    border-radius: 12px;
+    padding: 0.85rem;
     cursor: pointer;
-    transition: transform 0.15s, border-color 0.15s;
+    transition: transform 0.15s, border-color 0.15s, box-shadow 0.15s;
+    display: flex;
+    flex-direction: column;
   }
-  .mini-card:hover { transform: translateY(-2px); border-color: var(--primary-light); }
+  .mini-card:hover { transform: translateY(-3px); border-color: var(--primary-light); box-shadow: 0 8px 18px rgba(15,23,42,0.08); }
   .mini-card.custom-book { border-left: 4px solid #8b5cf6; }
-  .mini-card .num { font-size: 0.74rem; font-weight: 700; color: var(--primary-light); }
-  .mini-card .title { font-size: 0.98rem; font-weight: 700; margin: 4px 0; color: #0f172a; }
-  .mini-card .desc { font-size: 0.8rem; color: var(--muted); margin-bottom: 6px; }
-  .mini-card .tags { font-size: 0.73rem; color: #0d9488; font-weight: 600; }
+  .mini-poster-wrap {
+    width: 100%;
+    height: 165px;
+    border-radius: 8px;
+    overflow: hidden;
+    background: #0f172a;
+    margin-bottom: 0.6rem;
+  }
+  .mini-card .num { font-size: 0.73rem; font-weight: 700; color: var(--primary-light); }
+  .mini-card .title { font-size: 0.96rem; font-weight: 800; margin: 3px 0; color: #0f172a; }
+  .mini-card .desc { font-size: 0.79rem; color: var(--muted); margin-bottom: 6px; }
+  .mini-card .tags { font-size: 0.72rem; color: #0d9488; font-weight: 600; margin-top: auto; }
 
   .form-container {
-    max-width: 860px;
+    max-width: 900px;
     margin: 0 auto;
     background: white;
     padding: 2rem;
@@ -221,6 +232,45 @@
   }
   .result-item { background: white; padding: 0.9rem; border-radius: 8px; margin-bottom: 0.9rem; border: 1px solid #dcfce7; }
 
+  /* 추천도서 그림 선택 갤러리 박스 */
+  .visual-picker-panel {
+    display: none;
+    background: #f8fafc;
+    border: 1.5px solid #93c5fd;
+    border-radius: 12px;
+    padding: 1rem;
+    margin-bottom: 1.2rem;
+  }
+  .visual-picker-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(165px, 1fr));
+    gap: 0.75rem;
+    max-height: 340px;
+    overflow-y: auto;
+    margin-top: 0.7rem;
+  }
+  .pick-card {
+    background: white;
+    border: 1.5px solid #cbd5e1;
+    border-radius: 10px;
+    padding: 0.55rem;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .pick-card:hover, .pick-card.active {
+    border-color: #1e3a8a;
+    background: #eff6ff;
+    transform: translateY(-2px);
+  }
+  .pick-poster {
+    width: 100%;
+    height: 115px;
+    border-radius: 6px;
+    overflow: hidden;
+    background: #0f172a;
+    margin-bottom: 0.4rem;
+  }
+
   .star-rating-box { margin-top: 0.65rem; padding-top: 0.55rem; border-top: 1px dashed #e2e8f0; }
   .star-btns { display: inline-flex; gap: 3px; }
   .star-btn { background: none; border: none; font-size: 1.1rem; cursor: pointer; color: #cbd5e1; }
@@ -234,7 +284,7 @@
   .modal.open { display: flex; }
   .modal-content {
     background: white; padding: 1.6rem; border-radius: 14px;
-    max-width: 720px; width: 100%; max-height: 90vh; overflow-y: auto;
+    max-width: 860px; width: 100%; max-height: 90vh; overflow-y: auto;
   }
   .checkbox-subjects {
     display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.4rem;
@@ -248,12 +298,12 @@
 <header>
   <div class="header-inner">
     <div class="header-title">
-      <h1>📚 교과 연계 추천 도서 100선+ & 메타포 독서 탐구</h1>
+      <h1>📚 교과 연계 추천 도서 100선+ &amp; 메타포 독서 탐구</h1>
       <p>교과별 연관 도서 추천 · 1PAGE 도서 카드 · 학생 메타포 제출 및 AI 생기부·탐구 연동</p>
     </div>
     <div class="nav-btns">
       <button class="btn btn-tab active" id="nav-viewer" onclick="switchTab('viewer')">📖 도서 1PAGE 소개</button>
-      <button class="btn btn-tab" id="nav-submit" onclick="switchTab('submit')">✍️ 과목별 추천 & 소감 제출</button>
+      <button class="btn btn-tab" id="nav-submit" onclick="switchTab('submit')">✍️ 과목별 추천 &amp; 소감 제출</button>
       <button class="btn btn-shared" onclick="openSharedBooksModal()">📚 타교사 자료</button>
       <button class="btn teacher-only" style="background:#06b6d4; color:#0f172a;" onclick="openQrModal()">📱 학생 배포용 QR·링크</button>
       <button class="btn btn-add teacher-only" onclick="openAddBookModal()">➕ 교사 도서 1PAGE 추가</button>
@@ -265,6 +315,7 @@
 </header>
 
 <main>
+  <!-- 탭 1: 1PAGE 도서 카드 + 그림 목록 -->
   <section id="tab-viewer" class="section active">
     <div class="viewer-controls">
       <div class="filter-group">
@@ -275,7 +326,7 @@
         <button class="filter-btn" onclick="filterCategory('교사추가', this)">⭐ 교사 추가 도서</button>
       </div>
       <div style="display:flex; gap:0.5rem; flex-wrap:wrap;">
-        <input type="text" id="searchInput" class="search-input" placeholder="도서명, 주제, 과목 검색..." oninput="renderBookList()">
+        <input type="text" id="searchInput" class="search-input" placeholder="도서명, 주제, 과목 검색..." oninput="renderBookGrid()">
         <button class="btn" style="background:#e2e8f0;" onclick="window.print()">🖨️ 현재 1PAGE 인쇄</button>
       </div>
     </div>
@@ -283,18 +334,33 @@
     <div id="onePageContainer" class="one-page-card"></div>
 
     <div style="display:flex; justify-content:space-between; align-items:center; margin-top:1.8rem; flex-wrap:wrap; gap:0.5rem;">
-      <h3>🗂️ 전체 추천 도서 목록 (클릭 시 1PAGE 소개자료 표시)</h3>
+      <h3>🗂️ 전체 추천 도서 그림 목록 (클릭 시 1PAGE 소개자료 표시)</h3>
       <span id="bookCountLabel" style="font-size:0.88rem; color:var(--muted); font-weight:600;"></span>
     </div>
     <div id="bookGrid" class="book-grid"></div>
   </section>
 
+  <!-- 탭 2: 학생 소감문 및 메타포 제출 -->
   <section id="tab-submit" class="section">
     <div class="form-container">
-      <h2 style="color:var(--primary); margin-bottom:0.4rem;">✍️ 교과 연계 도서 선택 및 메타포 소감문 제출</h2>
-      <p style="color:var(--muted); font-size:0.9rem; margin-bottom:1.4rem;">
-        학번·이름·과목을 입력하고 도서를 선택한 뒤 <strong>나만의 메타포</strong>와 <strong>독서 소감문</strong>을 작성해 제출하세요.
+      <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:0.6rem; margin-bottom:0.4rem;">
+        <h2 style="color:var(--primary); margin:0;">✍️ 교과 연계 도서 선택 및 메타포 소감문 제출</h2>
+        <button type="button" class="btn" style="background:#0ea5e9; color:white;" onclick="toggleVisualBookPicker()">
+          🖼️ 추천도서 보기 (그림으로 선택)
+        </button>
+      </div>
+      <p style="color:var(--muted); font-size:0.9rem; margin-bottom:1.2rem;">
+        상단 <strong>[🖼️ 추천도서 보기]</strong> 버튼을 누르면 전체 도서가 그림 카드로 펼쳐지며, 그림을 클릭해 도서를 바로 선택할 수 있습니다.
       </p>
+
+      <!-- 추천도서 보기 (그림으로 선택) 패널 -->
+      <div id="visualPickerPanel" class="visual-picker-panel">
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:0.5rem;">
+          <strong style="color:#1e3a8a;">🖼️ 추천도서 그림 갤러리 (그림 카드를 누르면 아래 도서 선택에 자동 반영됩니다)</strong>
+          <input type="text" id="pickerSearchInput" class="search-input" style="min-width:180px; padding:0.35rem 0.7rem;" placeholder="그림 도서 검색..." oninput="renderVisualPickerCards()">
+        </div>
+        <div id="visualPickerGrid" class="visual-picker-grid"></div>
+      </div>
 
       <form id="readingForm" onsubmit="event.preventDefault();">
         <div class="form-row">
@@ -308,7 +374,7 @@
           </div>
           <div class="form-group">
             <label for="subjectSelect">교과(과목) 선택 *</label>
-            <select id="subjectSelect" class="form-control" required>
+            <select id="subjectSelect" class="form-control" onchange="handleSubjectSelectChange()" required>
               <option value="">-- 과목을 선택하세요 --</option>
               <option value="국어·문학">국어 / 문학 / 화법과 작문</option>
               <option value="사회·역사·지리">통합사회 / 한국사 / 세계사 / 지리</option>
@@ -331,7 +397,7 @@
         </div>
 
         <div class="form-group">
-          <label for="bookSelect">도서 선택 (ㄱㄴㄷ순 전체 목록 / 없는 책은 직접 입력) *</label>
+          <label for="bookSelect">도서 선택 (ㄱㄴㄷ순 전체 목록 / 그림으로 선택 / 직접 입력) *</label>
           <select id="bookSelect" class="form-control" onchange="toggleCustomBook()" required></select>
         </div>
 
@@ -386,7 +452,7 @@
 
 <!-- 교사 도서 1PAGE 추가 모달 -->
 <div id="addBookModal" class="modal">
-  <div class="modal-content">
+  <div class="modal-content" style="max-width:700px;">
     <h3 style="color:#6d28d9; margin-bottom:0.8rem;">➕ 교사 맞춤형 도서 1PAGE 카드 추가</h3>
     <form id="addBookForm" onsubmit="handleAddCustomBook(event)">
       <div class="form-row">
@@ -420,7 +486,7 @@
         <textarea id="newBookSummary" class="form-control" rows="3" required></textarea>
       </div>
       <div class="form-group">
-        <label>직접 만든 그림 이미지 URL (선택)</label>
+        <label>직접 만든 그림 이미지 URL (선택 - 비우면 도서 주제 맞춤 일러스트 자동 생성)</label>
         <input type="url" id="newBookImageUrl" class="form-control" placeholder="https://...">
       </div>
       <div class="form-group">
@@ -446,12 +512,12 @@
   </div>
 </div>
 
-<!-- 타교사 자료 모달 (한 페이지 일러스트 보기 + 별표 5점 평가 + 10명 2.5점 이하 자동삭제) -->
+<!-- 타교사 추천도서 모달 -->
 <div id="sharedBooksModal" class="modal">
-  <div class="modal-content" style="max-width:860px;">
-    <h3 style="color:#be185d; margin-bottom:0.4rem;">📚 교사 추천도서 누적 자료실 (한 페이지 일러스트 보기 · 별표 5점 평가)</h3>
+  <div class="modal-content">
+    <h3 style="color:#be185d; margin-bottom:0.4rem;">📚 타교사 추천도서 자료실 (100권 양식 일러스트 · 별표 5점 평가)</h3>
     <p style="font-size:0.84rem; color:#64748b; margin-bottom:0.8rem;">
-      카드를 누르면 한 페이지 소개·일러스트 뷰어에 바로 열리며, 하단 별표(★ 1~5점)로 평가할 수 있습니다. (10명 이상 평가 후 평균 2.5점 이하 자동 삭제)
+      타교사 추천 도서를 클릭하면 기존 100권 도서와 동일한 <strong>1페이지 양식과 일러스트</strong>로 생성되어 표시됩니다. (10명 이상 평가 후 평균 2.5점 이하 자동 삭제)
     </p>
     <div style="display:grid; grid-template-columns:1fr 1.5fr; gap:0.6rem; margin-bottom:0.9rem;">
       <select id="sharedSubjectFilter" class="form-control" onchange="renderSharedBooksList()">
@@ -469,7 +535,7 @@
       </select>
       <input type="text" id="sharedSearchInput" class="form-control" placeholder="도서명, 주제, 교사명 검색..." oninput="renderSharedBooksList()">
     </div>
-    <div id="sharedBooksContainer" style="display:grid; grid-template-columns:repeat(auto-fill, minmax(230px, 1fr)); gap:0.85rem; max-height:420px; overflow-y:auto;"></div>
+    <div id="sharedBooksContainer" style="display:grid; grid-template-columns:repeat(auto-fill, minmax(225px, 1fr)); gap:0.85rem; max-height:420px; overflow-y:auto;"></div>
     <div style="display:flex; justify-content:flex-end; margin-top:1rem;">
       <button type="button" class="btn" style="background:#e2e8f0;" onclick="closeSharedBooksModal()">닫기</button>
     </div>
@@ -510,7 +576,7 @@
 </footer>
 
 <script>
-const BOOKS = [
+const DEFAULT_BOOKS_DATA = [
   // PART 3: 인문사회 계열 책 읽기 (BOOK 1 ~ BOOK 47)
   { id: 1, cat: "인문사회", title: "존엄하게 산다는 것", subtitle: "존엄을 잃게 만드는 사회에서 어떻게 인간답게 살 것인가?", theme: "인간의 존엄성과 사회적 연대", subjects: ["윤리·철학·심리", "사회·역사·지리", "국어·문학"] },
   { id: 2, cat: "인문사회", title: "유튜브는 책을 집어삼킬 것인가", subtitle: "우리 시대 문해력에 대한 논의", theme: "디지털 미디어 시대의 비판적 문해력", subjects: ["국어·문학", "정보·AI", "사회·역사·지리"] },
@@ -627,6 +693,7 @@ window.addEventListener("DOMContentLoaded", function() {
   populateBookSelect();
   renderOnePage(0);
   renderBookGrid();
+  renderVisualPickerCards();
   applyUrlMode();
 });
 
@@ -637,7 +704,7 @@ function loadBooks() {
     const s = Number(b.ratingSum || 0);
     return !(c >= 10 && (s / c) <= 2.5);
   });
-  ALL_BOOKS = BOOKS.concat(custom);
+  ALL_BOOKS = DEFAULT_BOOKS_DATA.concat(custom);
 }
 
 function switchTab(name) {
@@ -655,32 +722,118 @@ function switchTab(name) {
   if (name === "viewer") {
     renderOnePage(currentIndex);
     renderBookGrid();
+  } else if (name === "submit") {
+    renderVisualPickerCards();
+  }
+}
+
+function getUniqueSceneByBook(book, colors) {
+  const id = Number(book.id || 1);
+  const text = (String(book.title || "") + " " + String(book.subtitle || "") + " " + String(book.theme || "")).toLowerCase();
+
+  // 대표 도서 및 주제 키워드별 고유 일러스트 장면
+  if (id === 3 || text.indexOf("언어") >= 0) {
+    return '<rect x="115" y="262" width="90" height="7" rx="3" fill="#64748b"/><rect x="156" y="122" width="8" height="140" fill="#64748b"/>' +
+      '<line x1="84" y1="146" x2="236" y2="136" stroke="#e2e8f0" stroke-width="4.5" stroke-linecap="round"/>' +
+      '<ellipse cx="88" cy="176" rx="24" ry="12" fill="#38bdf8"/><text x="88" y="180" font-size="9" font-weight="800" fill="#0f172a" text-anchor="middle">프레임</text>' +
+      '<ellipse cx="232" cy="168" rx="24" ry="12" fill="#f43f5e"/><text x="232" y="172" font-size="9" font-weight="800" fill="#ffffff" text-anchor="middle">권력·의미</text>' +
+      '<circle cx="195" cy="112" r="24" fill="#ffffff" stroke="#38bdf8" stroke-width="3.5"/><line x1="213" y1="130" x2="236" y2="152" stroke="#f59e0b" stroke-width="5" stroke-linecap="round"/>' +
+      '<text x="195" y="116" font-size="12" font-weight="900" fill="#0f172a" text-anchor="middle">언어</text>';
+  }
+  if (id === 7 || text.indexOf("심리") >= 0 || text.indexOf("본성") >= 0) {
+    return '<rect x="0" y="164" width="320" height="120" fill="#020617" opacity="0.65"/><line x1="0" y1="164" x2="320" y2="164" stroke="#38bdf8" stroke-width="2"/>' +
+      '<polygon points="160,102 128,164 192,164" fill="#e0f2fe"/><polygon points="128,164 192,164 232,212 194,264 126,264 88,212" fill="#1e3a8a" stroke="#60a5fa" stroke-width="2"/>' +
+      '<circle cx="160" cy="210" r="16" fill="none" stroke="#fbbf24" stroke-width="3"/><line x1="160" y1="226" x2="160" y2="252" stroke="#fbbf24" stroke-width="3.5"/>';
+  }
+  if (id === 15 || text.indexOf("페스트") >= 0 || text.indexOf("재난") >= 0) {
+    return '<polygon points="46,142 195,112 195,232 46,252" fill="#1e293b"/>' +
+      '<path d="M138 124 L146 152 L136 174 L148 200" fill="none" stroke="#f43f5e" stroke-width="3"/>' +
+      '<rect x="114" y="204" width="9" height="36" fill="#facc15" rx="3"/><circle cx="118" cy="170" r="8" fill="#f97316"/>' +
+      '<rect x="156" y="202" width="10" height="38" fill="#ffffff" rx="3"/><circle cx="161" cy="168" r="9" fill="#f97316"/>' +
+      '<rect x="198" y="204" width="9" height="36" fill="#34d399" rx="3"/><circle cx="202" cy="170" r="8" fill="#f97316"/>';
+  }
+  if (id === 19 || text.indexOf("땀") >= 0 || text.indexOf("노동") >= 0) {
+    return '<path d="M56 244 L112 244 L112 212 L168 212 L168 180 L224 180 L224 148 L272 148" fill="none" stroke="#fbbf24" stroke-width="5" stroke-linecap="round"/>' +
+      '<path d="M156 106 C156 106, 134 136, 134 152 C134 164, 144 174, 156 174 C168 174, 178 164, 178 152 C178 136, 156 106, 156 106 Z" fill="#38bdf8" stroke="white" stroke-width="2.5"/>' +
+      '<circle cx="96" cy="162" r="12" fill="#fde68a"/><rect x="86" y="176" width="20" height="44" rx="5" fill="#f43f5e"/>';
+  }
+  if (id === 20 || text.indexOf("평균") >= 0 || text.indexOf("교육") >= 0) {
+    return '<path d="M235 72 Q195 120 225 168 Q255 215 210 285 L320 285 L320 72 Z" fill="#fef08a"/>' +
+      '<rect x="74" y="108" width="96" height="162" rx="6" fill="#1e1b4b" stroke="#818cf8" stroke-width="2"/>' +
+      '<circle cx="122" cy="142" r="13" fill="#f8fafc"/><path d="M102 180 C102 162, 142 162, 142 180 L138 258 L106 258 Z" fill="#f8fafc"/>' +
+      '<polygon points="170,174 206,150 194,190" fill="#f43f5e"/><polygon points="176,196 220,192 194,220" fill="#38bdf8"/><circle cx="214" cy="164" r="13" fill="#fb923c"/>';
+  }
+  if (id === 59 || text.indexOf("미래") >= 0 || text.indexOf("인공지능") >= 0 || text.indexOf("우주") >= 0) {
+    return '<rect x="108" y="134" width="104" height="64" rx="6" fill="#312e81" stroke="#38bdf8" stroke-width="3"/>' +
+      '<path d="M160 100 C172 120 172 160 168 182 L152 182 C148 160 148 120 160 100 Z" fill="#f8fafc" stroke="#38bdf8" stroke-width="2"/>' +
+      '<polygon points="160,100 167,116 153,116" fill="#10b981"/><polygon points="154,188 166,188 160,210" fill="#f97316"/>' +
+      '<line x1="215" y1="238" x2="256" y2="214" stroke="#a855f7" stroke-width="6.5" stroke-linecap="round"/><line x1="234" y1="228" x2="224" y2="268" stroke="#cbd5e1" stroke-width="2.5"/><line x1="234" y1="228" x2="246" y2="268" stroke="#cbd5e1" stroke-width="2.5"/>';
+  }
+
+  // ID 및 문자열 해시 기반 100권 고유 기하·상징 구성
+  let hash = id * 37;
+  for (let i = 0; i < text.length; i++) {
+    hash = (hash * 31 + text.charCodeAt(i)) % 997;
+  }
+  const variant = hash % 6;
+  const cx = 140 + (hash % 41);
+  const cy = 165 + (hash % 25);
+  const r1 = 36 + (hash % 22);
+
+  if (variant === 0) {
+    return '<circle cx="' + cx + '" cy="' + cy + '" r="' + r1 + '" fill="none" stroke="' + colors[2] + '" stroke-width="3.5" stroke-dasharray="7,4"/>' +
+      '<polygon points="160,112 216,214 104,214" fill="' + colors[3] + '" fill-opacity="0.28" stroke="#ffffff" stroke-width="2.5"/>' +
+      '<circle cx="160" cy="176" r="13" fill="' + colors[3] + '"/>';
+  } else if (variant === 1) {
+    return '<rect x="76" y="114" width="168" height="122" rx="10" fill="#ffffff" fill-opacity="0.12" stroke="' + colors[2] + '" stroke-width="2.5"/>' +
+      '<path d="M94 212 Q142 126 176 174 T234 132" fill="none" stroke="' + colors[3] + '" stroke-width="4.5" stroke-linecap="round"/>' +
+      '<circle cx="176" cy="174" r="8" fill="#ffffff"/>';
+  } else if (variant === 2) {
+    return '<circle cx="122" cy="172" r="36" fill="' + colors[3] + '" opacity="0.82"/>' +
+      '<circle cx="198" cy="172" r="36" fill="' + colors[2] + '" opacity="0.82"/>' +
+      '<path d="M160 142 A 34 34 0 0 1 160 202 A 34 34 0 0 1 160 142 Z" fill="#ffffff"/>';
+  } else if (variant === 3) {
+    return '<polygon points="160,104 214,142 194,228 126,228 106,142" fill="' + colors[2] + '" fill-opacity="0.3" stroke="' + colors[3] + '" stroke-width="3.5"/>' +
+      '<circle cx="160" cy="166" r="18" fill="#ffffff"/><polygon points="160,152 164,166 160,180 156,166" fill="' + colors[3] + '"/>';
+  } else if (variant === 4) {
+    return '<path d="M74 214 Q160 176 246 214 L246 138 Q160 102 74 138 Z" fill="#f8fafc" stroke="' + colors[2] + '" stroke-width="3"/>' +
+      '<line x1="160" y1="120" x2="160" y2="196" stroke="' + colors[0] + '" stroke-width="2.5"/>' +
+      '<circle cx="160" cy="102" r="9" fill="' + colors[3] + '"/>';
+  } else {
+    return '<ellipse cx="160" cy="174" rx="58" ry="22" transform="rotate(-24 160 174)" fill="none" stroke="' + colors[2] + '" stroke-width="3"/>' +
+      '<ellipse cx="160" cy="174" rx="58" ry="22" transform="rotate(24 160 174)" fill="none" stroke="' + colors[3] + '" stroke-width="3"/>' +
+      '<circle cx="160" cy="174" r="12" fill="#ffffff"/>';
   }
 }
 
 function generateBookPosterSVG(book) {
-  const colors = [
-    ["#0f172a", "#1e3a8a", "#38bdf8", "#f59e0b"],
+  const palettes = [
+    ["#0f172a", "#1e3a8a", "#93c5fd", "#f59e0b"],
     ["#2e1065", "#4c1d95", "#fde047", "#f43f5e"],
     ["#064e3b", "#0f766e", "#a7f3d0", "#fbbf24"],
-    ["#4c0519", "#881337", "#fecdd3", "#34d399"]
+    ["#4c0519", "#881337", "#fecdd3", "#34d399"],
+    ["#172554", "#1d4ed8", "#bfdbfe", "#fb923c"],
+    ["#3b0764", "#6b21a8", "#f3e8ff", "#facc15"]
   ];
-  const pair = colors[(book.id || 1) % colors.length];
-  const titleSafe = String(book.title || "").slice(0, 14);
-  const themeSafe = String(book.theme || "").slice(0, 20);
+  const idx = (Number(book.id || 1) + String(book.title || "").length) % palettes.length;
+  const c = palettes[idx];
+  const gradId = "grad_" + String(book.id || 0) + "_" + String(book.title || "").replace(/[^a-zA-Z0-9가-힣]/g, "").slice(0, 8);
+  const shortTitle = String(book.title || "").slice(0, 15);
+  const shortTheme = String(book.theme || "").slice(0, 22);
+  const sceneSvg = getUniqueSceneByBook(book, c);
+
   return (
     '<svg viewBox="0 0 320 320" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">' +
-    '<defs><linearGradient id="g' + book.id + '" x1="0" y1="0" x2="0" y2="1">' +
-    '<stop offset="0%" stop-color="' + pair[0] + '"/><stop offset="100%" stop-color="' + pair[1] + '"/>' +
-    '</linearGradient></defs>' +
-    '<rect width="320" height="320" rx="12" fill="url(#g' + book.id + ')"/>' +
-    '<text x="160" y="42" font-size="18" font-weight="900" fill="#ffffff" text-anchor="middle">‘' + titleSafe + '’</text>' +
-    '<text x="160" y="64" font-size="11" font-weight="700" fill="' + pair[2] + '" text-anchor="middle">' + themeSafe + '</text>' +
-    '<circle cx="160" cy="175" r="56" fill="none" stroke="' + pair[3] + '" stroke-width="4"/>' +
-    '<polygon points="160,126 206,204 114,204" fill="' + pair[2] + '" fill-opacity="0.28" stroke="#ffffff" stroke-width="2.5"/>' +
-    '<circle cx="160" cy="175" r="14" fill="' + pair[3] + '"/>' +
-    '<rect x="18" y="274" width="284" height="28" rx="14" fill="#ffffff"/>' +
-    '<text x="160" y="292" font-size="10.5" font-weight="800" fill="#0f172a" text-anchor="middle">' + themeSafe + '</text>' +
+      '<defs><linearGradient id="' + gradId + '" x1="0" y1="0" x2="0" y2="1">' +
+        '<stop offset="0%" stop-color="' + c[0] + '"/><stop offset="100%" stop-color="' + c[1] + '"/>' +
+      '</linearGradient></defs>' +
+      '<rect width="320" height="320" rx="12" fill="url(#' + gradId + ')"/>' +
+      '<text x="160" y="38" font-size="17" font-weight="900" fill="#ffffff" text-anchor="middle">‘' + shortTitle + '’</text>' +
+      '<text x="160" y="58" font-size="10.5" font-weight="700" fill="' + c[2] + '" text-anchor="middle">' + shortTheme + '</text>' +
+      '<line x1="65" y1="68" x2="255" y2="68" stroke="' + c[2] + '" stroke-width="1" opacity="0.45"/>' +
+      sceneSvg +
+      '<rect x="16" y="276" width="288" height="26" rx="13" fill="#ffffff"/>' +
+      '<text x="160" y="293" font-size="10.5" font-weight="800" fill="#0f172a" text-anchor="middle">' + shortTheme + '</text>' +
     '</svg>'
   );
 }
@@ -691,7 +844,7 @@ function renderOnePage(idx) {
   if (idx >= ALL_BOOKS.length) idx = 0;
   currentIndex = idx;
   const book = ALL_BOOKS[idx];
-  const summary = book.customSummary || ("『" + book.title + "』은(는) '" + book.subtitle + "'라는 핵심 질문을 중심으로 " + book.theme + "을(를) 탐구하는 도서입니다.");
+  const summary = book.customSummary || ("『" + book.title + "』은(는) '" + book.subtitle + "'라는 핵심 질문을 중심으로 " + book.theme + "을(를) 탐구하는 " + book.cat + " 계열 도서입니다.");
   const tags = (book.subjects || []).map(function(s) { return '<span class="subject-tag">#' + s + '</span>'; }).join(" ");
   const visual = book.customImageUrl
     ? '<img src="' + book.customImageUrl + '" alt="' + book.title + '" style="max-width:100%; max-height:100%; object-fit:contain;">'
@@ -701,16 +854,26 @@ function renderOnePage(idx) {
     return '<option value="' + i + '"' + (i === idx ? ' selected' : '') + '>' + (i + 1) + '. 《' + b.title + '》</option>';
   }).join("");
 
+  const safeTitle = String(book.title || "").split("'").join("");
+  const c = Number(book.ratingCount || 0);
+  const avgNum = c > 0 ? (Number(book.ratingSum || 0) / c) : 0;
+  const ratingHtml = book.isCustom
+    ? '<div class="star-rating-box"><div style="display:flex;justify-content:space-between;align-items:center;"><span style="font-size:0.8rem;font-weight:700;color:#475569;">타교사 추천 별점 평가</span><span class="rating-badge">★ ' + avgNum.toFixed(1) + ' (' + c + '명)</span></div><div class="star-btns" style="margin-top:4px;">' +
+      [1, 2, 3, 4, 5].map(function(sc) {
+        return '<button type="button" class="star-btn ' + (sc <= Math.round(avgNum) ? 'filled' : '') + '" onclick="rateBook('' + safeTitle + '',' + sc + ');renderOnePage(' + idx + ');">★</button>';
+      }).join("") + '</div></div>'
+    : "";
+
   document.getElementById("onePageContainer").innerHTML =
-    '<div class="badge-row"><span class="page-badge">' + (book.isCustom ? "교사 추가" : "BOOK " + book.id) + ' · ' + book.cat + '</span>' + tags + '</div>' +
+    '<div class="badge-row"><span class="page-badge">' + (book.isCustom ? "교사 추천 도서" : "BOOK " + book.id) + ' · ' + book.cat + '</span>' + tags + '</div>' +
     '<div class="book-header"><div><h2>《' + book.title + '》</h2><div class="book-subtitle">“' + book.subtitle + '”</div></div>' +
-    '<button class="btn" style="background:var(--primary);color:white;" onclick="goSubmitWithBook(\'' + book.title.replace(/'/g, "") + '\')">✍️ 이 책으로 소감문 쓰기</button></div>' +
+    '<button class="btn" style="background:var(--primary);color:white;" onclick="goSubmitWithBook('' + safeTitle + '')">✍️ 이 책으로 소감문 쓰기</button></div>' +
     '<div class="one-page-grid">' +
       '<div>' +
         '<div class="info-box"><h3>📖 핵심 줄거리 및 내용 요약</h3><p>' + summary + '</p></div>' +
         '<div class="info-box" style="border-left-color:var(--accent);"><h3>🎯 핵심 주제 및 메타포 팁</h3><p><strong>핵심 주제:</strong> ' + book.theme + '<br><em>"『' + book.title + '』은(는) [사물/현상]이다"</em> 형식으로 메타포를 써보세요.</p></div>' +
       '</div>' +
-      '<div class="illustration-box"><h3>🖼️ 한 장 그림으로 도서 내용 표현하기</h3><div class="svg-stage">' + visual + '</div>' + (book.isCustom ? '<div class="star-rating-box"><div style="display:flex;justify-content:space-between;align-items:center;"><span style="font-size:0.8rem;font-weight:700;color:#475569;">교사 추천 별점 평가</span><span class="rating-badge">★ ' + (Number(book.ratingCount||0)>0 ? (Number(book.ratingSum||0)/Number(book.ratingCount||1)).toFixed(1) : '0.0') + ' (' + Number(book.ratingCount||0) + '명)</span></div><div class="star-btns" style="margin-top:4px;">' + [1,2,3,4,5].map(function(sc){return '<button type="button" class="star-btn ' + (sc <= Math.round((Number(book.ratingCount||0)>0 ? Number(book.ratingSum||0)/Number(book.ratingCount||1) : 0)) ? 'filled' : '') + '" onclick="rateBook('' + book.title.replace(/'/g,"") + '',' + sc + ');renderOnePage(' + idx + ');">★</button>';}).join('') + '</div></div>' : '') + '</div>' +
+      '<div class="illustration-box"><h3>🖼️ 한 장 그림으로 도서 내용 표현하기</h3><div class="svg-stage">' + visual + '</div>' + ratingHtml + '</div>' +
     '</div>' +
     '<div class="page-nav">' +
       '<button class="btn" style="background:#e2e8f0;" onclick="renderOnePage(' + (idx - 1) + ')">◀ 이전 도서</button>' +
@@ -737,24 +900,68 @@ function renderBookGrid() {
   const list = ALL_BOOKS.map(function(b, i) { return { b: b, i: i }; }).filter(function(item) {
     const b = item.b;
     const matchCat = currentFilter === "ALL" || (currentFilter === "교사추가" ? Boolean(b.isCustom) : b.cat === currentFilter);
-    const matchKw = !kw || b.title.toLowerCase().includes(kw) || b.theme.toLowerCase().includes(kw);
+    const matchKw = !kw || b.title.toLowerCase().includes(kw) || b.theme.toLowerCase().includes(kw) || (b.subjects || []).join(" ").toLowerCase().includes(kw);
     return matchCat && matchKw;
   });
-  document.getElementById("bookCountLabel").textContent = "표시 중: " + list.length + "권";
+  document.getElementById("bookCountLabel").textContent = "표시 중: " + list.length + "권 (전체 " + ALL_BOOKS.length + "권)";
   document.getElementById("bookGrid").innerHTML = list.map(function(item) {
     const b = item.b;
-    return '<div class="mini-card ' + (b.isCustom ? 'custom-book' : '') + '" onclick="renderOnePage(' + item.i + ');window.scrollTo({top:0,behavior:\'smooth\'});">' +
-      '<div class="num">' + (b.isCustom ? '⭐ 교사 추가' : 'BOOK ' + b.id) + ' · ' + b.cat + '</div>' +
+    const posterHtml = b.customImageUrl
+      ? '<img src="' + b.customImageUrl + '" alt="' + b.title + '" style="width:100%;height:100%;object-fit:contain;">'
+      : generateBookPosterSVG(b);
+    return '<div class="mini-card ' + (b.isCustom ? 'custom-book' : '') + '" onclick="renderOnePage(' + item.i + ');window.scrollTo({top:0,behavior:'smooth'});">' +
+      '<div class="mini-poster-wrap">' + posterHtml + '</div>' +
+      '<div class="num">' + (b.isCustom ? '⭐ 교사 추천' : 'BOOK ' + b.id) + ' · ' + b.cat + '</div>' +
       '<div class="title">《' + b.title + '》</div>' +
       '<div class="desc">' + b.subtitle + '</div>' +
       '<div class="tags">' + (b.subjects || []).map(function(s) { return '#' + s; }).join(' ') + '</div></div>';
   }).join("");
 }
 
+// 추천도서 보기 (그림으로 선택) 패널 제어
+function toggleVisualBookPicker() {
+  const panel = document.getElementById("visualPickerPanel");
+  const willOpen = panel.style.display !== "block";
+  panel.style.display = willOpen ? "block" : "none";
+  if (willOpen) renderVisualPickerCards();
+}
+
+function handleSubjectSelectChange() {
+  const val = document.getElementById("subjectSelect").value;
+  document.getElementById("customSubjectGroup").style.display = val === "CUSTOM_SUBJECT" ? "block" : "none";
+}
+
+function renderVisualPickerCards() {
+  const kw = (document.getElementById("pickerSearchInput")?.value || "").trim().toLowerCase();
+  const list = ALL_BOOKS.filter(function(b) {
+    return !kw || b.title.toLowerCase().includes(kw) || b.theme.toLowerCase().includes(kw) || (b.subjects || []).join(" ").toLowerCase().includes(kw);
+  });
+  const selectedTitle = document.getElementById("bookSelect").value;
+
+  document.getElementById("visualPickerGrid").innerHTML = list.map(function(b) {
+    const posterHtml = b.customImageUrl
+      ? '<img src="' + b.customImageUrl + '" alt="' + b.title + '" style="width:100%;height:100%;object-fit:contain;">'
+      : generateBookPosterSVG(b);
+    const activeCls = selectedTitle === b.title ? " active" : "";
+    const safeTitle = String(b.title || "").split("'").join("");
+    return '<div class="pick-card' + activeCls + '" onclick="pickBookFromGallery('' + safeTitle + '')">' +
+      '<div class="pick-poster">' + posterHtml + '</div>' +
+      '<div style="font-size:0.82rem;font-weight:800;color:#0f172a;">《' + b.title + '》</div>' +
+      '<div style="font-size:0.71rem;color:#64748b;">' + b.theme + '</div></div>';
+  }).join("");
+}
+
+function pickBookFromGallery(title) {
+  document.getElementById("bookSelect").value = title;
+  toggleCustomBook();
+  renderVisualPickerCards();
+}
+
 function populateBookSelect() {
   const sel = document.getElementById("bookSelect");
+  const sorted = ALL_BOOKS.slice().sort(function(a, b) { return a.title.localeCompare(b.title, "ko"); });
   sel.innerHTML = '<option value="">-- 도서 선택 --</option><option value="CUSTOM">✏️ [직접 입력]</option>' +
-    ALL_BOOKS.map(function(b) { return '<option value="' + b.title + '">' + b.title + '</option>'; }).join("");
+    sorted.map(function(b) { return '<option value="' + b.title + '">' + b.title + ' (' + b.cat + ')</option>'; }).join("");
 }
 
 function toggleCustomBook() {
@@ -766,6 +973,7 @@ function goSubmitWithBook(title) {
   switchTab("submit");
   document.getElementById("bookSelect").value = title;
   toggleCustomBook();
+  renderVisualPickerCards();
 }
 
 function openAddBookModal() { document.getElementById("addBookModal").classList.add("open"); }
@@ -794,6 +1002,7 @@ function handleAddCustomBook(e) {
   loadBooks();
   populateBookSelect();
   renderBookGrid();
+  renderVisualPickerCards();
   renderOnePage(ALL_BOOKS.length - 1);
   document.getElementById("addBookForm").reset();
   closeAddBookModal();
@@ -824,18 +1033,19 @@ function renderSharedBooksList() {
     const c = Number(b.ratingCount || 0);
     const avg = c > 0 ? (Number(b.ratingSum || 0) / c).toFixed(1) : "0.0";
     const gIdx = ALL_BOOKS.findIndex(function(item) { return item.title === b.title; });
+    const safeTitle = String(b.title || "").split("'").join("");
     const miniPoster = b.customImageUrl
-      ? '<img src="' + b.customImageUrl + '" alt="' + b.title + '" style="width:100%;height:150px;object-fit:contain;background:#0f172a;border-radius:8px;margin-bottom:0.5rem;">'
-      : '<div style="height:150px;border-radius:8px;overflow:hidden;margin-bottom:0.5rem;background:#0f172a;">' + generateBookPosterSVG(b) + '</div>';
+      ? '<img src="' + b.customImageUrl + '" alt="' + b.title + '" style="width:100%;height:100%;object-fit:contain;">'
+      : generateBookPosterSVG(b);
     const stars = [1, 2, 3, 4, 5].map(function(sc) {
-      return '<button type="button" class="star-btn ' + (sc <= Math.round(Number(avg)) ? 'filled' : '') + '" onclick="event.stopPropagation();rateBook('' + b.title.replace(/'/g, "") + '',' + sc + ')">★</button>';
+      return '<button type="button" class="star-btn ' + (sc <= Math.round(Number(avg)) ? 'filled' : '') + '" onclick="event.stopPropagation();rateBook('' + safeTitle + '',' + sc + ')">★</button>';
     }).join("");
     return '<div class="mini-card custom-book" onclick="openSharedBookInOnePage(' + gIdx + ')">' +
-      miniPoster +
+      '<div class="mini-poster-wrap">' + miniPoster + '</div>' +
       '<div style="display:flex;justify-content:space-between;align-items:center;"><span class="num">' + (b.teacherName || '교사 추천') + '</span><span class="rating-badge">★ ' + avg + ' (' + c + '명)</span></div>' +
       '<div class="title">《' + b.title + '》</div><div class="desc">' + b.subtitle + '</div>' +
       '<div class="star-rating-box" onclick="event.stopPropagation();"><div class="star-btns">' + stars + '</div></div></div>';
-  }).join("") : '<p style="grid-column:1/-1;text-align:center;color:#64748b;padding:1.5rem;">등록된 교사 추천도서가 없습니다.</p>';
+  }).join("") : '<p style="grid-column:1/-1;text-align:center;color:#64748b;padding:1.5rem;">등록된 타교사 추천도서가 없습니다. 상단 [➕ 교사 도서 1PAGE 추가]로 도서를 등록해 보세요.</p>';
 }
 
 function openSharedBookInOnePage(gIdx) {
@@ -872,7 +1082,8 @@ function requestAiFeedback() {
   const meta = document.getElementById("metaphor").value.trim();
   if (!title || !meta) { alert("도서와 메타포를 먼저 입력해 주세요."); return; }
   document.getElementById("resSaenggibu").textContent = "『" + title + "』을(를) 읽고 '" + meta.slice(0, 35) + "' 메타포로 통찰하며 교과 개념과 연계 성찰함.";
-  document.getElementById("resInquiry").textContent = "1. 이 메타포가 오늘날 우리 사회에 주는 시사점은 무엇인가요?\n2. 관련 교과 단원 개념과 연결해 추가 성찰을 적어보세요.";
+  document.getElementById("resInquiry").textContent = "1. 이 메타포가 오늘날 우리 사회에 주는 시사점은 무엇인가요?
+2. 관련 교과 단원 개념과 연결해 추가 성찰을 적어보세요.";
   document.getElementById("aiResultBox").style.display = "block";
 }
 
