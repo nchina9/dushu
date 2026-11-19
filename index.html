@@ -15,7 +15,7 @@
     --muted: #64748b;
     --border: #e2e8f0;
   }
-  * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, "Malgun Gothic", sans-serif; }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, "Malgun Gothic", sans-serif; }
   body { background: var(--bg); color: var(--text); line-height: 1.6; }
 
   header {
@@ -173,7 +173,6 @@
     border-top: 1px solid var(--border);
   }
 
-  /* 그림 카드 그리드 (1PAGE 목록 및 추천도서 그림 선택용) */
   .book-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(235px, 1fr));
@@ -232,7 +231,6 @@
   }
   .result-item { background: white; padding: 0.9rem; border-radius: 8px; margin-bottom: 0.9rem; border: 1px solid #dcfce7; }
 
-  /* 추천도서 그림 선택 갤러리 박스 */
   .visual-picker-panel {
     display: none;
     background: #f8fafc;
@@ -315,7 +313,6 @@
 </header>
 
 <main>
-  <!-- 탭 1: 1PAGE 도서 카드 + 그림 목록 -->
   <section id="tab-viewer" class="section active">
     <div class="viewer-controls">
       <div class="filter-group">
@@ -340,7 +337,6 @@
     <div id="bookGrid" class="book-grid"></div>
   </section>
 
-  <!-- 탭 2: 학생 소감문 및 메타포 제출 -->
   <section id="tab-submit" class="section">
     <div class="form-container">
       <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:0.6rem; margin-bottom:0.4rem;">
@@ -353,7 +349,6 @@
         상단 <strong>[🖼️ 추천도서 보기]</strong> 버튼을 누르면 전체 도서가 그림 카드로 펼쳐지며, 그림을 클릭해 도서를 바로 선택할 수 있습니다.
       </p>
 
-      <!-- 추천도서 보기 (그림으로 선택) 패널 -->
       <div id="visualPickerPanel" class="visual-picker-panel">
         <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:0.5rem;">
           <strong style="color:#1e3a8a;">🖼️ 추천도서 그림 갤러리 (그림 카드를 누르면 아래 도서 선택에 자동 반영됩니다)</strong>
@@ -450,7 +445,6 @@
   </section>
 </main>
 
-<!-- 교사 도서 1PAGE 추가 모달 -->
 <div id="addBookModal" class="modal">
   <div class="modal-content" style="max-width:700px;">
     <h3 style="color:#6d28d9; margin-bottom:0.8rem;">➕ 교사 맞춤형 도서 1PAGE 카드 추가</h3>
@@ -512,7 +506,6 @@
   </div>
 </div>
 
-<!-- 타교사 추천도서 모달 -->
 <div id="sharedBooksModal" class="modal">
   <div class="modal-content">
     <h3 style="color:#be185d; margin-bottom:0.4rem;">📚 타교사 추천도서 자료실 (100권 양식 일러스트 · 별표 5점 평가)</h3>
@@ -542,7 +535,6 @@
   </div>
 </div>
 
-<!-- 학생 QR 모달 -->
 <div id="qrModal" class="modal">
   <div class="modal-content" style="text-align:center; max-width:500px;">
     <h3 style="color:var(--primary); margin-bottom:0.6rem;">📱 학생 배포용 접속 QR 코드</h3>
@@ -552,7 +544,6 @@
   </div>
 </div>
 
-<!-- 교사 설정 모달 -->
 <div id="settingsModal" class="modal">
   <div class="modal-content" style="max-width:520px;">
     <h3 style="color:var(--primary); margin-bottom:0.8rem;">⚙️ 교사 연동 설정</h3>
@@ -731,7 +722,6 @@ function getUniqueSceneByBook(book, colors) {
   const id = Number(book.id || 1);
   const text = (String(book.title || "") + " " + String(book.subtitle || "") + " " + String(book.theme || "")).toLowerCase();
 
-  // 대표 도서 및 주제 키워드별 고유 일러스트 장면
   if (id === 3 || text.indexOf("언어") >= 0) {
     return '<rect x="115" y="262" width="90" height="7" rx="3" fill="#64748b"/><rect x="156" y="122" width="8" height="140" fill="#64748b"/>' +
       '<line x1="84" y1="146" x2="236" y2="136" stroke="#e2e8f0" stroke-width="4.5" stroke-linecap="round"/>' +
@@ -770,7 +760,6 @@ function getUniqueSceneByBook(book, colors) {
       '<line x1="215" y1="238" x2="256" y2="214" stroke="#a855f7" stroke-width="6.5" stroke-linecap="round"/><line x1="234" y1="228" x2="224" y2="268" stroke="#cbd5e1" stroke-width="2.5"/><line x1="234" y1="228" x2="246" y2="268" stroke="#cbd5e1" stroke-width="2.5"/>';
   }
 
-  // ID 및 문자열 해시 기반 100권 고유 기하·상징 구성
   let hash = id * 37;
   for (let i = 0; i < text.length; i++) {
     hash = (hash * 31 + text.charCodeAt(i)) % 997;
@@ -854,20 +843,19 @@ function renderOnePage(idx) {
     return '<option value="' + i + '"' + (i === idx ? ' selected' : '') + '>' + (i + 1) + '. 《' + b.title + '》</option>';
   }).join("");
 
-  const safeTitle = String(book.title || "").split("'").join("");
   const c = Number(book.ratingCount || 0);
   const avgNum = c > 0 ? (Number(book.ratingSum || 0) / c) : 0;
   const ratingHtml = book.isCustom
     ? '<div class="star-rating-box"><div style="display:flex;justify-content:space-between;align-items:center;"><span style="font-size:0.8rem;font-weight:700;color:#475569;">타교사 추천 별점 평가</span><span class="rating-badge">★ ' + avgNum.toFixed(1) + ' (' + c + '명)</span></div><div class="star-btns" style="margin-top:4px;">' +
       [1, 2, 3, 4, 5].map(function(sc) {
-        return '<button type="button" class="star-btn ' + (sc <= Math.round(avgNum) ? 'filled' : '') + '" onclick="rateBook('' + safeTitle + '',' + sc + ');renderOnePage(' + idx + ');">★</button>';
+        return '<button type="button" class="star-btn ' + (sc <= Math.round(avgNum) ? 'filled' : '') + '" data-idx="' + idx + '" data-score="' + sc + '" onclick="rateCurrentOnePage(this)">★</button>';
       }).join("") + '</div></div>'
     : "";
 
   document.getElementById("onePageContainer").innerHTML =
     '<div class="badge-row"><span class="page-badge">' + (book.isCustom ? "교사 추천 도서" : "BOOK " + book.id) + ' · ' + book.cat + '</span>' + tags + '</div>' +
     '<div class="book-header"><div><h2>《' + book.title + '》</h2><div class="book-subtitle">“' + book.subtitle + '”</div></div>' +
-    '<button class="btn" style="background:var(--primary);color:white;" onclick="goSubmitWithBook('' + safeTitle + '')">✍️ 이 책으로 소감문 쓰기</button></div>' +
+    '<button type="button" class="btn" style="background:var(--primary);color:white;" id="writeReviewBtn">✍️ 이 책으로 소감문 쓰기</button></div>' +
     '<div class="one-page-grid">' +
       '<div>' +
         '<div class="info-box"><h3>📖 핵심 줄거리 및 내용 요약</h3><p>' + summary + '</p></div>' +
@@ -876,10 +864,24 @@ function renderOnePage(idx) {
       '<div class="illustration-box"><h3>🖼️ 한 장 그림으로 도서 내용 표현하기</h3><div class="svg-stage">' + visual + '</div>' + ratingHtml + '</div>' +
     '</div>' +
     '<div class="page-nav">' +
-      '<button class="btn" style="background:#e2e8f0;" onclick="renderOnePage(' + (idx - 1) + ')">◀ 이전 도서</button>' +
+      '<button type="button" class="btn" style="background:#e2e8f0;" onclick="renderOnePage(' + (idx - 1) + ')">◀ 이전 도서</button>' +
       '<select onchange="renderOnePage(Number(this.value))" style="padding:0.35rem 0.6rem;border-radius:6px;border:1px solid #cbd5e1;">' + optionsHtml + '</select>' +
-      '<button class="btn" style="background:#e2e8f0;" onclick="renderOnePage(' + (idx + 1) + ')">다음 도서 ▶</button>' +
+      '<button type="button" class="btn" style="background:#e2e8f0;" onclick="renderOnePage(' + (idx + 1) + ')">다음 도서 ▶</button>' +
     '</div>';
+
+  const writeBtn = document.getElementById("writeReviewBtn");
+  if (writeBtn) {
+    writeBtn.onclick = function() { goSubmitWithBook(book.title); };
+  }
+}
+
+function rateCurrentOnePage(btnEl) {
+  const idx = Number(btnEl.getAttribute("data-idx"));
+  const score = Number(btnEl.getAttribute("data-score"));
+  const book = ALL_BOOKS[idx];
+  if (!book) return;
+  rateBook(book.title, score);
+  renderOnePage(idx);
 }
 
 function filterCategory(cat, btn) {
@@ -904,21 +906,28 @@ function renderBookGrid() {
     return matchCat && matchKw;
   });
   document.getElementById("bookCountLabel").textContent = "표시 중: " + list.length + "권 (전체 " + ALL_BOOKS.length + "권)";
-  document.getElementById("bookGrid").innerHTML = list.map(function(item) {
+  const grid = document.getElementById("bookGrid");
+  grid.innerHTML = list.map(function(item) {
     const b = item.b;
     const posterHtml = b.customImageUrl
       ? '<img src="' + b.customImageUrl + '" alt="' + b.title + '" style="width:100%;height:100%;object-fit:contain;">'
       : generateBookPosterSVG(b);
-    return '<div class="mini-card ' + (b.isCustom ? 'custom-book' : '') + '" onclick="renderOnePage(' + item.i + ');window.scrollTo({top:0,behavior:'smooth'});">' +
+    return '<div class="mini-card ' + (b.isCustom ? 'custom-book' : '') + '" data-gidx="' + item.i + '">' +
       '<div class="mini-poster-wrap">' + posterHtml + '</div>' +
       '<div class="num">' + (b.isCustom ? '⭐ 교사 추천' : 'BOOK ' + b.id) + ' · ' + b.cat + '</div>' +
       '<div class="title">《' + b.title + '》</div>' +
       '<div class="desc">' + b.subtitle + '</div>' +
       '<div class="tags">' + (b.subjects || []).map(function(s) { return '#' + s; }).join(' ') + '</div></div>';
   }).join("");
+
+  grid.querySelectorAll(".mini-card").forEach(function(card) {
+    card.onclick = function() {
+      renderOnePage(Number(this.getAttribute("data-gidx")));
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    };
+  });
 }
 
-// 추천도서 보기 (그림으로 선택) 패널 제어
 function toggleVisualBookPicker() {
   const panel = document.getElementById("visualPickerPanel");
   const willOpen = panel.style.display !== "block";
@@ -937,24 +946,27 @@ function renderVisualPickerCards() {
     return !kw || b.title.toLowerCase().includes(kw) || b.theme.toLowerCase().includes(kw) || (b.subjects || []).join(" ").toLowerCase().includes(kw);
   });
   const selectedTitle = document.getElementById("bookSelect").value;
-
-  document.getElementById("visualPickerGrid").innerHTML = list.map(function(b) {
+  const pGrid = document.getElementById("visualPickerGrid");
+  pGrid.innerHTML = list.map(function(b, idx) {
     const posterHtml = b.customImageUrl
       ? '<img src="' + b.customImageUrl + '" alt="' + b.title + '" style="width:100%;height:100%;object-fit:contain;">'
       : generateBookPosterSVG(b);
     const activeCls = selectedTitle === b.title ? " active" : "";
-    const safeTitle = String(b.title || "").split("'").join("");
-    return '<div class="pick-card' + activeCls + '" onclick="pickBookFromGallery('' + safeTitle + '')">' +
+    return '<div class="pick-card' + activeCls + '" data-pick-idx="' + idx + '">' +
       '<div class="pick-poster">' + posterHtml + '</div>' +
       '<div style="font-size:0.82rem;font-weight:800;color:#0f172a;">《' + b.title + '》</div>' +
       '<div style="font-size:0.71rem;color:#64748b;">' + b.theme + '</div></div>';
   }).join("");
-}
 
-function pickBookFromGallery(title) {
-  document.getElementById("bookSelect").value = title;
-  toggleCustomBook();
-  renderVisualPickerCards();
+  pGrid.querySelectorAll(".pick-card").forEach(function(card) {
+    card.onclick = function() {
+      const item = list[Number(this.getAttribute("data-pick-idx"))];
+      if (!item) return;
+      document.getElementById("bookSelect").value = item.title;
+      toggleCustomBook();
+      renderVisualPickerCards();
+    };
+  });
 }
 
 function populateBookSelect() {
@@ -1029,23 +1041,38 @@ function renderSharedBooksList() {
     return okSub && okKw;
   });
 
-  document.getElementById("sharedBooksContainer").innerHTML = filtered.length ? filtered.map(function(b) {
+  const sContainer = document.getElementById("sharedBooksContainer");
+  sContainer.innerHTML = filtered.length ? filtered.map(function(b, idx) {
     const c = Number(b.ratingCount || 0);
     const avg = c > 0 ? (Number(b.ratingSum || 0) / c).toFixed(1) : "0.0";
     const gIdx = ALL_BOOKS.findIndex(function(item) { return item.title === b.title; });
-    const safeTitle = String(b.title || "").split("'").join("");
     const miniPoster = b.customImageUrl
       ? '<img src="' + b.customImageUrl + '" alt="' + b.title + '" style="width:100%;height:100%;object-fit:contain;">'
       : generateBookPosterSVG(b);
     const stars = [1, 2, 3, 4, 5].map(function(sc) {
-      return '<button type="button" class="star-btn ' + (sc <= Math.round(Number(avg)) ? 'filled' : '') + '" onclick="event.stopPropagation();rateBook('' + safeTitle + '',' + sc + ')">★</button>';
+      return '<button type="button" class="star-btn ' + (sc <= Math.round(Number(avg)) ? 'filled' : '') + '" data-sidx="' + idx + '" data-sc="' + sc + '">★</button>';
     }).join("");
-    return '<div class="mini-card custom-book" onclick="openSharedBookInOnePage(' + gIdx + ')">' +
+    return '<div class="mini-card custom-book" data-gidx="' + gIdx + '">' +
       '<div class="mini-poster-wrap">' + miniPoster + '</div>' +
       '<div style="display:flex;justify-content:space-between;align-items:center;"><span class="num">' + (b.teacherName || '교사 추천') + '</span><span class="rating-badge">★ ' + avg + ' (' + c + '명)</span></div>' +
       '<div class="title">《' + b.title + '》</div><div class="desc">' + b.subtitle + '</div>' +
-      '<div class="star-rating-box" onclick="event.stopPropagation();"><div class="star-btns">' + stars + '</div></div></div>';
+      '<div class="star-rating-box"><div class="star-btns">' + stars + '</div></div></div>';
   }).join("") : '<p style="grid-column:1/-1;text-align:center;color:#64748b;padding:1.5rem;">등록된 타교사 추천도서가 없습니다. 상단 [➕ 교사 도서 1PAGE 추가]로 도서를 등록해 보세요.</p>';
+
+  sContainer.querySelectorAll(".mini-card").forEach(function(card) {
+    card.onclick = function() {
+      openSharedBookInOnePage(Number(this.getAttribute("data-gidx")));
+    };
+  });
+
+  sContainer.querySelectorAll(".star-btn").forEach(function(btn) {
+    btn.onclick = function(ev) {
+      ev.stopPropagation();
+      const targetBook = filtered[Number(this.getAttribute("data-sidx"))];
+      if (!targetBook) return;
+      rateBook(targetBook.title, Number(this.getAttribute("data-sc")));
+    };
+  });
 }
 
 function openSharedBookInOnePage(gIdx) {
@@ -1082,8 +1109,7 @@ function requestAiFeedback() {
   const meta = document.getElementById("metaphor").value.trim();
   if (!title || !meta) { alert("도서와 메타포를 먼저 입력해 주세요."); return; }
   document.getElementById("resSaenggibu").textContent = "『" + title + "』을(를) 읽고 '" + meta.slice(0, 35) + "' 메타포로 통찰하며 교과 개념과 연계 성찰함.";
-  document.getElementById("resInquiry").textContent = "1. 이 메타포가 오늘날 우리 사회에 주는 시사점은 무엇인가요?
-2. 관련 교과 단원 개념과 연결해 추가 성찰을 적어보세요.";
+  document.getElementById("resInquiry").textContent = "1. 이 메타포가 오늘날 우리 사회에 주는 시사점은 무엇인가요?\n2. 관련 교과 단원 개념과 연결해 추가 성찰을 적어보세요.";
   document.getElementById("aiResultBox").style.display = "block";
 }
 
