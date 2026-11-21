@@ -798,6 +798,31 @@ const DEFAULT_BOOKS_DATA = [
   {"id": 200, "cat": "수학", "title": "스스로 탐구하는 수학 세특 프로젝트", "subtitle": "교과 개념에서 출발해 나만의 탐구 주제를 완성하는 길", "theme": "주제 선정·탐구 설계·메타포 성찰의 통합", "subjects": ["수학", "미술·예술·진로", "정보·AI"]}
 ];
 
+
+function normalizeSearchText(str) {
+  return String(str || "").toLowerCase().replace(/[\s·.,'"“”‘’《》『』()\-_]/g, "");
+}
+
+function bookMatchesQuery(book, rawKw) {
+  if (!rawKw) return true;
+  const kwLower = String(rawKw).trim().toLowerCase();
+  const kwNorm = normalizeSearchText(rawKw);
+  const fields = [
+    book.title,
+    book.subtitle,
+    book.theme,
+    book.teacherName,
+    book.cat,
+    (book.subjects || []).join(" ")
+  ];
+  for (let i = 0; i < fields.length; i++) {
+    const f = String(fields[i] || "");
+    if (f.toLowerCase().indexOf(kwLower) >= 0) return true;
+    if (kwNorm && normalizeSearchText(f).indexOf(kwNorm) >= 0) return true;
+  }
+  return false;
+}
+
 let ALL_BOOKS = [];
 let currentIndex = 0;
 let currentFilter = "ALL";
@@ -1178,11 +1203,11 @@ function renderBookGrid() {
   const grid = document.getElementById("bookGrid");
   if (!grid || !countEl) return;
 
-  const kw = (searchEl && searchEl.value ? searchEl.value : "").trim().toLowerCase();
+  const kw = (searchEl && searchEl.value ? searchEl.value : "").trim();
   const list = ALL_BOOKS.map(function(b, i) { return { b: b, i: i }; }).filter(function(item) {
     const b = item.b;
     const matchCat = currentFilter === "ALL" || (currentFilter === "교사추가" ? Boolean(b.isCustom) : b.cat === currentFilter);
-    const matchKw = !kw || b.title.toLowerCase().includes(kw) || b.theme.toLowerCase().includes(kw) || (b.subjects || []).join(" ").toLowerCase().includes(kw);
+    const matchKw = bookMatchesQuery(b, kw);
     return matchCat && matchKw;
   });
 
@@ -1240,9 +1265,9 @@ function handleSubjectSelectChange() {
 }
 
 function renderVisualPickerCards() {
-  const kw = (document.getElementById("pickerSearchInput")?.value || "").trim().toLowerCase();
+  const kw = (document.getElementById("pickerSearchInput")?.value || "").trim();
   const list = ALL_BOOKS.filter(function(b) {
-    return !kw || b.title.toLowerCase().includes(kw) || b.theme.toLowerCase().includes(kw) || (b.subjects || []).join(" ").toLowerCase().includes(kw);
+    return bookMatchesQuery(b, kw);
   });
   const selectedTitle = document.getElementById("bookSelect").value;
   const pGrid = document.getElementById("visualPickerGrid");
@@ -1342,12 +1367,12 @@ function closeSharedBooksModal() { document.getElementById("sharedBooksModal").c
 
 function renderSharedBooksList() {
   const sub = document.getElementById("sharedSubjectFilter").value;
-  const kw = (document.getElementById("sharedSearchInput").value || "").trim().toLowerCase();
+  const kw = (document.getElementById("sharedSearchInput").value || "").trim();
   let custom = getAllCustomBooks();
 
   const filtered = custom.filter(function(b) {
     const okSub = sub === "ALL" || (b.subjects && b.subjects.includes(sub));
-    const okKw = !kw || b.title.toLowerCase().includes(kw) || b.theme.toLowerCase().includes(kw) || (b.teacherName || "").toLowerCase().includes(kw);
+    const okKw = bookMatchesQuery(b, kw);
     return okSub && okKw;
   });
 
