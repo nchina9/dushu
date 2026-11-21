@@ -925,6 +925,48 @@ function mergeCustomBooksList(rawList) {
   return Object.keys(byTitle).map(function(k) { return byTitle[k]; });
 }
 
+function fetchSharedBooksViaJsonp_(gasUrl) {
+  return new Promise(function(resolve) {
+    try {
+      const cbName = "__dushuSharedBooksCb_" + Date.now() + "_" + Math.floor(Math.random() * 100000);
+      const timer = setTimeout(function() {
+        cleanup();
+        resolve(null);
+      }, 6000);
+
+      function cleanup() {
+        clearTimeout(timer);
+        try { delete window[cbName]; } catch (e) {}
+        if (scriptEl && scriptEl.parentNode) {
+          scriptEl.parentNode.removeChild(scriptEl);
+        }
+      }
+
+      window[cbName] = function(payload) {
+        cleanup();
+        if (payload && payload.status === "success" && Array.isArray(payload.books)) {
+          resolve(payload.books);
+        } else if (Array.isArray(payload)) {
+          resolve(payload);
+        } else {
+          resolve(null);
+        }
+      };
+
+      const sep = gasUrl.indexOf("?") >= 0 ? "&" : "?";
+      const scriptEl = document.createElement("script");
+      scriptEl.src = gasUrl + sep + "action=get_shared_books&callback=" + encodeURIComponent(cbName);
+      scriptEl.onerror = function() {
+        cleanup();
+        resolve(null);
+      };
+      document.body.appendChild(scriptEl);
+    } catch (err) {
+      resolve(null);
+    }
+  });
+}
+
 async function syncSharedBooksFromServer(shouldRenderModal) {
   const gasUrl = getActiveGasUrl();
   const statusEl = document.getElementById("sharedSyncStatus");
@@ -936,24 +978,16 @@ async function syncSharedBooksFromServer(shouldRenderModal) {
   }
   if (statusEl) {
     statusEl.style.color = "#0284c7";
-    statusEl.textContent = "공유 추천도서 목록을 불러오는 중입니다...";
+    statusEl.textContent = "원본 및 타교사 공유 추천도서 목록을 동기화하는 중입니다...";
   }
 
   let syncedBooks = null;
 
   if (gasUrl) {
-    try {
-      const res = await fetch(gasUrl, {
-        method: "POST",
-        headers: { "Content-Type": "text/plain;charset=utf-8" },
-        body: JSON.stringify({ action: "get_shared_books" })
-      });
-      const data = await res.json();
-      if (data && data.status === "success" && Array.isArray(data.books)) {
-        syncedBooks = data.books;
-      }
-    } catch (e) {}
+    // 1. JSONP GET 시도 (CORS 회피)
+    syncedBooks = await fetchSharedBooksViaJsonp_(gasUrl);
 
+    // 2. 일반 GET 시도
     if (!syncedBooks) {
       try {
         const sep = gasUrl.indexOf("?") >= 0 ? "&" : "?";
@@ -963,6 +997,21 @@ async function syncSharedBooksFromServer(shouldRenderModal) {
           syncedBooks = getData.books;
         }
       } catch (e2) {}
+    }
+
+    // 3. POST 시도
+    if (!syncedBooks) {
+      try {
+        const res = await fetch(gasUrl, {
+          method: "POST",
+          headers: { "Content-Type": "text/plain;charset=utf-8" },
+          body: JSON.stringify({ action: "get_shared_books" })
+        });
+        const data = await res.json();
+        if (data && data.status === "success" && Array.isArray(data.books)) {
+          syncedBooks = data.books;
+        }
+      } catch (e) {}
     }
   }
 
@@ -977,7 +1026,7 @@ async function syncSharedBooksFromServer(shouldRenderModal) {
     }
     if (statusEl) {
       statusEl.style.color = "#059669";
-      statusEl.textContent = "동기화 완료! 총 " + merged.length + "권의 교사 추천도서가 반영되었습니다.";
+      statusEl.textContent = "동기화 완료! 타교사 추천도서 포함 총 " + merged.length + "권이 반영되었습니다.";
     }
   } else {
     loadBooks();
@@ -988,7 +1037,7 @@ async function syncSharedBooksFromServer(shouldRenderModal) {
     }
     if (statusEl) {
       statusEl.style.color = "#b45309";
-      statusEl.textContent = "서버 응답을 받지 못해 기본/저장된 공유 도서 목록(" + getAllCustomBooks().length + "권)을 표시합니다. Apps Script 웹 앱 [새 배포 → 모든 사용자]를 확인해 주세요.";
+      statusEl.textContent = "현재 저장된 교사 추천도서(" + getAllCustomBooks().length + "권)를 표시합니다. (원본 Apps Script 배포가 [새 배포 → 모든 사용자]인지 확인해 주세요.)";
     }
   }
 
