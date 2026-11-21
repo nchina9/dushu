@@ -810,19 +810,88 @@ window.addEventListener("DOMContentLoaded", function() {
     renderOnePage(0);
     renderBookGrid();
     applyUrlMode();
+    syncSharedBooksFromServer(false);
   } catch (e) {
     console.error("초기화 중 오류:", e);
   }
 });
 
-function loadBooks() {
-  let custom = JSON.parse(localStorage.getItem("teacherCustomBooks") || "[]");
-  custom = custom.filter(function(b) {
-    const c = Number(b.ratingCount || 0);
-    const s = Number(b.ratingSum || 0);
-    return !(c >= 10 && (s / c) <= 2.5);
+const SHARED_SEED_BOOKS = [
+  {
+    id: 201,
+    isCustom: true,
+    cat: "인문사회",
+    teacherName: "교사 추천",
+    title: "열하일기",
+    subtitle: "우리나라를 대표하는 조선 대표 여행기",
+    theme: "중국 탐구, 편견 극복, 쇄국에서 개방으로",
+    customSummary: "박지원이 청나라 열하를 다녀오며 기록한 기행문으로, 쇄국과 편견을 넘어 실학과 개방적 시각으로 조선의 현실과 발전 방향을 성찰한 대표 고전입니다.",
+    subjects: ["사회·역사·지리", "국어·문학", "중국어·세계문화"],
+    ratingCount: 1,
+    ratingSum: 4
+  }
+];
+
+function mergeCustomBooksList(rawList) {
+  const combined = SHARED_SEED_BOOKS.concat(Array.isArray(rawList) ? rawList : []);
+  const byTitle = {};
+  combined.forEach(function(item) {
+    if (!item || !item.title) return;
+    const key = String(item.title).trim();
+    const c = Number(item.ratingCount || 0);
+    const s = Number(item.ratingSum || 0);
+    if (c >= 10 && (s / c) <= 2.5) return;
+    if (!byTitle[key]) {
+      byTitle[key] = Object.assign({}, item, { ratingCount: c, ratingSum: s });
+    } else {
+      // Keep higher ratingCount or latest non-seed entry
+      const prevC = Number(byTitle[key].ratingCount || 0);
+      if (c >= prevC || !item._isSeed) {
+        byTitle[key] = Object.assign({}, byTitle[key], item, {
+          ratingCount: Math.max(prevC, c),
+          ratingSum: Math.max(Number(byTitle[key].ratingSum || 0), s)
+        });
+      }
+    }
   });
+  return Object.keys(byTitle).map(function(k) { return byTitle[k]; });
+}
+
+function getAllCustomBooks() {
+  const saved = JSON.parse(localStorage.getItem("teacherCustomBooks") || "[]");
+  const merged = mergeCustomBooksList(saved);
+  localStorage.setItem("teacherCustomBooks", JSON.stringify(merged));
+  return merged;
+}
+
+function loadBooks() {
+  const custom = getAllCustomBooks();
   ALL_BOOKS = DEFAULT_BOOKS_DATA.concat(custom);
+}
+
+async function syncSharedBooksFromServer(shouldRenderModal) {
+  try {
+    const gasUrl = getActiveGasUrl();
+    if (!gasUrl) return;
+    const res = await fetch(gasUrl, {
+      method: "POST",
+      headers: { "Content-Type": "text/plain;charset=utf-8" },
+      body: JSON.stringify({ action: "get_shared_books" })
+    });
+    const data = await res.json();
+    if (data && data.status === "success" && Array.isArray(data.books) && data.books.length > 0) {
+      const merged = mergeCustomBooksList(data.books);
+      localStorage.setItem("teacherCustomBooks", JSON.stringify(merged));
+      loadBooks();
+      populateBookSelect();
+      renderBookGrid();
+      if (shouldRenderModal) {
+        renderSharedBooksList();
+      }
+    }
+  } catch (e) {
+    // 오프라인/로컬 환경에서도 로컬 및 기본 공유 도서(열하일기 등) 정상 표시
+  }
 }
 
 function switchTab(name) {
@@ -1172,12 +1241,12 @@ function closeAddBookModal() { document.getElementById("addBookModal").classList
 function handleAddCustomBook(e) {
   e.preventDefault();
   const subjects = Array.from(document.querySelectorAll("#newBookSubjects input:checked")).map(function(c) { return c.value; });
-  const custom = JSON.parse(localStorage.getItem("teacherCustomBooks") || "[]");
+  const custom = getAllCustomBooks();
   const newBook = {
     id: 200 + custom.length + 1,
     isCustom: true,
     cat: document.getElementById("newBookCat").value,
-    teacherName: document.getElementById("newBookTeacher").value.trim(),
+    teacherName: (document.getElementById("newBookTeacher").value || "").trim() || "교사 추천",
     title: document.getElementById("newBookTitle").value.trim(),
     subtitle: document.getElementById("newBookSubtitle").value.trim(),
     theme: document.getElementById("newBookTheme").value.trim(),
@@ -1188,7 +1257,8 @@ function handleAddCustomBook(e) {
     ratingSum: 0
   };
   custom.push(newBook);
-  localStorage.setItem("teacherCustomBooks", JSON.stringify(custom));
+  const merged = mergeCustomBooksList(custom);
+  localStorage.setItem("teacherCustomBooks", JSON.stringify(merged));
   loadBooks();
   populateBookSelect();
   renderBookGrid();
@@ -1197,21 +1267,31 @@ function handleAddCustomBook(e) {
   document.getElementById("addBookForm").reset();
   closeAddBookModal();
   switchTab("viewer");
+
+  // 다른 교사들도 함께 볼 수 있도록 서버 시트에도 공유 도서 등록 시도
+  try {
+    const gasUrl = getActiveGasUrl();
+    if (gasUrl) {
+      fetch(gasUrl, {
+        method: "POST",
+        headers: { "Content-Type": "text/plain;charset=utf-8" },
+        body: JSON.stringify({ action: "save_shared_book", book: newBook })
+      }).catch(function() {});
+    }
+  } catch (err) {}
 }
 
-function openSharedBooksModal() { document.getElementById("sharedBooksModal").classList.add("open"); renderSharedBooksList(); }
+function openSharedBooksModal() {
+  document.getElementById("sharedBooksModal").classList.add("open");
+  renderSharedBooksList();
+  syncSharedBooksFromServer(true);
+}
 function closeSharedBooksModal() { document.getElementById("sharedBooksModal").classList.remove("open"); }
 
 function renderSharedBooksList() {
   const sub = document.getElementById("sharedSubjectFilter").value;
   const kw = (document.getElementById("sharedSearchInput").value || "").trim().toLowerCase();
-  let custom = JSON.parse(localStorage.getItem("teacherCustomBooks") || "[]");
-  custom = custom.filter(function(b) {
-    const c = Number(b.ratingCount || 0);
-    const s = Number(b.ratingSum || 0);
-    return !(c >= 10 && (s / c) <= 2.5);
-  });
-  localStorage.setItem("teacherCustomBooks", JSON.stringify(custom));
+  let custom = getAllCustomBooks();
 
   const filtered = custom.filter(function(b) {
     const okSub = sub === "ALL" || (b.subjects && b.subjects.includes(sub));
@@ -1263,7 +1343,7 @@ function openSharedBookInOnePage(gIdx) {
 }
 
 function rateBook(title, score) {
-  let custom = JSON.parse(localStorage.getItem("teacherCustomBooks") || "[]");
+  let custom = getAllCustomBooks();
   const idx = custom.findIndex(function(b) { return b.title === title; });
   if (idx === -1) return;
   const count = Number(custom[idx].ratingCount || 0) + 1;
@@ -1276,10 +1356,28 @@ function rateBook(title, score) {
     custom[idx].ratingCount = count;
     custom[idx].ratingSum = sum;
   }
-  localStorage.setItem("teacherCustomBooks", JSON.stringify(custom));
+  const merged = mergeCustomBooksList(custom);
+  localStorage.setItem("teacherCustomBooks", JSON.stringify(merged));
   loadBooks();
   renderSharedBooksList();
   renderBookGrid();
+
+  try {
+    const gasUrl = getActiveGasUrl();
+    if (gasUrl) {
+      fetch(gasUrl, {
+        method: "POST",
+        headers: { "Content-Type": "text/plain;charset=utf-8" },
+        body: JSON.stringify({
+          action: "rate_shared_book",
+          title: title,
+          score: score,
+          ratingCount: count,
+          ratingSum: sum
+        })
+      }).catch(function() {});
+    }
+  } catch (err) {}
 }
 
 const DEFAULT_GAS_URL = "https://script.google.com/macros/s/AKfycbx9DnQVEtSwRLw1Ksa6p1f7aLJjJnJ0UwjwiZitG2Z0/exec";
