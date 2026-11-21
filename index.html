@@ -300,6 +300,7 @@
       <p>교과별 연관 도서 추천 · 1PAGE 도서 카드 · 학생 메타포 제출 및 AI 생기부·탐구 연동</p>
     </div>
     <div class="nav-btns">
+      <button class="btn" style="background:#f8fafc; color:#0f172a;" id="nav-home" onclick="goHomeMain()">🏠 메인화면 돌아가기</button>
       <button class="btn btn-tab active" id="nav-viewer" onclick="switchTab('viewer')">📖 도서 1PAGE 소개</button>
       <button class="btn btn-tab" id="nav-submit" onclick="switchTab('submit')">✍️ 과목별 추천 &amp; 소감 제출</button>
       <button class="btn btn-shared" onclick="openSharedBooksModal()">📚 타교사 자료</button>
@@ -308,7 +309,7 @@
       <button class="btn btn-copy teacher-only" onclick="copyTeacherSheet()">📑 시트 사본 만들기</button>
       <button class="btn btn-mysheet teacher-only" onclick="openMySheet()">📊 내 시트 가기</button>
       <button class="btn teacher-only" style="background:#38bdf8; color:#0f172a;" onclick="openMySheetConnectModal(false)" title="내 사본 시트 주소 변경">🔗 시트연결</button>
-      <button class="btn btn-setting teacher-only admin-only" onclick="openSettings()">⚙️ 교사 설정</button>
+      <button class="btn btn-setting teacher-only" onclick="openSettings()">⚙️ 교사 설정</button>
     </div>
   </div>
 </header>
@@ -342,9 +343,12 @@
     <div class="form-container">
       <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:0.6rem; margin-bottom:0.4rem;">
         <h2 style="color:var(--primary); margin:0;">✍️ 교과 연계 도서 선택 및 메타포 소감문 제출</h2>
-        <button type="button" class="btn" style="background:#0ea5e9; color:white;" onclick="toggleVisualBookPicker()">
-          🖼️ 추천도서 보기 (그림으로 선택)
-        </button>
+        <div style="display:flex; gap:0.45rem; flex-wrap:wrap;">
+          <button type="button" class="btn" style="background:#e2e8f0; color:#0f172a;" onclick="goHomeMain()">🏠 메인화면 돌아가기</button>
+          <button type="button" class="btn" style="background:#0ea5e9; color:white;" onclick="toggleVisualBookPicker()">
+            🖼️ 추천도서 보기 (그림으로 선택)
+          </button>
+        </div>
       </div>
       <p style="color:var(--muted); font-size:0.9rem; margin-bottom:1.2rem;">
         상단 <strong>[🖼️ 추천도서 보기]</strong> 버튼을 누르면 전체 도서가 그림 카드로 펼쳐지며, 그림을 클릭해 도서를 바로 선택할 수 있습니다.
@@ -510,9 +514,10 @@
 <div id="sharedBooksModal" class="modal">
   <div class="modal-content">
     <h3 style="color:#be185d; margin-bottom:0.4rem;">📚 타교사 추천도서 자료실 (100권 양식 일러스트 · 별표 5점 평가)</h3>
-    <p style="font-size:0.84rem; color:#64748b; margin-bottom:0.8rem;">
+    <p style="font-size:0.84rem; color:#64748b; margin-bottom:0.5rem;">
       타교사 추천 도서를 클릭하면 기존 100권 도서와 동일한 <strong>1페이지 양식과 일러스트</strong>로 생성되어 표시됩니다. (10명 이상 평가 후 평균 2.5점 이하 자동 삭제)
     </p>
+    <div id="sharedSyncStatus" style="font-size:0.8rem; color:#0284c7; font-weight:600; margin-bottom:0.7rem;"></div>
     <div style="display:grid; grid-template-columns:1fr 1.5fr auto; gap:0.6rem; margin-bottom:0.9rem;">
       <select id="sharedSubjectFilter" class="form-control" onchange="renderSharedBooksList()">
         <option value="ALL">📂 전체 교과 분류</option>
@@ -528,7 +533,7 @@
         <option value="미술·예술·진로">미술·예술·진로</option>
       </select>
       <input type="text" id="sharedSearchInput" class="form-control" placeholder="도서명, 주제, 교사명 검색..." oninput="renderSharedBooksList()">
-      <button type="button" class="btn" style="background:#0284c7;color:white;" onclick="syncSharedBooksFromServer(true)">🔄 공유목록 동기화</button>
+      <button type="button" id="syncSharedBtn" class="btn" style="background:#0284c7;color:white;" onclick="syncSharedBooksFromServer(true)">🔄 공유목록 동기화</button>
     </div>
     <div id="sharedBooksContainer" style="display:grid; grid-template-columns:repeat(auto-fill, minmax(225px, 1fr)); gap:0.85rem; max-height:420px; overflow-y:auto;"></div>
     <div style="display:flex; justify-content:flex-end; margin-top:1rem;">
@@ -921,48 +926,77 @@ function mergeCustomBooksList(rawList) {
 
 async function syncSharedBooksFromServer(shouldRenderModal) {
   const gasUrl = getActiveGasUrl();
-  if (!gasUrl) {
-    if (shouldRenderModal) renderSharedBooksList();
-    return;
+  const statusEl = document.getElementById("sharedSyncStatus");
+  const syncBtn = document.getElementById("syncSharedBtn");
+
+  if (syncBtn) {
+    syncBtn.disabled = true;
+    syncBtn.textContent = "⏳ 동기화 중...";
+  }
+  if (statusEl) {
+    statusEl.style.color = "#0284c7";
+    statusEl.textContent = "공유 추천도서 목록을 불러오는 중입니다...";
   }
 
-  try {
-    const res = await fetch(gasUrl, {
-      method: "POST",
-      headers: { "Content-Type": "text/plain;charset=utf-8" },
-      body: JSON.stringify({ action: "get_shared_books" })
-    });
-    const data = await res.json();
-    if (data && data.status === "success" && Array.isArray(data.books)) {
-      const merged = mergeCustomBooksList(data.books);
-      localStorage.setItem("teacherCustomBooks", JSON.stringify(merged));
-      loadBooks();
-      populateBookSelect();
-      renderBookGrid();
-      if (shouldRenderModal) {
-        renderSharedBooksList();
-      }
-      return;
-    }
-  } catch (e) {}
+  let syncedBooks = null;
 
-  // POST가 막힌 환경에서도 GET 엔드포인트로 한 번 더 조회 시도
-  try {
-    const sep = gasUrl.indexOf("?") >= 0 ? "&" : "?";
-    const getRes = await fetch(gasUrl + sep + "action=get_shared_books");
-    const getData = await getRes.json();
-    if (getData && getData.status === "success" && Array.isArray(getData.books)) {
-      const merged = mergeCustomBooksList(getData.books);
-      localStorage.setItem("teacherCustomBooks", JSON.stringify(merged));
-      loadBooks();
-      populateBookSelect();
-      renderBookGrid();
-      if (shouldRenderModal) {
-        renderSharedBooksList();
+  if (gasUrl) {
+    try {
+      const res = await fetch(gasUrl, {
+        method: "POST",
+        headers: { "Content-Type": "text/plain;charset=utf-8" },
+        body: JSON.stringify({ action: "get_shared_books" })
+      });
+      const data = await res.json();
+      if (data && data.status === "success" && Array.isArray(data.books)) {
+        syncedBooks = data.books;
       }
+    } catch (e) {}
+
+    if (!syncedBooks) {
+      try {
+        const sep = gasUrl.indexOf("?") >= 0 ? "&" : "?";
+        const getRes = await fetch(gasUrl + sep + "action=get_shared_books");
+        const getData = await getRes.json();
+        if (getData && getData.status === "success" && Array.isArray(getData.books)) {
+          syncedBooks = getData.books;
+        }
+      } catch (e2) {}
     }
-  } catch (e2) {}
+  }
+
+  if (Array.isArray(syncedBooks)) {
+    const merged = mergeCustomBooksList(syncedBooks);
+    localStorage.setItem("teacherCustomBooks", JSON.stringify(merged));
+    loadBooks();
+    populateBookSelect();
+    renderBookGrid();
+    if (shouldRenderModal) {
+      renderSharedBooksList();
+    }
+    if (statusEl) {
+      statusEl.style.color = "#059669";
+      statusEl.textContent = "동기화 완료! 총 " + merged.length + "권의 교사 추천도서가 반영되었습니다.";
+    }
+  } else {
+    loadBooks();
+    populateBookSelect();
+    renderBookGrid();
+    if (shouldRenderModal) {
+      renderSharedBooksList();
+    }
+    if (statusEl) {
+      statusEl.style.color = "#b45309";
+      statusEl.textContent = "서버 응답을 받지 못해 기본/저장된 공유 도서 목록(" + getAllCustomBooks().length + "권)을 표시합니다. Apps Script 웹 앱 [새 배포 → 모든 사용자]를 확인해 주세요.";
+    }
+  }
+
+  if (syncBtn) {
+    syncBtn.disabled = false;
+    syncBtn.textContent = "🔄 공유목록 동기화";
+  }
 }
+
 function getAllCustomBooks() {
   const saved = JSON.parse(localStorage.getItem("teacherCustomBooks") || "[]");
   const merged = mergeCustomBooksList(saved);
@@ -972,8 +1006,58 @@ function getAllCustomBooks() {
 
 function loadBooks() {
   const custom = getAllCustomBooks();
-  ALL_BOOKS = DEFAULT_BOOKS_DATA.concat(custom);
+  const imgMap = JSON.parse(localStorage.getItem("customBookImageUrls") || "{}");
+  ALL_BOOKS = DEFAULT_BOOKS_DATA.concat(custom).map(function(b) {
+    if (imgMap[b.title]) {
+      return Object.assign({}, b, { customImageUrl: imgMap[b.title] });
+    }
+    return b;
+  });
 }
+
+function setOnePageImageUrl(idx) {
+  const book = ALL_BOOKS[idx];
+  if (!book) return;
+  const currentUrl = book.customImageUrl || "";
+  const inputUrl = prompt(
+    "인터넷에서 검색해 [이미지 주소 복사]한 그림 주소를 붙여넣어 주세요.\n(비우고 확인을 누르면 기본 일러스트로 돌아갑니다.)",
+    currentUrl
+  );
+  if (inputUrl === null) return;
+  const trimmed = inputUrl.trim();
+  book.customImageUrl = trimmed;
+
+  // Save in localStorage map by book title so it persists across reloads
+  const imgMap = JSON.parse(localStorage.getItem("customBookImageUrls") || "{}");
+  if (trimmed) {
+    imgMap[book.title] = trimmed;
+  } else {
+    delete imgMap[book.title];
+  }
+  localStorage.setItem("customBookImageUrls", JSON.stringify(imgMap));
+
+  if (book.isCustom) {
+    const custom = getAllCustomBooks().map(function(item) {
+      if (item.title === book.title) {
+        return Object.assign({}, item, { customImageUrl: trimmed });
+      }
+      return item;
+    });
+    localStorage.setItem("teacherCustomBooks", JSON.stringify(custom));
+  }
+
+  renderOnePage(idx);
+  renderBookGrid();
+}
+
+function goHomeMain() {
+  document.querySelectorAll(".modal.open").forEach(function(m) {
+    m.classList.remove("open");
+  });
+  switchTab("viewer");
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
 function switchTab(name) {
   document.querySelectorAll(".section").forEach(function(el) {
     el.classList.remove("active");
@@ -1164,7 +1248,7 @@ function renderOnePage(idx) {
         '<div class="info-box"><h3>📖 핵심 줄거리 및 내용 요약</h3><p>' + summary + '</p></div>' +
         '<div class="info-box" style="border-left-color:var(--accent);"><h3>🎯 핵심 주제 및 메타포 팁</h3><p><strong>핵심 주제:</strong> ' + book.theme + '<br><em>"『' + book.title + '』은(는) [사물/현상]이다"</em> 형식으로 메타포를 써보세요.</p></div>' +
       '</div>' +
-      '<div class="illustration-box"><h3>🖼️ 한 장 그림으로 도서 내용 표현하기</h3><div class="svg-stage">' + visual + '</div>' + ratingHtml + '</div>' +
+      '<div class="illustration-box"><div style="display:flex;justify-content:space-between;align-items:center;gap:6px;margin-bottom:0.6rem;flex-wrap:wrap;"><h3 style="margin:0;">🖼️ 한 장 그림으로 도서 내용 표현하기</h3><button type="button" class="btn" style="background:#e0f2fe;color:#0369a1;padding:0.25rem 0.55rem;font-size:0.75rem;" onclick="setOnePageImageUrl(' + idx + ')">🔗 인터넷 이미지 주소 넣기</button></div><div class="svg-stage">' + visual + '</div>' + ratingHtml + '</div>' +
     '</div>' +
     '<div class="page-nav">' +
       '<button type="button" class="btn" style="background:#e2e8f0;" onclick="renderOnePage(' + (idx - 1) + ')">◀ 이전 도서</button>' +
