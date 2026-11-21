@@ -578,6 +578,10 @@
       <label>사본으로 만든 내 구글 스프레드시트 URL *</label>
       <input type="url" id="peerSheetUrlInput" class="form-control" placeholder="https://docs.google.com/spreadsheets/d/내시트ID/edit">
     </div>
+    <div class="form-group">
+      <label>내 Apps Script 웹 앱 URL (선택 - 비우면 기본 웹 앱으로 시트 ID 자동 전달)</label>
+      <input type="url" id="peerGasUrlInput" class="form-control" placeholder="https://script.google.com/macros/s/.../exec">
+    </div>
     <div style="display:flex; justify-content:flex-end; gap:0.5rem; margin-top:1rem;">
       <button type="button" class="btn" style="background:#e2e8f0;" onclick="closeMySheetConnectModal()">닫기</button>
       <button type="button" class="btn btn-mysheet" onclick="saveAndOpenMySheet()">✅ 저장 및 내 시트 바로 열기</button>
@@ -1779,16 +1783,28 @@ function saveSettings() {
   alert("구글 시트 및 Apps Script 연동 주소가 저장되었습니다!");
   closeSettings();
 }
+function getLinkedSheetUrl() {
+  const p = new URLSearchParams(window.location.search);
+  if (p.get("sheet")) {
+    const fromParam = p.get("sheet").trim().replace(/\/copy.*$/, "/edit");
+    localStorage.setItem("myPeerSheetUrl", fromParam);
+    localStorage.setItem("sheetUrl", fromParam);
+    return fromParam;
+  }
+  const peerSaved = (localStorage.getItem("myPeerSheetUrl") || "").trim();
+  const saved = (localStorage.getItem("sheetUrl") || "").trim();
+  return peerSaved || saved || DEFAULT_SHEET_URL;
+}
+
 function copyTeacherSheet() {
-  const u = DEFAULT_SHEET_URL;
-  window.open(u.replace(/\/(edit|view).*$/, "/copy"), "_blank");
-  // 사본 생성 후 바로 내 사본 시트와 웹 앱 주소를 연결할 수 있도록 연결 안내 창 자동 오픈
+  const baseSheet = getLinkedSheetUrl().replace(/\/(edit|view|copy).*$/, "");
+  const copyUrl = baseSheet + "/copy";
+  window.open(copyUrl, "_blank");
   openMySheetConnectModal(true);
 }
 
 function openMySheet() {
-  const savedMySheet = (localStorage.getItem("myPeerSheetUrl") || "").trim();
-  const savedMyGas = (localStorage.getItem("myPeerGasUrl") || "").trim();
+  const savedMySheet = (localStorage.getItem("myPeerSheetUrl") || localStorage.getItem("sheetUrl") || "").trim();
   if (!savedMySheet) {
     openMySheetConnectModal(false);
     return;
@@ -1801,13 +1817,17 @@ function openMySheetConnectModal(fromCopy) {
   const titleEl = document.getElementById("mySheetModalTitle");
   const descEl = document.getElementById("mySheetModalDesc");
   if (fromCopy) {
-    titleEl.textContent = "📑 시트 사본 만들기 → 내 시트 연결";
-    descEl.textContent = "새 탭에서 사본을 만든 뒤, 생성된 내 구글 시트 주소만 붙여넣고 [저장 및 내 시트 바로 열기]를 누르세요. 다음부터는 [📊 내 시트 가기] 버튼으로 바로 열립니다.";
+    titleEl.textContent = "📑 시트 사본 만들기 → 내 시트 즉시 연결";
+    descEl.textContent = "새 탭에서 사본을 만든 뒤, 내 구글 시트 주소를 붙여넣고 [저장 및 내 시트 바로 열기]를 누르세요. 저장 즉시 [📊 내 시트 가기]와 학생 QR 코드가 내 시트에 연결됩니다.";
   } else {
     titleEl.textContent = "📊 내 사본 시트 연결";
-    descEl.textContent = "사본으로 복사한 내 구글 시트 주소를 한 번만 등록해 두면 [📊 내 시트 가기] 버튼으로 바로 연결됩니다.";
+    descEl.textContent = "사본으로 복사한 내 구글 시트 주소를 연결하면 [📊 내 시트 가기] 및 학생 QR 제출이 내 시트로 바로 연결됩니다.";
   }
   document.getElementById("peerSheetUrlInput").value = localStorage.getItem("myPeerSheetUrl") || "";
+  const gasInput = document.getElementById("peerGasUrlInput");
+  if (gasInput) {
+    gasInput.value = localStorage.getItem("myPeerGasUrl") || "";
+  }
   modal.classList.add("open");
 }
 
@@ -1817,6 +1837,9 @@ function closeMySheetConnectModal() {
 
 function saveAndOpenMySheet() {
   const sheetInput = document.getElementById("peerSheetUrlInput").value.trim();
+  const gasInputEl = document.getElementById("peerGasUrlInput");
+  const gasInput = gasInputEl ? gasInputEl.value.trim() : "";
+
   if (!sheetInput) {
     alert("사본으로 만든 내 구글 시트 주소를 붙여넣어 주세요.");
     return;
@@ -1824,6 +1847,12 @@ function saveAndOpenMySheet() {
   const cleanSheetUrl = sheetInput.replace(/\/copy.*$/, "/edit");
   localStorage.setItem("myPeerSheetUrl", cleanSheetUrl);
   localStorage.setItem("sheetUrl", cleanSheetUrl);
+
+  if (gasInput) {
+    localStorage.setItem("myPeerGasUrl", gasInput);
+    localStorage.setItem("gasUrl", gasInput);
+  }
+
   closeMySheetConnectModal();
   window.open(cleanSheetUrl, "_blank");
 }
@@ -1834,7 +1863,9 @@ function applyUrlMode() {
     localStorage.setItem("gasUrl", p.get("gas").trim());
   }
   if (p.get("sheet")) {
-    localStorage.setItem("sheetUrl", p.get("sheet").trim());
+    const cleanSheet = p.get("sheet").trim().replace(/\/copy.*$/, "/edit");
+    localStorage.setItem("sheetUrl", cleanSheet);
+    localStorage.setItem("myPeerSheetUrl", cleanSheet);
   }
   if (p.get("mode") === "student") {
     document.body.classList.add("student-mode");
@@ -1843,6 +1874,7 @@ function applyUrlMode() {
     document.body.classList.add("peer-teacher-mode");
   }
 }
+
 </script>
 </body>
 </html>
