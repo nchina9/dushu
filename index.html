@@ -925,48 +925,6 @@ function mergeCustomBooksList(rawList) {
   return Object.keys(byTitle).map(function(k) { return byTitle[k]; });
 }
 
-function fetchSharedBooksViaJsonp_(gasUrl) {
-  return new Promise(function(resolve) {
-    try {
-      const cbName = "__dushuSharedBooksCb_" + Date.now() + "_" + Math.floor(Math.random() * 100000);
-      const timer = setTimeout(function() {
-        cleanup();
-        resolve(null);
-      }, 6000);
-
-      function cleanup() {
-        clearTimeout(timer);
-        try { delete window[cbName]; } catch (e) {}
-        if (scriptEl && scriptEl.parentNode) {
-          scriptEl.parentNode.removeChild(scriptEl);
-        }
-      }
-
-      window[cbName] = function(payload) {
-        cleanup();
-        if (payload && payload.status === "success" && Array.isArray(payload.books)) {
-          resolve(payload.books);
-        } else if (Array.isArray(payload)) {
-          resolve(payload);
-        } else {
-          resolve(null);
-        }
-      };
-
-      const sep = gasUrl.indexOf("?") >= 0 ? "&" : "?";
-      const scriptEl = document.createElement("script");
-      scriptEl.src = gasUrl + sep + "action=get_shared_books&callback=" + encodeURIComponent(cbName);
-      scriptEl.onerror = function() {
-        cleanup();
-        resolve(null);
-      };
-      document.body.appendChild(scriptEl);
-    } catch (err) {
-      resolve(null);
-    }
-  });
-}
-
 async function syncSharedBooksFromServer(shouldRenderModal) {
   const gasUrl = getActiveGasUrl();
   const statusEl = document.getElementById("sharedSyncStatus");
@@ -978,40 +936,51 @@ async function syncSharedBooksFromServer(shouldRenderModal) {
   }
   if (statusEl) {
     statusEl.style.color = "#0284c7";
-    statusEl.textContent = "원본 및 타교사 공유 추천도서 목록을 동기화하는 중입니다...";
+    statusEl.textContent = "공유 추천도서 목록을 불러오는 중입니다...";
   }
 
   let syncedBooks = null;
 
   if (gasUrl) {
-    // 1. JSONP GET 시도 (CORS 회피)
-    syncedBooks = await fetchSharedBooksViaJsonp_(gasUrl);
+    try {
+      const res = await fetch(gasUrl, {
+        method: "POST",
+        headers: { "Content-Type": "text/plain;charset=utf-8" },
+        body: JSON.stringify({ action: "get_shared_books" })
+      });
+      const data = await res.json();
+      if (data && data.status === "success") {
+        if (data.imageMap && typeof data.imageMap === "object") {
+          const curMap = JSON.parse(localStorage.getItem("customBookImageUrls") || "{}");
+          Object.keys(data.imageMap).forEach(function(k) {
+            if (data.imageMap[k]) curMap[k] = data.imageMap[k];
+          });
+          localStorage.setItem("customBookImageUrls", JSON.stringify(curMap));
+        }
+        if (Array.isArray(data.books)) {
+          syncedBooks = data.books;
+        }
+      }
+    } catch (e) {}
 
-    // 2. 일반 GET 시도
     if (!syncedBooks) {
       try {
         const sep = gasUrl.indexOf("?") >= 0 ? "&" : "?";
         const getRes = await fetch(gasUrl + sep + "action=get_shared_books");
         const getData = await getRes.json();
-        if (getData && getData.status === "success" && Array.isArray(getData.books)) {
-          syncedBooks = getData.books;
+        if (getData && getData.status === "success") {
+          if (getData.imageMap && typeof getData.imageMap === "object") {
+            const curMap2 = JSON.parse(localStorage.getItem("customBookImageUrls") || "{}");
+            Object.keys(getData.imageMap).forEach(function(k) {
+              if (getData.imageMap[k]) curMap2[k] = getData.imageMap[k];
+            });
+            localStorage.setItem("customBookImageUrls", JSON.stringify(curMap2));
+          }
+          if (Array.isArray(getData.books)) {
+            syncedBooks = getData.books;
+          }
         }
       } catch (e2) {}
-    }
-
-    // 3. POST 시도
-    if (!syncedBooks) {
-      try {
-        const res = await fetch(gasUrl, {
-          method: "POST",
-          headers: { "Content-Type": "text/plain;charset=utf-8" },
-          body: JSON.stringify({ action: "get_shared_books" })
-        });
-        const data = await res.json();
-        if (data && data.status === "success" && Array.isArray(data.books)) {
-          syncedBooks = data.books;
-        }
-      } catch (e) {}
     }
   }
 
@@ -1020,13 +989,14 @@ async function syncSharedBooksFromServer(shouldRenderModal) {
     localStorage.setItem("teacherCustomBooks", JSON.stringify(merged));
     loadBooks();
     populateBookSelect();
+    renderOnePage(currentIndex);
     renderBookGrid();
     if (shouldRenderModal) {
       renderSharedBooksList();
     }
     if (statusEl) {
       statusEl.style.color = "#059669";
-      statusEl.textContent = "동기화 완료! 타교사 추천도서 포함 총 " + merged.length + "권이 반영되었습니다.";
+      statusEl.textContent = "동기화 완료! 총 " + merged.length + "권의 교사 추천도서 및 공유 이미지가 반영되었습니다.";
     }
   } else {
     loadBooks();
@@ -1037,7 +1007,7 @@ async function syncSharedBooksFromServer(shouldRenderModal) {
     }
     if (statusEl) {
       statusEl.style.color = "#b45309";
-      statusEl.textContent = "현재 저장된 교사 추천도서(" + getAllCustomBooks().length + "권)를 표시합니다. (원본 Apps Script 배포가 [새 배포 → 모든 사용자]인지 확인해 주세요.)";
+      statusEl.textContent = "서버 응답을 받지 못해 기본/저장된 공유 도서 목록(" + getAllCustomBooks().length + "권)을 표시합니다. Apps Script 웹 앱 [새 배포 → 모든 사용자]를 확인해 주세요.";
     }
   }
 
@@ -1065,19 +1035,18 @@ function loadBooks() {
   });
 }
 
-function setOnePageImageUrl(idx) {
+async function setOnePageImageUrl(idx) {
   const book = ALL_BOOKS[idx];
   if (!book) return;
   const currentUrl = book.customImageUrl || "";
   const inputUrl = prompt(
-    "인터넷에서 검색해 [이미지 주소 복사]한 그림 주소를 붙여넣어 주세요.\n(비우고 확인을 누르면 기본 일러스트로 돌아갑니다.)",
+    "인터넷에서 검색해 [이미지 주소 복사]한 그림 주소를 붙여넣어 주세요.\n(저장 시 다른 교사들의 화면에도 자동으로 공유됩니다. 비우고 확인하면 기본 일러스트로 돌아갑니다.)",
     currentUrl
   );
   if (inputUrl === null) return;
   const trimmed = inputUrl.trim();
   book.customImageUrl = trimmed;
 
-  // Save in localStorage map by book title so it persists across reloads
   const imgMap = JSON.parse(localStorage.getItem("customBookImageUrls") || "{}");
   if (trimmed) {
     imgMap[book.title] = trimmed;
@@ -1098,6 +1067,22 @@ function setOnePageImageUrl(idx) {
 
   renderOnePage(idx);
   renderBookGrid();
+
+  // 모든 교사 화면에도 반영되도록 중앙 서버에 도서 이미지 URL 공유 저장
+  try {
+    const gasUrl = getActiveGasUrl();
+    if (gasUrl) {
+      await fetch(gasUrl, {
+        method: "POST",
+        headers: { "Content-Type": "text/plain;charset=utf-8" },
+        body: JSON.stringify({
+          action: "save_book_image",
+          title: book.title,
+          imageUrl: trimmed
+        })
+      });
+    }
+  } catch (err) {}
 }
 
 function goHomeMain() {
