@@ -839,6 +839,7 @@ let bookGridShowAll = false;
 
 window.addEventListener("DOMContentLoaded", function() {
   try {
+    getActiveGasUrl();
     loadBooks();
     populateBookSelect();
     renderOnePage(0);
@@ -1544,18 +1545,22 @@ function rateBook(title, score) {
   } catch (err) {}
 }
 
-const DEFAULT_GAS_URL = "https://script.google.com/macros/s/AKfycbx9DnQVEtSwRLw1Ksa6p1f7aLJjJnJ0UwjwiZitG2Z0/exec";
+const DEFAULT_GAS_URL = "https://script.google.com/macros/s/AKfycbxsCwrhptjdDh6VaqMeNd1wMNJNI71gwNRSC1adFO2MI8mx4PZ3BaKmGZxPEb6B6hYz/exec";
 const DEFAULT_SHEET_URL = "https://docs.google.com/spreadsheets/d/1BgMJQ1Gy1JgaLQ7d0aovUNl5P_NGtLtp94Bq7vk6OoA/edit";
 let cachedAiResult = { saenggibu: "", inquiry: "" };
 
 function getActiveGasUrl() {
   const p = new URLSearchParams(window.location.search);
-  if (p.get("gas")) {
-    localStorage.setItem("gasUrl", p.get("gas").trim());
+  const queryGas = (p.get("gas") || "").trim();
+  if (queryGas) {
+    localStorage.setItem("gasUrl", queryGas);
+    return queryGas;
   }
-  const peerGas = (localStorage.getItem("myPeerGasUrl") || "").trim();
-  const saved = (localStorage.getItem("gasUrl") || "").trim();
-  return peerGas || saved || DEFAULT_GAS_URL;
+  const currentSaved = (localStorage.getItem("gasUrl") || "").trim();
+  if (!currentSaved || currentSaved.indexOf("AKfycbx9DnQVEtSwRLw1Ksa6p1f7aLJjJnJ0UwjwiZitG2Z0") >= 0 || currentSaved.indexOf("AKfycbwF7x1tLM9bv0CGT1odUOxDpQtsTof_rJ9IitTBM4nooO5qjyIw5dnlM0lLITfHKWJNOw") >= 0) {
+    localStorage.setItem("gasUrl", DEFAULT_GAS_URL);
+  }
+  return (localStorage.getItem("gasUrl") || "").trim() || DEFAULT_GAS_URL;
 }
 
 function normalizeStudentId(raw) {
