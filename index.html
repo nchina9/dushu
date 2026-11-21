@@ -513,7 +513,7 @@
     <p style="font-size:0.84rem; color:#64748b; margin-bottom:0.8rem;">
       타교사 추천 도서를 클릭하면 기존 100권 도서와 동일한 <strong>1페이지 양식과 일러스트</strong>로 생성되어 표시됩니다. (10명 이상 평가 후 평균 2.5점 이하 자동 삭제)
     </p>
-    <div style="display:grid; grid-template-columns:1fr 1.5fr; gap:0.6rem; margin-bottom:0.9rem;">
+    <div style="display:grid; grid-template-columns:1fr 1.5fr auto; gap:0.6rem; margin-bottom:0.9rem;">
       <select id="sharedSubjectFilter" class="form-control" onchange="renderSharedBooksList()">
         <option value="ALL">📂 전체 교과 분류</option>
         <option value="국어·문학">국어·문학</option>
@@ -528,6 +528,7 @@
         <option value="미술·예술·진로">미술·예술·진로</option>
       </select>
       <input type="text" id="sharedSearchInput" class="form-control" placeholder="도서명, 주제, 교사명 검색..." oninput="renderSharedBooksList()">
+      <button type="button" class="btn" style="background:#0284c7;color:white;" onclick="syncSharedBooksFromServer(true)">🔄 공유목록 동기화</button>
     </div>
     <div id="sharedBooksContainer" style="display:grid; grid-template-columns:repeat(auto-fill, minmax(225px, 1fr)); gap:0.85rem; max-height:420px; overflow-y:auto;"></div>
     <div style="display:flex; justify-content:flex-end; margin-top:1rem;">
@@ -832,31 +833,108 @@ const SHARED_SEED_BOOKS = [
   }
 ];
 
+function normalizePeerBookRecord(raw, idxFallback) {
+  if (!raw || typeof raw !== "object") return null;
+  const title = String(raw.title || raw.bookTitle || raw.name || "").replace(/[《》『』]/g, "").trim();
+  if (!title) return null;
+  const rawCat = String(raw.cat || raw.category || "인문사회").trim();
+  const cat = (rawCat === "과학" || rawCat === "수학" || rawCat === "인문사회") ? rawCat : "인문사회";
+  const subjList = Array.isArray(raw.subjects) && raw.subjects.length
+    ? raw.subjects
+    : (typeof raw.subjects === "string" && raw.subjects.trim()
+        ? raw.subjects.split(/[,·/]/).map(function(s) { return s.trim(); }).filter(Boolean)
+        : ["국어·문학"]);
+
+  return {
+    id: Number(raw.id || (201 + idxFallback)),
+    isCustom: true,
+    cat: cat,
+    teacherName: String(raw.teacherName || raw.teacher || "타교사 추천").trim(),
+    title: title,
+    subtitle: String(raw.subtitle || raw.subTitle || raw.theme || "교과 연계 추천 도서").trim(),
+    theme: String(raw.theme || raw.topic || raw.subtitle || title).trim(),
+    customSummary: String(raw.customSummary || raw.summary || "").trim(),
+    customImageUrl: String(raw.customImageUrl || raw.imageUrl || "").trim(),
+    subjects: subjList,
+    ratingCount: Number(raw.ratingCount || 0),
+    ratingSum: Number(raw.ratingSum || 0)
+  };
+}
+
 function mergeCustomBooksList(rawList) {
-  const combined = SHARED_SEED_BOOKS.concat(Array.isArray(rawList) ? rawList : []);
+  const normalizedIncoming = (Array.isArray(rawList) ? rawList : [])
+    .map(function(item, i) { return normalizePeerBookRecord(item, i + 1); })
+    .filter(Boolean);
+
+  const combined = SHARED_SEED_BOOKS.concat(normalizedIncoming);
   const byTitle = {};
   combined.forEach(function(item) {
-    if (!item || !item.title) return;
-    const key = String(item.title).trim();
+    const key = String(item.title || "").trim();
+    if (!key) return;
     const c = Number(item.ratingCount || 0);
     const s = Number(item.ratingSum || 0);
     if (c >= 10 && (s / c) <= 2.5) return;
+
     if (!byTitle[key]) {
       byTitle[key] = Object.assign({}, item, { ratingCount: c, ratingSum: s });
     } else {
-      // Keep higher ratingCount or latest non-seed entry
-      const prevC = Number(byTitle[key].ratingCount || 0);
-      if (c >= prevC || !item._isSeed) {
-        byTitle[key] = Object.assign({}, byTitle[key], item, {
-          ratingCount: Math.max(prevC, c),
-          ratingSum: Math.max(Number(byTitle[key].ratingSum || 0), s)
-        });
-      }
+      const existing = byTitle[key];
+      const bestC = Math.max(Number(existing.ratingCount || 0), c);
+      const bestS = Math.max(Number(existing.ratingSum || 0), s);
+      byTitle[key] = Object.assign({}, existing, item, {
+        id: existing.id || item.id,
+        ratingCount: bestC,
+        ratingSum: bestS
+      });
     }
   });
   return Object.keys(byTitle).map(function(k) { return byTitle[k]; });
 }
 
+async function syncSharedBooksFromServer(shouldRenderModal) {
+  const gasUrl = getActiveGasUrl();
+  if (!gasUrl) {
+    if (shouldRenderModal) renderSharedBooksList();
+    return;
+  }
+
+  try {
+    const res = await fetch(gasUrl, {
+      method: "POST",
+      headers: { "Content-Type": "text/plain;charset=utf-8" },
+      body: JSON.stringify({ action: "get_shared_books" })
+    });
+    const data = await res.json();
+    if (data && data.status === "success" && Array.isArray(data.books)) {
+      const merged = mergeCustomBooksList(data.books);
+      localStorage.setItem("teacherCustomBooks", JSON.stringify(merged));
+      loadBooks();
+      populateBookSelect();
+      renderBookGrid();
+      if (shouldRenderModal) {
+        renderSharedBooksList();
+      }
+      return;
+    }
+  } catch (e) {}
+
+  // POST가 막힌 환경에서도 GET 엔드포인트로 한 번 더 조회 시도
+  try {
+    const sep = gasUrl.indexOf("?") >= 0 ? "&" : "?";
+    const getRes = await fetch(gasUrl + sep + "action=get_shared_books");
+    const getData = await getRes.json();
+    if (getData && getData.status === "success" && Array.isArray(getData.books)) {
+      const merged = mergeCustomBooksList(getData.books);
+      localStorage.setItem("teacherCustomBooks", JSON.stringify(merged));
+      loadBooks();
+      populateBookSelect();
+      renderBookGrid();
+      if (shouldRenderModal) {
+        renderSharedBooksList();
+      }
+    }
+  } catch (e2) {}
+}
 function getAllCustomBooks() {
   const saved = JSON.parse(localStorage.getItem("teacherCustomBooks") || "[]");
   const merged = mergeCustomBooksList(saved);
@@ -868,32 +946,6 @@ function loadBooks() {
   const custom = getAllCustomBooks();
   ALL_BOOKS = DEFAULT_BOOKS_DATA.concat(custom);
 }
-
-async function syncSharedBooksFromServer(shouldRenderModal) {
-  try {
-    const gasUrl = getActiveGasUrl();
-    if (!gasUrl) return;
-    const res = await fetch(gasUrl, {
-      method: "POST",
-      headers: { "Content-Type": "text/plain;charset=utf-8" },
-      body: JSON.stringify({ action: "get_shared_books" })
-    });
-    const data = await res.json();
-    if (data && data.status === "success" && Array.isArray(data.books) && data.books.length > 0) {
-      const merged = mergeCustomBooksList(data.books);
-      localStorage.setItem("teacherCustomBooks", JSON.stringify(merged));
-      loadBooks();
-      populateBookSelect();
-      renderBookGrid();
-      if (shouldRenderModal) {
-        renderSharedBooksList();
-      }
-    }
-  } catch (e) {
-    // 오프라인/로컬 환경에서도 로컬 및 기본 공유 도서(열하일기 등) 정상 표시
-  }
-}
-
 function switchTab(name) {
   document.querySelectorAll(".section").forEach(function(el) {
     el.classList.remove("active");
@@ -1625,13 +1677,15 @@ async function submitFinalToSheet(withAi) {
 
   document.getElementById("resSaenggibu").textContent = tailoredSaenggibu;
 
+  const activeSheetUrl = (typeof getLinkedSheetUrl === "function") ? getLinkedSheetUrl() : (localStorage.getItem("sheetUrl") || DEFAULT_SHEET_URL);
   const payload = Object.assign({}, baseData, {
     reflection: combinedReflection,
     additionalReflection: addText,
     action: withAi ? "submit_with_feedback" : "submit_direct",
     preGeneratedSaenggibu: tailoredSaenggibu,
     tailoredSaenggibu: tailoredSaenggibu,
-    preGeneratedInquiry: withAi ? cachedAiResult.inquiry : ""
+    preGeneratedInquiry: withAi ? cachedAiResult.inquiry : "",
+    sheetUrl: activeSheetUrl
   });
 
   const targetBtn = withAi ? document.getElementById("finalSubmitWithAiBtn") : document.getElementById("directSubmitBtn");
@@ -1668,9 +1722,11 @@ async function submitFinalToSheet(withAi) {
 function openQrModal() {
   const base = window.location.href.split("?")[0].startsWith("file://") ? "https://nchina9.github.io/dushu/" : window.location.href.split("?")[0];
   const gasUrl = getActiveGasUrl();
+  const sheetUrl = (typeof getLinkedSheetUrl === "function") ? getLinkedSheetUrl() : (localStorage.getItem("sheetUrl") || DEFAULT_SHEET_URL);
   const params = new URLSearchParams();
   params.set("mode", "student");
   if (gasUrl) params.set("gas", gasUrl);
+  if (sheetUrl) params.set("sheet", sheetUrl);
   document.getElementById("qrTargetUrl").value = base + "?" + params.toString();
   updateQrImage();
   document.getElementById("qrModal").classList.add("open");
