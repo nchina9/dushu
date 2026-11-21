@@ -1579,7 +1579,7 @@ function rateBook(title, score) {
   } catch (err) {}
 }
 
-const DEFAULT_GAS_URL = "https://script.google.com/macros/s/AKfycbxsCwrhptjdDh6VaqMeNd1wMNJNI71gwNRSC1adFO2MI8mx4PZ3BaKmGZxPEb6B6hYz/exec";
+const DEFAULT_GAS_URL = "https://script.google.com/macros/s/AKfycbwYJH_PUXy_3oyhsEEFcGP3zN0PMaQP6O3gbns_6U-No6JspxX24ht-RGekDsBN6pC3/exec";
 const DEFAULT_SHEET_URL = "https://docs.google.com/spreadsheets/d/1BgMJQ1Gy1JgaLQ7d0aovUNl5P_NGtLtp94Bq7vk6OoA/edit";
 let cachedAiResult = { saenggibu: "", inquiry: "" };
 
@@ -1591,7 +1591,7 @@ function getActiveGasUrl() {
     return queryGas;
   }
   const currentSaved = (localStorage.getItem("gasUrl") || "").trim();
-  if (!currentSaved || currentSaved.indexOf("AKfycbx9DnQVEtSwRLw1Ksa6p1f7aLJjJnJ0UwjwiZitG2Z0") >= 0 || currentSaved.indexOf("AKfycbwF7x1tLM9bv0CGT1odUOxDpQtsTof_rJ9IitTBM4nooO5qjyIw5dnlM0lLITfHKWJNOw") >= 0) {
+  if (!currentSaved || currentSaved.indexOf("AKfycbx9DnQVEtSwRLw1Ksa6p1f7aLJjJnJ0UwjwiZitG2Z0") >= 0 || currentSaved.indexOf("AKfycbwF7x1tLM9bv0CGT1odUOxDpQtsTof_rJ9IitTBM4nooO5qjyIw5dnlM0lLITfHKWJNOw") >= 0 || currentSaved.indexOf("AKfycbxsCwrhptjdDh6VaqMeNd1wMNJNI71gwNRSC1adFO2MI8mx4PZ3BaKmGZxPEb6B6hYz") >= 0) {
     localStorage.setItem("gasUrl", DEFAULT_GAS_URL);
   }
   return (localStorage.getItem("gasUrl") || "").trim() || DEFAULT_GAS_URL;
