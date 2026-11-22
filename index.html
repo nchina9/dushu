@@ -1869,12 +1869,14 @@ async function submitFinalToSheet(withAi) {
 
   document.getElementById("resSaenggibu").textContent = tailoredSaenggibu;
 
+  const submissionTypeLabel = withAi ? "AI 피드백 후 보완" : "피드백 없이 바로 제출";
   const activeSheetUrl = (typeof getLinkedSheetUrl === "function") ? getLinkedSheetUrl() : (localStorage.getItem("sheetUrl") || DEFAULT_SHEET_URL);
   const payload = Object.assign({}, baseData, {
     studentId: effectiveStudentId,
     reflection: combinedReflection,
     additionalReflection: addText,
     action: withAi ? "submit_with_feedback" : "submit_direct",
+    submissionType: submissionTypeLabel,
     preGeneratedSaenggibu: tailoredSaenggibu,
     tailoredSaenggibu: tailoredSaenggibu,
     preGeneratedInquiry: withAi ? cachedAiResult.inquiry : "",
