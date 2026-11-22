@@ -17,6 +17,7 @@
   }
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, "Malgun Gothic", sans-serif; }
   body { background: var(--bg); color: var(--text); line-height: 1.6; }
+
   header {
     background: linear-gradient(135deg, #1e3a8a 0%, #0f172a 100%);
     color: white;
@@ -26,11 +27,272 @@
     top: 0;
     z-index: 100;
   }
+  .header-inner {
+    max-width: 1240px;
+    margin: 0 auto;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.75rem;
+  }
+  .header-title h1 { font-size: 1.3rem; font-weight: 800; }
+  .header-title p { font-size: 0.8rem; color: #cbd5e1; margin-top: 2px; }
+  .nav-btns { display: flex; gap: 0.45rem; flex-wrap: wrap; }
+  .btn {
+    padding: 0.48rem 0.88rem;
+    border-radius: 8px;
+    border: none;
+    font-weight: 600;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: all 0.15s;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+  }
+  .btn-tab { background: rgba(255,255,255,0.14); color: white; }
+  .btn-tab.active { background: #3b82f6; color: white; box-shadow: 0 2px 8px rgba(59,130,246,0.4); }
+  .btn-add { background: #8b5cf6; color: white; }
+  .btn-shared { background: #ec4899; color: white; }
+  .btn-copy { background: #10b981; color: white; }
+  .btn-mysheet { background: #0284c7; color: white; }
+  .btn-setting { background: #f59e0b; color: #0f172a; }
   body.student-mode .teacher-only { display: none !important; }
   body.peer-teacher-mode .admin-only { display: none !important; }
+
+  main { max-width: 1240px; margin: 1.6rem auto; padding: 0 1.4rem; }
+  .section { display: none; }
+  .section.active { display: block; }
+
+  .viewer-controls {
+    background: var(--card);
+    padding: 1rem;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.8rem;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1.4rem;
+  }
+  .filter-group { display: flex; gap: 0.45rem; flex-wrap: wrap; }
+  .filter-btn {
+    padding: 0.4rem 0.85rem;
+    border-radius: 20px;
+    border: 1px solid var(--border);
+    background: white;
+    cursor: pointer;
+    font-size: 0.84rem;
+    font-weight: 600;
+  }
+  .filter-btn.active { background: var(--primary); color: white; border-color: var(--primary); }
+  .search-input {
+    padding: 0.45rem 0.85rem;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    min-width: 210px;
+    font-size: 0.88rem;
+  }
+
+  .one-page-card {
+    background: var(--card);
+    border-radius: 16px;
+    border: 2px solid #cbd5e1;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.06);
+    padding: 2rem;
+    max-width: 980px;
+    margin: 0 auto 2rem auto;
+  }
+  .badge-row { display: flex; gap: 0.45rem; flex-wrap: wrap; align-items: center; margin-bottom: 0.7rem; }
+  .page-badge {
+    background: #eff6ff; color: var(--primary); font-weight: 700;
+    padding: 0.25rem 0.7rem; border-radius: 6px; font-size: 0.82rem;
+  }
+  .subject-tag {
+    background: #f0fdf4; color: #15803d; border: 1px solid #bbf7d0;
+    font-weight: 600; padding: 0.22rem 0.6rem; border-radius: 6px; font-size: 0.78rem;
+  }
+  .book-header {
+    border-bottom: 2px solid var(--primary);
+    padding-bottom: 0.9rem;
+    margin-bottom: 1.4rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    flex-wrap: wrap;
+    gap: 0.8rem;
+  }
+  .book-header h2 { font-size: 1.65rem; color: #0f172a; }
+  .book-subtitle { color: var(--accent); font-weight: 700; font-size: 0.98rem; margin-top: 0.25rem; }
+
+  .one-page-grid {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: 1.6rem;
+    align-items: start;
+  }
+  @media (max-width: 768px) { .one-page-grid { grid-template-columns: 1fr; } }
+  .info-box {
+    background: #f8fafc;
+    border-left: 4px solid var(--primary-light);
+    padding: 1.1rem;
+    border-radius: 0 8px 8px 0;
+    margin-bottom: 1rem;
+  }
+  .info-box h3 { font-size: 0.96rem; color: var(--primary); margin-bottom: 0.4rem; }
+  .info-box p { font-size: 0.92rem; color: #334155; }
+
+  .illustration-box {
+    background: #ffffff;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1rem;
+    text-align: center;
+  }
+  .illustration-box h3 { font-size: 0.9rem; color: var(--muted); margin-bottom: 0.6rem; }
+  .svg-stage {
+    width: 100%;
+    height: 360px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #0f172a;
+    border-radius: 12px;
+    overflow: hidden;
+  }
+  .page-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    margin-top: 1.4rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border);
+  }
+
+  .book-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(235px, 1fr));
+    gap: 1rem;
+    margin-top: 1rem;
+  }
+  .mini-card {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 0.85rem;
+    cursor: pointer;
+    transition: transform 0.15s, border-color 0.15s, box-shadow 0.15s;
+    display: flex;
+    flex-direction: column;
+  }
+  .mini-card:hover { transform: translateY(-3px); border-color: var(--primary-light); box-shadow: 0 8px 18px rgba(15,23,42,0.08); }
+  .mini-card.custom-book { border-left: 4px solid #8b5cf6; }
+  .mini-poster-wrap {
+    width: 100%;
+    height: 165px;
+    border-radius: 8px;
+    overflow: hidden;
+    background: #0f172a;
+    margin-bottom: 0.6rem;
+  }
+  .mini-card .num { font-size: 0.73rem; font-weight: 700; color: var(--primary-light); }
+  .mini-card .title { font-size: 0.96rem; font-weight: 800; margin: 3px 0; color: #0f172a; }
+  .mini-card .desc { font-size: 0.79rem; color: var(--muted); margin-bottom: 6px; }
+  .mini-card .tags { font-size: 0.72rem; color: #0d9488; font-weight: 600; margin-top: auto; }
+
+  .form-container {
+    max-width: 900px;
+    margin: 0 auto;
+    background: white;
+    padding: 2rem;
+    border-radius: 16px;
+    border: 1px solid var(--border);
+  }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr 1.2fr; gap: 1rem; margin-bottom: 1rem; }
+  @media (max-width: 640px) { .form-row { grid-template-columns: 1fr; } }
+  .form-group { margin-bottom: 1.1rem; }
+  .form-group label { display: block; font-weight: 700; margin-bottom: 0.35rem; font-size: 0.9rem; }
+  .form-control { width: 100%; padding: 0.65rem 0.85rem; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 0.92rem; }
+  .metaphor-guide {
+    background: #fefce8; border: 1px solid #fef08a; padding: 0.75rem 0.95rem;
+    border-radius: 8px; font-size: 0.84rem; color: #854d0e; margin-bottom: 0.5rem;
+  }
+  .btn-submit {
+    width: 100%; padding: 0.9rem; background: var(--primary); color: white;
+    font-size: 1rem; justify-content: center; margin-top: 0.4rem;
+  }
+  .ai-result-box {
+    margin-top: 1.6rem; background: #f0fdf4; border: 2px solid #86efac;
+    border-radius: 12px; padding: 1.4rem; display: none;
+  }
+  .result-item { background: white; padding: 0.9rem; border-radius: 8px; margin-bottom: 0.9rem; border: 1px solid #dcfce7; }
+
+  .visual-picker-panel {
+    display: none;
+    background: #f8fafc;
+    border: 1.5px solid #93c5fd;
+    border-radius: 12px;
+    padding: 1rem;
+    margin-bottom: 1.2rem;
+  }
+  .visual-picker-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(165px, 1fr));
+    gap: 0.75rem;
+    max-height: 340px;
+    overflow-y: auto;
+    margin-top: 0.7rem;
+  }
+  .pick-card {
+    background: white;
+    border: 1.5px solid #cbd5e1;
+    border-radius: 10px;
+    padding: 0.55rem;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .pick-card:hover, .pick-card.active {
+    border-color: #1e3a8a;
+    background: #eff6ff;
+    transform: translateY(-2px);
+  }
+  .pick-poster {
+    width: 100%;
+    height: 115px;
+    border-radius: 6px;
+    overflow: hidden;
+    background: #0f172a;
+    margin-bottom: 0.4rem;
+  }
+
+  .star-rating-box { margin-top: 0.65rem; padding-top: 0.55rem; border-top: 1px dashed #e2e8f0; }
+  .star-btns { display: inline-flex; gap: 3px; }
+  .star-btn { background: none; border: none; font-size: 1.1rem; cursor: pointer; color: #cbd5e1; }
+  .star-btn.filled { color: #f59e0b; }
+  .rating-badge { font-size: 0.74rem; font-weight: 700; color: #b45309; background: #fef3c7; padding: 2px 7px; border-radius: 10px; }
+
+  .modal {
+    display: none; position: fixed; inset: 0; background: rgba(15,23,42,0.65);
+    z-index: 200; align-items: center; justify-content: center; padding: 1rem;
+  }
+  .modal.open { display: flex; }
+  .modal-content {
+    background: white; padding: 1.6rem; border-radius: 14px;
+    max-width: 860px; width: 100%; max-height: 90vh; overflow-y: auto;
+  }
+  .checkbox-subjects {
+    display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.4rem;
+    background: #f8fafc; padding: 0.75rem; border-radius: 8px; border: 1px solid var(--border); font-size: 0.84rem;
+  }
+  footer { text-align: center; padding: 1.8rem; color: var(--muted); font-size: 0.88rem; border-top: 1px solid var(--border); margin-top: 2.5rem; }
 </style>
 </head>
 <body>
+
 <header>
   <div class="header-inner">
     <div class="header-title">
@@ -51,10 +313,1704 @@
     </div>
   </div>
 </header>
-...
+
+<main>
+  <section id="tab-viewer" class="section active">
+    <div class="viewer-controls">
+      <div class="filter-group">
+        <button class="filter-btn active" onclick="filterCategory('ALL', this)">전체 도서</button>
+        <button class="filter-btn" onclick="filterCategory('인문사회', this)">인문·사회</button>
+        <button class="filter-btn" onclick="filterCategory('과학', this)">과학 계열</button>
+        <button class="filter-btn" onclick="filterCategory('수학', this)">수학 계열</button>
+        <button class="filter-btn" onclick="filterCategory('교사추가', this)">⭐ 교사 추가 도서</button>
+      </div>
+      <div style="display:flex; gap:0.5rem; flex-wrap:wrap;">
+        <input type="text" id="searchInput" class="search-input" placeholder="도서명, 주제, 과목 검색..." oninput="renderBookGrid()">
+        <button class="btn" style="background:#e2e8f0;" onclick="window.print()">🖨️ 현재 1PAGE 인쇄</button>
+      </div>
+    </div>
+
+    <div id="onePageContainer" class="one-page-card"></div>
+
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-top:1.8rem; flex-wrap:wrap; gap:0.5rem;">
+      <h3>🗂️ 전체 추천 도서 그림 목록 (클릭 시 1PAGE 소개자료 표시)</h3>
+      <span id="bookCountLabel" style="font-size:0.88rem; color:var(--muted); font-weight:600;"></span>
+    </div>
+    <div id="bookGrid" class="book-grid"></div>
+  </section>
+
+  <section id="tab-submit" class="section">
+    <div class="form-container">
+      <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:0.6rem; margin-bottom:0.4rem;">
+        <h2 style="color:var(--primary); margin:0;">✍️ 교과 연계 도서 선택 및 메타포 소감문 제출</h2>
+        <div style="display:flex; gap:0.45rem; flex-wrap:wrap;">
+          <button type="button" class="btn" style="background:#e2e8f0; color:#0f172a;" onclick="goHomeMain()">🏠 메인화면 돌아가기</button>
+          <button type="button" class="btn" style="background:#0ea5e9; color:white;" onclick="toggleVisualBookPicker()">
+            🖼️ 추천도서 보기 (그림으로 선택)
+          </button>
+        </div>
+      </div>
+      <p style="color:var(--muted); font-size:0.9rem; margin-bottom:1.2rem;">
+        상단 <strong>[🖼️ 추천도서 보기]</strong> 버튼을 누르면 전체 도서가 그림 카드로 펼쳐지며, 그림을 클릭해 도서를 바로 선택할 수 있습니다.
+      </p>
+
+      <div id="visualPickerPanel" class="visual-picker-panel">
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:0.5rem;">
+          <strong style="color:#1e3a8a;">🖼️ 추천도서 그림 갤러리 (그림 카드를 누르면 아래 도서 선택에 자동 반영됩니다)</strong>
+          <input type="text" id="pickerSearchInput" class="search-input" style="min-width:180px; padding:0.35rem 0.7rem;" placeholder="그림 도서 검색..." oninput="renderVisualPickerCards()">
+        </div>
+        <div id="visualPickerGrid" class="visual-picker-grid"></div>
+      </div>
+
+      <form id="readingForm" onsubmit="event.preventDefault();">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="studentId">학번 (4자리 또는 5자리) *</label>
+            <input type="text" id="studentId" class="form-control" placeholder="예: 20315 또는 9999" required>
+          </div>
+          <div class="form-group">
+            <label for="studentName">이름 *</label>
+            <input type="text" id="studentName" class="form-control" placeholder="예: 홍길동" required>
+          </div>
+          <div class="form-group">
+            <label for="subjectSelect">교과(과목) 선택 *</label>
+            <select id="subjectSelect" class="form-control" onchange="handleSubjectSelectChange()" required>
+              <option value="">-- 과목을 선택하세요 --</option>
+              <option value="국어·문학">국어 / 문학 / 화법과 작문</option>
+              <option value="사회·역사·지리">통합사회 / 한국사 / 세계사 / 지리</option>
+              <option value="윤리·철학·심리">생활과 윤리 / 윤리와 사상 / 철학·심리</option>
+              <option value="경제·정치·법">경제 / 정치와 법 / 사회·문화</option>
+              <option value="수학">수학 / 미적분 / 확률과 통계 / 기하</option>
+              <option value="물리·지구과학">통합과학 / 물리학 / 지구과학</option>
+              <option value="화학·생명과학">화학 / 생명과학 / 환경</option>
+              <option value="정보·AI">정보 / 인공지능 기초 / 데이터과학</option>
+              <option value="중국어·세계문화">중국어 / 제2외국어 / 세계문화</option>
+              <option value="미술·예술·진로">미술 / 예술 / 진로와 직업</option>
+              <option value="CUSTOM_SUBJECT">✏️ 기타 과목 직접 입력</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group" id="customSubjectGroup" style="display:none;">
+          <label for="customSubjectInput">과목명 직접 입력 *</label>
+          <input type="text" id="customSubjectInput" class="form-control" placeholder="예: 중국 문화, 한문 등">
+        </div>
+
+        <div class="form-group">
+          <label for="bookSelect">도서 선택 (ㄱㄴㄷ순 전체 목록 / 그림으로 선택 / 직접 입력) *</label>
+          <select id="bookSelect" class="form-control" onchange="toggleCustomBook()" required></select>
+        </div>
+
+        <div class="form-group" id="customBookGroup" style="display:none;">
+          <label for="customBookTitle">직접 입력할 책 제목 *</label>
+          <input type="text" id="customBookTitle" class="form-control" placeholder="읽은 책 제목을 입력하세요">
+        </div>
+
+        <div class="form-group">
+          <label for="metaphor">나만의 도서 메타포(은유) 작성 *</label>
+          <div class="metaphor-guide">
+            💡 <strong>작성 예시:</strong> "아Q정전은 회초리다. 서구 열강의 침입 앞에 봉건사상에만 빠져있는 근대 중국인들의 어리석음에 대해 따끔한 견책을 하고 있기 때문이다."
+          </div>
+          <textarea id="metaphor" class="form-control" rows="3" placeholder="『(책 제목)』은(는) (무엇)이다. 왜냐하면 ~ 때문이다." required></textarea>
+        </div>
+
+        <div class="form-group">
+          <label for="reflection">독서 소감문 (줄거리 요약 및 교과 연계 성찰) *</label>
+          <textarea id="reflection" class="form-control" rows="5" placeholder="인상 깊었던 내용과 교과 개념 연계, 자신의 성찰을 작성하세요." required></textarea>
+        </div>
+
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.8rem;">
+          <button type="button" id="aiFeedbackBtn" class="btn btn-submit" style="background:#2563eb;" onclick="requestAiFeedback()">🤖 AI 피드백 먼저 받기</button>
+          <button type="button" id="directSubmitBtn" class="btn btn-submit" style="background:#059669;" onclick="submitFinalToSheet(false)">📤 피드백 없이 바로 제출</button>
+        </div>
+      </form>
+
+      <div id="aiResultBox" class="ai-result-box">
+        <h3 style="color:#166534; margin-bottom:0.8rem;">🤖 AI 독서 분석 및 심화 탐구 가이드</h3>
+        <div class="result-item">
+          <strong>📌 생성된 생기부 문구 초안</strong>
+          <p id="resSaenggibu" style="margin-top:4px;"></p>
+        </div>
+        <div class="result-item">
+          <strong>🔍 후속 심화 탐구 질문</strong>
+          <p id="resInquiry" style="white-space:pre-line; margin-top:4px;"></p>
+        </div>
+        <div class="form-group">
+          <label for="additionalReflection">✍️ AI 피드백 반영 추가 성찰 (선택)</label>
+          <textarea id="additionalReflection" class="form-control" rows="3" placeholder="추가 탐구 내용을 덧붙여 작성하세요."></textarea>
+        </div>
+        <button type="button" id="finalSubmitWithAiBtn" class="btn btn-submit" style="background:#15803d;" onclick="submitFinalToSheet(true)">✅ 보완 내용 포함 최종 제출</button>
+      </div>
+
+      <div id="finalCompleteBanner" style="display:none; margin-top:1.4rem; background:#ecfdf5; border:2px solid #10b981; border-radius:12px; padding:1.2rem; text-align:center;">
+        <h3 style="color:#065f46;">🎉 제출이 완료되었습니다!</h3>
+        <p id="finalCompleteMsg" style="font-size:0.9rem; color:#047857; margin-top:4px;"></p>
+      </div>
+    </div>
+  </section>
+</main>
+
+<div id="addBookModal" class="modal">
+  <div class="modal-content" style="max-width:700px;">
+    <h3 style="color:#6d28d9; margin-bottom:0.8rem;">➕ 교사 맞춤형 도서 1PAGE 카드 추가</h3>
+    <form id="addBookForm" onsubmit="handleAddCustomBook(event)">
+      <div class="form-row">
+        <div class="form-group">
+          <label>도서 제목 *</label>
+          <input type="text" id="newBookTitle" class="form-control" required>
+        </div>
+        <div class="form-group">
+          <label>추천 교사명</label>
+          <input type="text" id="newBookTeacher" class="form-control" placeholder="예: 신윤기 수석">
+        </div>
+        <div class="form-group">
+          <label>계열 *</label>
+          <select id="newBookCat" class="form-control">
+            <option value="인문사회">인문·사회</option>
+            <option value="과학">과학 계열</option>
+            <option value="수학">수학 계열</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>핵심 부제 *</label>
+        <input type="text" id="newBookSubtitle" class="form-control" required>
+      </div>
+      <div class="form-group">
+        <label>핵심 주제 키워드 *</label>
+        <input type="text" id="newBookTheme" class="form-control" required>
+      </div>
+      <div class="form-group">
+        <label>핵심 줄거리 및 교과 연계 설명 *</label>
+        <textarea id="newBookSummary" class="form-control" rows="3" required></textarea>
+      </div>
+      <div class="form-group">
+        <label>직접 만든 그림 이미지 URL (선택 - 비우면 도서 주제 맞춤 일러스트 자동 생성)</label>
+        <input type="url" id="newBookImageUrl" class="form-control" placeholder="https://...">
+      </div>
+      <div class="form-group">
+        <label>연관 교과 선택</label>
+        <div class="checkbox-subjects" id="newBookSubjects">
+          <label><input type="checkbox" value="국어·문학" checked> 국어·문학</label>
+          <label><input type="checkbox" value="수학"> 수학</label>
+          <label><input type="checkbox" value="사회·역사·지리"> 사회·역사·지리</label>
+          <label><input type="checkbox" value="윤리·철학·심리"> 윤리·철학·심리</label>
+          <label><input type="checkbox" value="경제·정치·법"> 경제·정치·법</label>
+          <label><input type="checkbox" value="물리·지구과학"> 물리·지구과학</label>
+          <label><input type="checkbox" value="화학·생명과학"> 화학·생명과학</label>
+          <label><input type="checkbox" value="정보·AI"> 정보·AI</label>
+          <label><input type="checkbox" value="중국어·세계문화"> 중국어·세계문화</label>
+          <label><input type="checkbox" value="미술·예술·진로"> 미술·예술·진로</label>
+        </div>
+      </div>
+      <div style="display:flex; justify-content:flex-end; gap:0.5rem;">
+        <button type="button" class="btn" style="background:#e2e8f0;" onclick="closeAddBookModal()">닫기</button>
+        <button type="submit" class="btn btn-add">1PAGE 카드 생성하기</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div id="sharedBooksModal" class="modal">
+  <div class="modal-content">
+    <h3 style="color:#be185d; margin-bottom:0.4rem;">📚 타교사 추천도서 자료실 (100권 양식 일러스트 · 별표 5점 평가)</h3>
+    <p style="font-size:0.84rem; color:#64748b; margin-bottom:0.5rem;">
+      타교사 추천 도서를 클릭하면 기존 100권 도서와 동일한 <strong>1페이지 양식과 일러스트</strong>로 생성되어 표시됩니다. (10명 이상 평가 후 평균 2.5점 이하 자동 삭제)
+    </p>
+    <div id="sharedSyncStatus" style="font-size:0.8rem; color:#0284c7; font-weight:600; margin-bottom:0.7rem;"></div>
+    <div style="display:grid; grid-template-columns:1fr 1.5fr auto; gap:0.6rem; margin-bottom:0.9rem;">
+      <select id="sharedSubjectFilter" class="form-control" onchange="renderSharedBooksList()">
+        <option value="ALL">📂 전체 교과 분류</option>
+        <option value="국어·문학">국어·문학</option>
+        <option value="윤리·철학·심리">윤리·철학·심리</option>
+        <option value="사회·역사·지리">사회·역사·지리</option>
+        <option value="경제·정치·법">경제·정치·법</option>
+        <option value="수학">수학</option>
+        <option value="물리·지구과학">물리·지구과학</option>
+        <option value="화학·생명과학">화학·생명과학</option>
+        <option value="정보·AI">정보·AI</option>
+        <option value="중국어·세계문화">중국어·세계문화</option>
+        <option value="미술·예술·진로">미술·예술·진로</option>
+      </select>
+      <input type="text" id="sharedSearchInput" class="form-control" placeholder="도서명, 주제, 교사명 검색..." oninput="renderSharedBooksList()">
+      <button type="button" id="syncSharedBtn" class="btn" style="background:#0284c7;color:white;" onclick="syncSharedBooksFromServer(true)">🔄 공유목록 동기화</button>
+    </div>
+    <div id="sharedBooksContainer" style="display:grid; grid-template-columns:repeat(auto-fill, minmax(225px, 1fr)); gap:0.85rem; max-height:420px; overflow-y:auto;"></div>
+    <div style="display:flex; justify-content:flex-end; margin-top:1rem;">
+      <button type="button" class="btn" style="background:#e2e8f0;" onclick="closeSharedBooksModal()">닫기</button>
+    </div>
+  </div>
+</div>
+
+<div id="qrModal" class="modal">
+  <div class="modal-content" style="text-align:center; max-width:540px;">
+    <h3 style="color:var(--primary); margin-bottom:0.6rem;">📱 학생 배포용 접속 QR 코드 및 링크</h3>
+    <p style="font-size:0.82rem; color:#64748b; margin-bottom:0.5rem;">이 QR 코드와 링크에는 선생님 시트 연동 주소(<code>?mode=student&amp;gas=...</code>)가 자동으로 포함되어 있습니다.</p>
+    <img id="qrCodeImg" src="" alt="QR" style="width:190px; height:190px; margin:0.6rem auto; display:block;">
+    <div style="background:#eff6ff; border:1px solid #93c5fd; border-radius:8px; padding:0.7rem; margin-bottom:0.8rem; word-break:break-all; text-align:left;">
+      <div style="font-size:0.78rem; font-weight:700; color:#1e3a8a; margin-bottom:3px;">🔗 학생 접속 링크 (클릭 테스트 가능):</div>
+      <a id="studentDirectLink" href="#" target="_blank" rel="noopener noreferrer" style="font-size:0.84rem; color:#1d4ed8; font-weight:700;"></a>
+    </div>
+    <input type="url" id="qrTargetUrl" class="form-control" style="margin-bottom:0.8rem;" oninput="updateQrImage()">
+    <button type="button" class="btn" style="background:#e2e8f0;" onclick="closeQrModal()">닫기</button>
+  </div>
+</div>
+
+<div id="settingsModal" class="modal">
+  <div class="modal-content" style="max-width:520px;">
+    <h3 style="color:var(--primary); margin-bottom:0.8rem;">⚙️ 교사 연동 설정</h3>
+    <div class="form-group">
+      <label>Google Apps Script 웹 앱 URL</label>
+      <input type="url" id="gasUrlInput" class="form-control">
+    </div>
+    <div class="form-group">
+      <label>원본 구글 스프레드시트 URL</label>
+      <input type="url" id="sheetUrlInput" class="form-control">
+    </div>
+    <div style="display:flex; justify-content:flex-end; gap:0.5rem;">
+      <button type="button" class="btn" style="background:#e2e8f0;" onclick="closeSettings()">닫기</button>
+      <button type="button" class="btn btn-submit" style="width:auto; padding:0.5rem 1rem; margin:0;" onclick="saveSettings()">저장</button>
+    </div>
+  </div>
+</div>
+
+
+<div id="mySheetConnectModal" class="modal">
+  <div class="modal-content" style="max-width:520px;">
+    <h3 id="mySheetModalTitle" style="color:#0284c7; margin-bottom:0.5rem;">📊 내 사본 시트 연결</h3>
+    <p id="mySheetModalDesc" style="font-size:0.85rem; color:#475569; margin-bottom:1rem; line-height:1.55;"></p>
+    <div class="form-group">
+      <label>사본으로 만든 내 구글 스프레드시트 URL *</label>
+      <input type="url" id="peerSheetUrlInput" class="form-control" placeholder="https://docs.google.com/spreadsheets/d/내시트ID/edit">
+      <p style="font-size:0.76rem; color:#64748b; margin-top:4px;">
+        ※ Apps Script 배포 절차 없이 내 시트 URL만 넣으면 됩니다. 내 시트 우측 상단 <strong>[공유] → 링크가 있는 모든 사용자: 편집자</strong>로 두면 학생 QR 결과물이 내 사본 시트에 바로 들어옵니다.
+      </p>
+    </div>
+    <div style="display:flex; justify-content:flex-end; gap:0.5rem; margin-top:1rem;">
+      <button type="button" class="btn" style="background:#e2e8f0;" onclick="closeMySheetConnectModal()">닫기</button>
+      <button type="button" class="btn btn-mysheet" onclick="saveAndOpenMySheet()">✅ 저장 및 내 시트 바로 열기</button>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <p><strong>개발자: 신윤기 수석</strong> | 교과 연계 200권+ 독서·메타포·AI 생기부 통합 플랫폼</p>
+</footer>
+
 <script>
+const DEFAULT_BOOKS_DATA = [
+  // PART 3: 인문사회 계열 책 읽기 (BOOK 1 ~ BOOK 47)
+  { id: 1, cat: "인문사회", title: "존엄하게 산다는 것", subtitle: "존엄을 잃게 만드는 사회에서 어떻게 인간답게 살 것인가?", theme: "인간의 존엄성과 사회적 연대", subjects: ["윤리·철학·심리", "사회·역사·지리", "국어·문학"] },
+  { id: 2, cat: "인문사회", title: "유튜브는 책을 집어삼킬 것인가", subtitle: "우리 시대 문해력에 대한 논의", theme: "디지털 미디어 시대의 비판적 문해력", subjects: ["국어·문학", "정보·AI", "사회·역사·지리"] },
+  { id: 3, cat: "인문사회", title: "언어의 줄다리기", subtitle: "우리가 몰랐던 언어 속의 숨은 의미 파헤치기", theme: "언어와 권력, 사회문화적 맥락", subjects: ["국어·문학", "사회·역사·지리", "중국어·세계문화"] },
+  { id: 4, cat: "인문사회", title: "몰입의 즐거움", subtitle: "한 번이라도 몰입해본 인생은 얼마나 아름다운가", theme: "자기주도적 몰입과 행복의 심리학", subjects: ["윤리·철학·심리", "미술·예술·진로"] },
+  { id: 5, cat: "인문사회", title: "인간관계론", subtitle: "성공하는 인간관계를 맺으려면?", theme: "공감과 경청을 통한 대인관계의 원리", subjects: ["윤리·철학·심리", "국어·문학", "미술·예술·진로"] },
+  { id: 6, cat: "인문사회", title: "책은 도끼다", subtitle: "얼어붙은 감수성을 깨뜨리는 우리의 '도끼'들", theme: "깊이 읽기를 통한 인문학적 감수성 회복", subjects: ["국어·문학", "윤리·철학·심리", "미술·예술·진로"] },
+  { id: 7, cat: "인문사회", title: "인간 본성의 법칙", subtitle: "인간의 내면을 해독하는 열쇠를 얻고 싶다면", theme: "인간 심리의 심층 구조와 행동 동인", subjects: ["윤리·철학·심리", "사회·역사·지리"] },
+  { id: 8, cat: "인문사회", title: "철학의 역사", subtitle: "소크라테스부터 피터 싱어까지, 위대한 철학자 40인으로 살펴보는 철학의 역사", theme: "서양 지성사의 흐름과 핵심 사유", subjects: ["윤리·철학·심리", "사회·역사·지리", "중국어·세계문화"] },
+  { id: 9, cat: "인문사회", title: "강원국의 글쓰기", subtitle: "내 글을 쓴다는 건 나답게 산다는 것", theme: "생각을 정리하고 표현하는 글쓰기의 힘", subjects: ["국어·문학", "미술·예술·진로"] },
+  { id: 10, cat: "인문사회", title: "나는 생각하고 말하는 사람이 되기로 했다", subtitle: "'올바른 말하기'를 배우는 언어 감수성 수업", theme: "차별과 혐오를 넘어서는 언어 감수성", subjects: ["국어·문학", "윤리·철학·심리", "사회·역사·지리"] },
+  { id: 11, cat: "인문사회", title: "진작 이렇게 책을 읽었더라면", subtitle: "읽은 것이 고스란히 배움이 되는, 생산적 책 읽기", theme: "지식을 내면화하는 능동적 독서 전략", subjects: ["국어·문학", "미술·예술·진로"] },
+  { id: 12, cat: "인문사회", title: "철학적 시 읽기의 즐거움", subtitle: "우리 시와 현대 철학이 만났을 때", theme: "문학과 철학의 통섭적 해석", subjects: ["국어·문학", "윤리·철학·심리"] },
+  { id: 13, cat: "인문사회", title: "문학의 숲을 거닐다", subtitle: "문학의 숲에서 사랑을 만나고, 삶의 길을 찾는다", theme: "고전과 현대 문학이 건네는 삶의 성찰", subjects: ["국어·문학", "윤리·철학·심리"] },
+  { id: 14, cat: "인문사회", title: "서른세 번의 만남, 백석과 동주", subtitle: "백석과 윤동주의 연결고리를 찾는 탐험", theme: "일제강점기 두 시인의 문학적 교감과 시대정신", subjects: ["국어·문학", "사회·역사·지리"] },
+  { id: 15, cat: "인문사회", title: "페스트", subtitle: "시대를 아우르는 한 권의 고전", theme: "재난 속 인간의 연대와 실존적 저항", subjects: ["국어·문학", "윤리·철학·심리", "중국어·세계문화", "화학·생명과학"] },
+  { id: 16, cat: "인문사회", title: "광장", subtitle: "밀실과 광장 사이에 선 한 인간의 고뇌", theme: "분단 이데올로기와 개인의 실존적 선택", subjects: ["국어·문학", "사회·역사·지리", "윤리·철학·심리", "중국어·세계문화"] },
+  { id: 17, cat: "인문사회", title: "난장이가 쏘아올린 작은 공", subtitle: "우리 사회의 그림자를 폭로한 한국 문학 대표작", theme: "산업화 시대의 소외와 구조적 불평등", subjects: ["국어·문학", "사회·역사·지리", "경제·정치·법"] },
+  { id: 18, cat: "인문사회", title: "작별인사", subtitle: "'진정한 인간다움이란 무엇인가?'를 묻는 책", theme: "포스트휴먼 시대의 정체성과 존재의 의미", subjects: ["국어·문학", "윤리·철학·심리", "정보·AI"] },
+  { id: 19, cat: "인문사회", title: "땀 흘리는 소설", subtitle: "'을'로서 살아가는 청춘들의 땀을 담은 이야기", theme: "노동의 가치와 청년 세대의 현실", subjects: ["국어·문학", "경제·정치·법", "사회·역사·지리"] },
+  { id: 20, cat: "인문사회", title: "평균의 종말", subtitle: "평균주의가 망친 교육, 아이들의 진정한 재능을 찾으려면?", theme: "개별성과 다양성을 존중하는 교육 패러다임", subjects: ["사회·역사·지리", "수학", "윤리·철학·심리", "미술·예술·진로"] },
+  { id: 21, cat: "인문사회", title: "교사와 학생 사이", subtitle: "'사랑만으로는 안 된다.' 교사에게 필요한 가르침의 기술을 논하는 책", theme: "존중과 소통에 기반한 교육적 관계", subjects: ["윤리·철학·심리", "국어·문학", "미술·예술·진로"] },
+  { id: 22, cat: "인문사회", title: "공부의 미래", subtitle: "내가 지금 하는 공부가 10년 후에는 아무 쓸모 없어진다면?", theme: "AI 시대 미래 역량과 배움의 본질", subjects: ["정보·AI", "사회·역사·지리", "미술·예술·진로"] },
+  { id: 23, cat: "인문사회", title: "팩트풀니스", subtitle: "'세상이 생각보다 괜찮은 이유'를 명확한 근거로 설명하는 책", theme: "편향을 극복하고 데이터로 세계를 바라보는 태도", subjects: ["사회·역사·지리", "수학", "경제·정치·법", "중국어·세계문화"] },
+  { id: 24, cat: "인문사회", title: "아주 작은 습관의 힘", subtitle: "습관 하나만 바뀌어도 인생이 바뀐다", theme: "시스템과 환경 설계를 통한 행동 변화", subjects: ["윤리·철학·심리", "미술·예술·진로"] },
+  { id: 25, cat: "인문사회", title: "포노 사피엔스", subtitle: "스마트폰을 손에 쥔 신인류가 세상을 바꾼다", theme: "디지털 문명의 전환과 소비·소통 방식의 변화", subjects: ["사회·역사·지리", "정보·AI", "경제·정치·법"] },
+  { id: 26, cat: "인문사회", title: "선량한 차별주의자", subtitle: "차별에 대한 예민한 감각 깨우기", theme: "일상 속 무의식적 편견과 구조적 차별 성찰", subjects: ["사회·역사·지리", "윤리·철학·심리", "경제·정치·법", "중국어·세계문화"] },
+  { id: 27, cat: "인문사회", title: "공정하다는 착각", subtitle: "'우리는 모두 공정한 기회를 누리고 있는가?'를 묻는 책", theme: "능력주의의 한계와 공동선·정의의 재구성", subjects: ["윤리·철학·심리", "경제·정치·법", "사회·역사·지리"] },
+  { id: 28, cat: "인문사회", title: "거꾸로 읽는 세계사", subtitle: "최고의 이야기꾼이 들려주는, 가장 격동적이었던 100년의 역사", theme: "비판적 역사 인식과 현대 세계사의 이면", subjects: ["사회·역사·지리", "중국어·세계문화", "경제·정치·법"] },
+  { id: 29, cat: "인문사회", title: "무심코 지나쳤던 우리동네 독립운동가 이야기", subtitle: "우리가 오롯이 기억해야 할 35년 한국 독립사", theme: "지역사 기반의 독립운동 재조명", subjects: ["사회·역사·지리", "국어·문학", "중국어·세계문화"] },
+  { id: 30, cat: "인문사회", title: "빈곤의 연대기", subtitle: "'가난한 나라는 왜 계속 가난한가?'에 대한 진지한 고찰", theme: "세계 불평등의 역사적·구조적 원인", subjects: ["경제·정치·법", "사회·역사·지리", "중국어·세계문화"] },
+  { id: 31, cat: "인문사회", title: "착한 소비는 없다", subtitle: "미래의 지구를 위해 내가 할 수 있는 일", theme: "윤리적 소비의 한계와 시스템 전환의 필요성", subjects: ["경제·정치·법", "윤리·철학·심리", "화학·생명과학", "사회·역사·지리"] },
+  { id: 32, cat: "인문사회", title: "문학 속의 지리 이야기", subtitle: "국어와 지리의 콜라보, 교과 통합의 전형", theme: "문학 작품의 배경이 된 공간과 인문지리적 해석", subjects: ["국어·문학", "사회·역사·지리", "중국어·세계문화"] },
+  { id: 33, cat: "인문사회", title: "동물들의 위대한 법정", subtitle: "멸종 위기에 처한 동물들이 인간에게 판결을 내릴 수 있다면?", theme: "생태 정의와 동물권, 환경 법학", subjects: ["윤리·철학·심리", "경제·정치·법", "화학·생명과학"] },
+  { id: 34, cat: "인문사회", title: "심리학이 이토록 재미있을 줄이야", subtitle: "백설공주는 왜 자꾸만 낯선 사람에게 문을 열어줄까?", theme: "일상과 동화 속 심리기제의 과학적 이해", subjects: ["윤리·철학·심리", "국어·문학"] },
+  { id: 35, cat: "인문사회", title: "클라우스 슈밥의 제4차 산업혁명 THE NEXT", subtitle: "인류가 맞이한 4차 산업혁명, 우리는 무엇을 준비하고 실천해야 하는가?", theme: "초연결 기술 혁명과 사회적 대응 전략", subjects: ["정보·AI", "경제·정치·법", "사회·역사·지리"] },
+  { id: 36, cat: "인문사회", title: "지리의 힘", subtitle: "삶의 모든 것이 시작되는 '땅'에 대해 공부한다", theme: "지정학적 조건이 국제 정치와 역사에 미치는 영향", subjects: ["사회·역사·지리", "경제·정치·법", "중국어·세계문화"] },
+  { id: 37, cat: "인문사회", title: "도시의 승리", subtitle: "사람은 왜 도시로 몰리는가, 도시는 사람을 어떻게 행복하게 만드는가?", theme: "도시 집적의 경제학과 지속가능한 도시 설계", subjects: ["사회·역사·지리", "경제·정치·법", "미술·예술·진로"] },
+  { id: 38, cat: "인문사회", title: "공간의 미래", subtitle: "건축가의 시선으로 바라보는 포스트 코로나 시대 '관계와 공간'에 대한 이야기", theme: "사회 변화에 따른 건축 공간의 진화", subjects: ["사회·역사·지리", "미술·예술·진로", "물리·지구과학"] },
+  { id: 39, cat: "인문사회", title: "트렌드 코리아 2023", subtitle: "새로운 1년을 미리 비춰주는 열 가지 키워드", theme: "사회·소비 트렌드 분석과 시대 변화 읽기", subjects: ["경제·정치·법", "사회·역사·지리", "미술·예술·진로"] },
+  { id: 40, cat: "인문사회", title: "왜 법이 문제일까?", subtitle: "우리 사회의 뼈대인 '법' 바로 알기", theme: "법치주의의 원리와 일상 속 법적 쟁점", subjects: ["경제·정치·법", "사회·역사·지리", "윤리·철학·심리"] },
+  { id: 41, cat: "인문사회", title: "내가 만난 소년에 대하여", subtitle: "소년 범죄를 어떤 시선으로 바라보아야 할까?", theme: "소년 사법 제도와 회복적 정의의 모색", subjects: ["경제·정치·법", "윤리·철학·심리", "사회·역사·지리"] },
+  { id: 42, cat: "인문사회", title: "헌법의 자리", subtitle: "대통령 탄핵부터 간통죄까지, 우리 헌법이 걸어온 길과 가야 할 길", theme: "헌법 정신과 기본권 보장의 역사", subjects: ["경제·정치·법", "사회·역사·지리"] },
+  { id: 43, cat: "인문사회", title: "생각에 관한 생각", subtitle: "인간의 행동을 지배하는 '생각'에 대하여", theme: "이중 처리 이론(시스템 1·2)과 행동경제학", subjects: ["윤리·철학·심리", "경제·정치·법", "수학"] },
+  { id: 44, cat: "인문사회", title: "죽은 경제학자의 살아있는 아이디어", subtitle: "세계를 움직인 경제학자들의 지혜를 만난다", theme: "경제사상사의 핵심 이론과 현대 경제 적용", subjects: ["경제·정치·법", "사회·역사·지리"] },
+  { id: 45, cat: "인문사회", title: "EBS 다큐프라임 자본주의", subtitle: "우리가 몰랐던 자본주의의 이면", theme: "금융 자본주의의 작동 원리와 화폐 시스템", subjects: ["경제·정치·법", "사회·역사·지리", "수학"] },
+  { id: 46, cat: "인문사회", title: "무엇이 행동하게 하는가", subtitle: "독창적인 현장 실험으로 살아 있는 경제학을 탐구한다", theme: "행동경제학 현장 실험과 넛지의 힘", subjects: ["경제·정치·법", "윤리·철학·심리", "수학"] },
+  { id: 47, cat: "인문사회", title: "아트인문학", subtitle: "미술의 패러다임을 바꾼 열 번의 순간을 들여다보다", theme: "예술사의 전환점과 시대를 바꾼 창의적 사유", subjects: ["미술·예술·진로", "사회·역사·지리", "윤리·철학·심리", "중국어·세계문화"] },
+
+  // PART 4: 과학 계열 책 읽기 (BOOK 48 ~ BOOK 70)
+  { id: 48, cat: "과학", title: "인류세 쫌 아는 10대", subtitle: "우리가 지구의 마지막 세대가 되지 않으려면", theme: "인류세의 개념과 기후 위기 대응", subjects: ["물리·지구과학", "화학·생명과학", "사회·역사·지리", "윤리·철학·심리"] },
+  { id: 49, cat: "과학", title: "지속가능한 미래를 위한 기후변화 데이터북", subtitle: "데이터를 통해 객관적으로 바라보는 기후 변화", theme: "기후 데이터의 과학적 분석과 탄소중립", subjects: ["물리·지구과학", "수학", "정보·AI", "사회·역사·지리"] },
+  { id: 50, cat: "과학", title: "천 개의 뇌", subtitle: "뇌 과학과 인공지능에 대한 새로운 통찰", theme: "신피질의 작동 원리와 차세대 인공지능 모델", subjects: ["화학·생명과학", "정보·AI", "윤리·철학·심리"] },
+  { id: 51, cat: "과학", title: "협력의 유전자", subtitle: "인류가 진화하고 발전하는 원동력 '협력'의 비밀", theme: "진화생물학 관점에서 본 이타성과 협력의 메커니즘", subjects: ["화학·생명과학", "사회·역사·지리", "윤리·철학·심리"] },
+  { id: 52, cat: "과학", title: "세상은 온통 화학이야", subtitle: "유쾌한 화학자의 하루로 들여다보는 화학의 매력", theme: "일상 속 물질의 화학 반응과 원리", subjects: ["화학·생명과학", "물리·지구과학"] },
+  { id: 53, cat: "과학", title: "걱정 많은 어른들을 위한 화학 이야기", subtitle: "제대로 알고 안전하게 쓰는 화학제품 이야기", theme: "화학 물질의 독성과 과학적 위해성 평가", subjects: ["화학·생명과학", "사회·역사·지리"] },
+  { id: 54, cat: "과학", title: "비커 군과 실험실 친구들 / 비커 군과 실험 기구 선배들", subtitle: "실험실의 신나는 주인공, 실험기구들을 따라 배우는 과학", theme: "과학 실험 기구의 원리와 탐구 기초", subjects: ["화학·생명과학", "물리·지구과학"] },
+  { id: 55, cat: "과학", title: "화학에서 인생을 배우다", subtitle: "정확하고 공정한 '화학' 같은 인생을 살 수 있다면", theme: "화학 평형과 반응 원리로 풀어낸 삶의 지혜", subjects: ["화학·생명과학", "윤리·철학·심리", "국어·문학"] },
+  { id: 56, cat: "과학", title: "인류에게 필요한 11가지 약 이야기 / 인류를 구한 12가지 약 이야기", subtitle: "우리에게 없어선 안 될 중요한 약들의 비하인드 스토리", theme: "의약품 개발의 역사와 생명과학적 작용 원리", subjects: ["화학·생명과학", "사회·역사·지리"] },
+  { id: 57, cat: "과학", title: "세상을 바꿀 미래 의학 설명서", subtitle: "의학과 공학의 융합으로 달라지는 세상", theme: "의공학, 유전자 치료, 정밀 의학의 미래", subjects: ["화학·생명과학", "정보·AI", "미술·예술·진로"] },
+  { id: 58, cat: "과학", title: "상상이 현실이 되는 순간", subtitle: "SF 작가들이 오늘 발명한 것들은 내일 현실이 된다", theme: "과학적 상상력과 기술 혁신의 공진화", subjects: ["물리·지구과학", "정보·AI", "국어·문학"] },
+  { id: 59, cat: "과학", title: "이상한 미래 연구소", subtitle: "우주 여행에서부터 뇌과학까지, 미래를 내다보는 엉뚱하고 유쾌한 상상", theme: "첨단 과학기술의 현재와 미래 시나리오", subjects: ["물리·지구과학", "화학·생명과학", "정보·AI"] },
+  { id: 60, cat: "과학", title: "곽재식의 세균 박람회", subtitle: "작디작은 세균 속에서 크고 먼 미래를 내다본다", theme: "미생물 생태계와 인류 문명의 공생", subjects: ["화학·생명과학", "사회·역사·지리"] },
+  { id: 61, cat: "과학", title: "과학자의 미술관", subtitle: "과학의 프리즘으로 보는 예술", theme: "명화 속에 숨겨진 광학·화학·천문학 원리", subjects: ["미술·예술·진로", "물리·지구과학", "화학·생명과학"] },
+  { id: 62, cat: "과학", title: "미드 보다 과학에 빠지다", subtitle: "미드를 통해 배우는 흥미로운 과학 상식", theme: "대중문화 속 과학적 오류와 실제 물리·생물 법칙", subjects: ["물리·지구과학", "화학·생명과학", "중국어·세계문화"] },
+  { id: 63, cat: "과학", title: "광물, 그 호기심의 문을 열다", subtitle: "광물 콜렉터가 소개하는 아름다운 광물 이야기", theme: "결정 구조와 지구과학적 광물 생성 원리", subjects: ["물리·지구과학", "화학·생명과학"] },
+  { id: 64, cat: "과학", title: "우주 패권의 시대, 4차원의 우주이야기", subtitle: "세계 강국들이 앞다퉈 우주 개발에 집중하는 이유는?", theme: "뉴스페이스 시대의 우주 탐사와 우주 산업", subjects: ["물리·지구과학", "경제·정치·법", "중국어·세계문화"] },
+  { id: 65, cat: "과학", title: "오늘의 천체관측", subtitle: "천체 관측을 꿈꾸는 초보자를 위한 친절한 입문서", theme: "망원경의 원리와 밤하늘 천체 관측 가이드", subjects: ["물리·지구과학", "수학"] },
+  { id: 66, cat: "과학", title: "우주의 끝을 찾아서", subtitle: "우주의 비밀에 다가선 과학자들의 이야기로 우주론과 친숙해진다", theme: "빅뱅 우주론, 암흑물질과 현대 천체물리학", subjects: ["물리·지구과학", "수학"] },
+  { id: 67, cat: "과학", title: "수학 없는 물리", subtitle: "수식 없이도 제대로 이해하는 물리", theme: "직관과 개념 중심으로 이해하는 물리학의 핵심 법칙", subjects: ["물리·지구과학", "수학"] },
+  { id: 68, cat: "과학", title: "데이터 과학자의 일", subtitle: "데이터 과학자는 어디에서 무슨 일을 할까?", theme: "빅데이터 분석 프로세스와 데이터 기반 의사결정", subjects: ["정보·AI", "수학", "경제·정치·법", "미술·예술·진로"] },
+  { id: 69, cat: "과학", title: "도시를 움직이는 모든 것들의 과학", subtitle: "과학은 어떻게 거대한 도시를 움직이는가?", theme: "도시 인프라 속에 숨겨진 공학과 물리학 원리", subjects: ["물리·지구과학", "사회·역사·지리", "정보·AI"] },
+  { id: 70, cat: "과학", title: "SEASON 과학서평매거진", subtitle: "좋은 과학책을 소개하는 과학 서평 잡지", theme: "최신 과학 담론의 비판적 읽기와 과학 커뮤니케이션", subjects: ["물리·지구과학", "화학·생명과학", "국어·문학"] },
+
+  // PART 5: 수학 계열 책 읽기 (BOOK 71 ~ BOOK 100)
+  { id: 71, cat: "수학", title: "수학을 낳은 위대한 질문들", subtitle: "수학의 다채로운 역사를 보여주는 20가지 질문들", theme: "수학적 개념의 탄생 배경과 수학사의 결정적 질문", subjects: ["수학", "사회·역사·지리"] },
+  { id: 72, cat: "수학", title: "수학의 밀레니엄 문제들 7", subtitle: "100만 달러의 현상금을 내건 일곱 개의 수학 난제", theme: "현대 수학의 7대 미해결 난제와 그 의의", subjects: ["수학", "정보·AI", "물리·지구과학"] },
+  { id: 73, cat: "수학", title: "위대한 수학자의 수학의 즐거움", subtitle: "피타고라스부터 노이만까지, 위대한 수학자들의 삶과 업적", theme: "수학자들의 탐구 정신과 주요 정리의 발전", subjects: ["수학", "사회·역사·지리"] },
+  { id: 74, cat: "수학", title: "발칙한 수학책", subtitle: "이야기와 그림으로 논리적 감수성을 자극한다", theme: "기하학과 논리 퍼즐을 통한 수학적 직관", subjects: ["수학", "미술·예술·진로"] },
+  { id: 75, cat: "수학", title: "수학은 실험이다", subtitle: "다양한 실험으로 배우는 살아 있는 수학", theme: "구체적 조작과 실험으로 증명하는 수학적 원리", subjects: ["수학", "물리·지구과학"] },
+  { id: 76, cat: "수학", title: "더 이상한 수학책", subtitle: "미적분학을 바라보는 다양한 시각", theme: "극한, 무한, 변화율을 탐구하는 미적분의 본질", subjects: ["수학", "물리·지구과학"] },
+  { id: 77, cat: "수학", title: "인생에도 수학처럼 답이 있다면", subtitle: "현실 세계의 문제를 해석하고 해결하는 수학 모델링", theme: "사회·자연 현상을 수식으로 구현하는 수학적 모델링", subjects: ["수학", "경제·정치·법", "정보·AI"] },
+  { id: 78, cat: "수학", title: "고교수학의 아름다운 이야기", subtitle: "간결한 증명과 신기한 공식을 얻을 수 있는 보물지도 같은 책", theme: "고등학교 수학 개념의 심화 증명과 아름다움", subjects: ["수학"] },
+  { id: 79, cat: "수학", title: "야밤의 공대생 만화", subtitle: "지식과 개그를 절묘하게 엮은 수학 만화", theme: "공학 수학의 핵심 아이디어와 과학기술사 에피소드", subjects: ["수학", "물리·지구과학", "정보·AI"] },
+  { id: 80, cat: "수학", title: "수학님은 어디에나 계셔", subtitle: "보이지 않는 곳에서 우리를 도와주는 '수학님'을 만난다", theme: "일상생활과 첨단 기술에 스며든 응용수학", subjects: ["수학", "정보·AI"] },
+  { id: 81, cat: "수학", title: "모든 것의 수다", subtitle: "한국을 대표하는 수학자 열 명에게 듣는 '수학의 쓸모'", theme: "현대 산업과 기초과학을 이끄는 수학의 역할", subjects: ["수학", "정보·AI", "미술·예술·진로"] },
+  { id: 82, cat: "수학", title: "일하는 수학", subtitle: "25가지 직업으로 만나보는 수학의 세계", theme: "진로·직업 현장에서 활용되는 실용 수학", subjects: ["수학", "미술·예술·진로", "경제·정치·법"] },
+  { id: 83, cat: "수학", title: "수학대백과사전", subtitle: "두루 써먹을 수 있는 기초 교양 수학", theme: "수, 도형, 함수, 확률의 체계적 개념 정리", subjects: ["수학"] },
+  { id: 84, cat: "수학", title: "물리가 쉬워지는 미적분", subtitle: "미적분과 물리의 연결고리로 두 과목을 동시에 잡는다", theme: "속도·가속도·운동 방정식으로 이해하는 미적분", subjects: ["수학", "물리·지구과학"] },
+  { id: 85, cat: "수학", title: "한국사에서 수학을 보다", subtitle: "문과생에게는 수학의 매력을, 이과생에게는 인문학적 교양을", theme: "한국사 유물과 제도 속에 담긴 수학적 원리", subjects: ["수학", "사회·역사·지리", "중국어·세계문화"] },
+  { id: 86, cat: "수학", title: "미술관에 간 수학자", subtitle: "아름다운 명화로 수학을 감상한다", theme: "황금비, 원근법, 대칭 등 미술 속 기하학", subjects: ["수학", "미술·예술·진로"] },
+  { id: 87, cat: "수학", title: "프로그래머, 수학으로 생각하라", subtitle: "실력 있는 프로그래머에게 필요한 수학적 사고력", theme: "이산수학, 논리, 알고리즘적 문제 해결력", subjects: ["수학", "정보·AI"] },
+  { id: 88, cat: "수학", title: "다시, 수학이 필요한 순간", subtitle: "수학의 거장과 함께하는 교양 수학 세미나", theme: "수학적 사고의 본질과 추상화의 힘", subjects: ["수학", "윤리·철학·심리"] },
+  { id: 89, cat: "수학", title: "미적분으로 바라본 하루", subtitle: "일상에서 최적의 길을 찾아주는 미적분", theme: "최적화 문제와 변화율로 해석하는 일상의 현상", subjects: ["수학", "경제·정치·법", "물리·지구과학"] },
+  { id: 90, cat: "수학", title: "오일러가 사랑한 수 e", subtitle: "위대한 수 e와 한걸음 가까워진다", theme: "자연상수 e의 정의, 성질과 자연현상 속 지수함수", subjects: ["수학", "화학·생명과학", "경제·정치·법"] },
+  { id: 91, cat: "수학", title: "x의 즐거움", subtitle: "수학을 안다는 것이 이토록 즐거울 줄이야", theme: "수의 탄생부터 미적분까지 수학의 큰 그림", subjects: ["수학"] },
+  { id: 92, cat: "수학", title: "수학의 쓸모", subtitle: "인공지능 시대, 우리에게는 여전히 수학이 필요하다", theme: "머신러닝과 AI 알고리즘의 토대가 되는 확률·선형대수", subjects: ["수학", "정보·AI", "경제·정치·법"] },
+  { id: 93, cat: "수학", title: "이 문제 풀 수 있겠어?", subtitle: "125개의 퍼즐과 함께하는 '즐거운 고통'의 시간", theme: "논리적 추론과 창의적 문제 해결 전략", subjects: ["수학", "정보·AI"] },
+  { id: 94, cat: "수학", title: "수학책을 탈출한 미적분", subtitle: "공포의 미적분이 만만해지는 책", theme: "개념과 직관으로 쉽게 풀어낸 미분과 적분", subjects: ["수학", "물리·지구과학"] },
+  { id: 95, cat: "수학", title: "페르마의 마지막 정리", subtitle: "350년간 전 세계 수학자들을 사로잡았던 하나의 문제", theme: "정수론의 위대한 난제와 수학자들의 집념", subjects: ["수학", "사회·역사·지리"] },
+  { id: 96, cat: "수학", title: "처음 시작하는 만화 통계학", subtitle: "만화로 쉽고 재미있게 배우는 개념 통계학", theme: "평균, 분산, 확률분포 등 기초 통계 개념", subjects: ["수학", "사회·역사·지리"] },
+  { id: 97, cat: "수학", title: "벌거벗은 통계학", subtitle: "확률과 통계의 두 가지 얼굴을 읽는다", theme: "통계적 추론의 원리와 데이터 해석의 함정", subjects: ["수학", "경제·정치·법", "사회·역사·지리", "정보·AI"] },
+  { id: 98, cat: "수학", title: "새빨간 거짓말, 통계", subtitle: "통계가 어떻게 사람을 속일 수 있는지 알려주는 책", theme: "그래프 왜곡과 표본 편향을 가려내는 통계 리터러시", subjects: ["수학", "경제·정치·법", "국어·문학", "사회·역사·지리"] },
+  { id: 99, cat: "수학", title: "수학은 어떻게 문명을 만들었는가", subtitle: "인간의 위대한 업적, 수학에 관한 역사 교양서", theme: "인류 문명 발전의 핵심 동력으로서의 수학사", subjects: ["수학", "사회·역사·지리", "중국어·세계문화"] },
+  { id: 100, cat: "수학", title: "수학이 좋아지는 수학", subtitle: "유쾌한 입담으로 풀어내는 수학 이야기", theme: "생활 속 수학적 원리의 재발견과 수학적 사고", subjects: ["수학"] },
+  {"id": 101, "cat": "인문사회", "title": "아Q정전", "subtitle": "정신승리법에 빠진 근대인을 일깨우는 날카로운 풍자", "theme": "정신승리법 비판과 근대적 각성", "subjects": ["국어·문학", "중국어·세계문화", "윤리·철학·심리"]},
+  {"id": 102, "cat": "인문사회", "title": "광인일기", "subtitle": "식인 예교의 폭력성을 고발한 중국 현대문학의 출발점", "theme": "봉건적 관습 비판과 근대적 자각", "subjects": ["국어·문학", "중국어·세계문화", "사회·역사·지리"]},
+  {"id": 103, "cat": "인문사회", "title": "열하일기", "subtitle": "청나라의 실상을 관찰하며 개혁을 꿈꾼 실학자의 기록", "theme": "북학사상과 이용후생의 실학 정신", "subjects": ["사회·역사·지리", "중국어·세계문화", "국어·문학"]},
+  {"id": 104, "cat": "인문사회", "title": "논어", "subtitle": "스승과 제자의 대화로 풀어낸 인(仁)과 예(禮)의 지혜", "theme": "수신과 인격 도야, 공동체 윤리", "subjects": ["윤리·철학·심리", "중국어·세계문화", "국어·문학"]},
+  {"id": 105, "cat": "인문사회", "title": "도덕경", "subtitle": "무위자연과 물처럼 낮은 곳으로 흐르는 삶의 지혜", "theme": "도(道)의 본질과 자연 순응적 사유", "subjects": ["윤리·철학·심리", "중국어·세계문화"]},
+  {"id": 106, "cat": "인문사회", "title": "맹자", "subtitle": "성선설과 민본주의, 왕도정치의 철학", "theme": "의(義)의 실천과 백성을 근본으로 삼는 정치", "subjects": ["윤리·철학·심리", "경제·정치·법", "중국어·세계문화"]},
+  {"id": 107, "cat": "인문사회", "title": "사기 열전", "subtitle": "역사 속 인물들의 선택과 흥망성쇠를 꿰뚫는 통찰", "theme": "인물 중심 서사와 역사적 교훈", "subjects": ["사회·역사·지리", "중국어·세계문화", "국어·문학"]},
+  {"id": 108, "cat": "인문사회", "title": "손자병법", "subtitle": "싸우지 않고 이기는 전략과 정세 판단의 지혜", "theme": "전략적 사고와 갈등 해결의 원리", "subjects": ["사회·역사·지리", "중국어·세계문화", "경제·정치·법"]},
+  {"id": 109, "cat": "인문사회", "title": "삼국지", "subtitle": "난세의 영웅들이 펼치는 지략과 의리, 리더십의 드라마", "theme": "군웅할거 시대 리더십과 인간 군상", "subjects": ["국어·문학", "중국어·세계문화", "사회·역사·지리"]},
+  {"id": 110, "cat": "인문사회", "title": "서유기", "subtitle": "삼장법사와 손오공·저팔계가 함께 떠난 구도 여정", "theme": "시련 극복과 동료 협동의 구도 서사", "subjects": ["국어·문학", "중국어·세계문화", "미술·예술·진로"]},
+  {"id": 111, "cat": "인문사회", "title": "수호지", "subtitle": "불의에 맞선 의로운 호걸들의 연대와 저항", "theme": "사회 부조리에 대한 저항과 의리", "subjects": ["국어·문학", "중국어·세계문화", "사회·역사·지리"]},
+  {"id": 112, "cat": "인문사회", "title": "홍루몽", "subtitle": "대관원의 번영과 쇠락 속에 담긴 섬세한 인간 내면", "theme": "가문의 흥망과 섬세한 심리·문화 묘사", "subjects": ["국어·문학", "중국어·세계문화", "윤리·철학·심리"]},
+  {"id": 113, "cat": "인문사회", "title": "인생", "subtitle": "격동의 현대사를 온몸으로 견뎌낸 평범한 한 남자의 삶", "theme": "중국 현대사 격랑 속 삶의 끈질긴 생명력", "subjects": ["국어·문학", "중국어·세계문화", "사회·역사·지리"]},
+  {"id": 114, "cat": "인문사회", "title": "허삼관 매혈기", "subtitle": "가족을 지키기 위해 피를 팔아야 했던 가장의 절절한 사랑", "theme": "고난 속 가족애와 인간 존엄의 무게", "subjects": ["국어·문학", "중국어·세계문화", "윤리·철학·심리"]},
+  {"id": 115, "cat": "인문사회", "title": "중국 현대문학사", "subtitle": "신문화운동에서 당대 문학까지 변화하는 중국의 목소리", "theme": "근현대 중국 문학의 흐름과 사회상", "subjects": ["중국어·세계문화", "국어·문학", "사회·역사·지리"]},
+  {"id": 116, "cat": "인문사회", "title": "한중일 비교문화론", "subtitle": "가깝고도 다른 동아시아 세 나라의 생활·사유·사회 구조", "theme": "동아시아 문화권의 공통점과 차이점 비교", "subjects": ["중국어·세계문화", "사회·역사·지리", "윤리·철학·심리"]},
+  {"id": 117, "cat": "인문사회", "title": "총, 균, 쇠", "subtitle": "문명의 불평등은 왜 생겨났는가? 지리와 환경의 대답", "theme": "지리적·환경적 요인이 문명 발전에 미친 영향", "subjects": ["사회·역사·지리", "화학·생명과학", "경제·정치·법"]},
+  {"id": 118, "cat": "인문사회", "title": "사피엔스", "subtitle": "인지혁명에서 AI 시대까지, 인류 역사를 관통하는 질문", "theme": "상상을 공유하는 능력과 인류 문명의 진화", "subjects": ["사회·역사·지리", "윤리·철학·심리", "화학·생명과학"]},
+  {"id": 119, "cat": "인문사회", "title": "호모 데우스", "subtitle": "생존을 넘어 신의 경지를 넘보는 인류의 미래 전망", "theme": "생명공학·알고리즘 시대 인간 가치의 재정의", "subjects": ["윤리·철학·심리", "정보·AI", "화학·생명과학"]},
+  {"id": 120, "cat": "인문사회", "title": "21세기를 위한 21가지 제언", "subtitle": "기술·정치·진실·교육의 혼란 속에서 길을 묻다", "theme": "급변하는 세계에서 주체적 판단과 회복탄력성", "subjects": ["사회·역사·지리", "윤리·철학·심리", "정보·AI"]},
+  {"id": 121, "cat": "인문사회", "title": "정의란 무엇인가", "subtitle": "옳고 그름의 기준을 두고 치열하게 토론하는 정치철학", "theme": "공리주의·자유지상주의·공동체주의 정의관", "subjects": ["윤리·철학·심리", "경제·정치·법", "사회·역사·지리"]},
+  {"id": 122, "cat": "인문사회", "title": "왜 국가들은 실패하는가", "subtitle": "번영과 빈곤을 가르는 것은 지도가 아니라 제도의 차이", "theme": "포용적 제도와 착취적 제도의 역사적 비교", "subjects": ["경제·정치·법", "사회·역사·지리"]},
+  {"id": 123, "cat": "인문사회", "title": "도넛 경제학", "subtitle": "생태적 한계와 사회적 토대 사이에서 균형을 찾는 경제", "theme": "지속가능한 경제 모델과 생태 한계 준수", "subjects": ["경제·정치·법", "화학·생명과학", "사회·역사·지리"]},
+  {"id": 124, "cat": "인문사회", "title": "생태경제학의 이해", "subtitle": "유한한 지구 생태계 안에서 작동하는 경제의 원리", "theme": "물질순환·엔트로피와 지속가능한 자원 이용", "subjects": ["경제·정치·법", "물리·지구과학", "화학·생명과학"]},
+  {"id": 125, "cat": "인문사회", "title": "성장에는 한계가 있다", "subtitle": "지수적 성장과 유한한 자원이 충돌할 때 벌어지는 일", "theme": "시스템 사고와 지속가능 발전의 경고", "subjects": ["경제·정치·법", "수학", "물리·지구과학"]},
+  {"id": 126, "cat": "인문사회", "title": "데일 카네기 인간관계론", "subtitle": "사람의 마음을 움직이고 신뢰를 쌓는 대화의 기술", "theme": "진심 어린 관심과 존중의 소통 원리", "subjects": ["윤리·철학·심리", "국어·문학", "미술·예술·진로"]},
+  {"id": 127, "cat": "인문사회", "title": "미움받을 용기", "subtitle": "과제의 분리와 지금 여기를 살아가는 아들러 심리학", "theme": "타인의 기대에서 자유로워지는 주체적 삶", "subjects": ["윤리·철학·심리", "국어·문학"]},
+  {"id": 128, "cat": "인문사회", "title": "데미안", "subtitle": "알을 깨고 세계로 나아가는 내면 성장의 기록", "theme": "자아 발견과 내면의 목소리를 따르는 성장", "subjects": ["국어·문학", "윤리·철학·심리"]},
+  {"id": 129, "cat": "인문사회", "title": "1984", "subtitle": "감시와 언어 통제가 지배하는 사회에서 자유와 진실의 의미", "theme": "전체주의적 통제와 비판적 사고의 수호", "subjects": ["국어·문학", "경제·정치·법", "정보·AI"]},
+  {"id": 130, "cat": "인문사회", "title": "멋진 신세계", "subtitle": "쾌락과 통제가 설계된 사회에서 인간다움이란 무엇인가", "theme": "과학기술 만능주의와 인간의 자유·감정", "subjects": ["국어·문학", "윤리·철학·심리", "화학·생명과학"]},
+  {"id": 131, "cat": "인문사회", "title": "어린 왕자", "subtitle": "어른이 되어 잊어버린 순수한 시선과 관계의 의미", "theme": "길들임의 책임과 본질을 보는 마음의 눈", "subjects": ["국어·문학", "윤리·철학·심리", "미술·예술·진로"]},
+  {"id": 132, "cat": "인문사회", "title": "노인과 바다", "subtitle": "거대한 자연 앞에서도 굴하지 않는 인간의 불굴의 의지", "theme": "패배할지라도 끝까지 도전하는 실존적 품격", "subjects": ["국어·문학", "윤리·철학·심리"]},
+  {"id": 133, "cat": "인문사회", "title": "그리스 로마 신화", "subtitle": "인간의 욕망·지혜·비극·영웅담이 담긴 서구 원형 서사", "theme": "신화 속 상징과 인간 본성의 다층적 이해", "subjects": ["국어·문학", "미술·예술·진로", "윤리·철학·심리"]},
+  {"id": 134, "cat": "인문사회", "title": "우리말의 품격", "subtitle": "단어 하나를 고르는 태도가 삶의 깊이를 만든다", "theme": "어휘력과 언어 예절, 한국어 문화의 가치", "subjects": ["국어·문학", "윤리·철학·심리"]},
+  {"id": 135, "cat": "인문사회", "title": "읽는 인간", "subtitle": "종이책에서 디지털 화면으로 넘어가는 뇌의 독서 진화", "theme": "깊은 읽기의 신경과학적 가치와 문해력", "subjects": ["국어·문학", "정보·AI", "화학·생명과학"]},
+  {"id": 136, "cat": "인문사회", "title": "평가, 수업이 되다", "subtitle": "학생의 배움과 성장을 돕는 과정중심·성찰적 평가", "theme": "배움 중심 수업과 평가의 유기적 연결", "subjects": ["사회·역사·지리", "국어·문학", "미술·예술·진로"]},
+  {"id": 137, "cat": "인문사회", "title": "교실의 에코로지", "subtitle": "교실 속 관계와 생태적 환경이 만드는 배움의 리듬", "theme": "생태적 관점으로 본 교실 문화와 상호작용", "subjects": ["윤리·철학·심리", "사회·역사·지리", "미술·예술·진로"]},
+  {"id": 138, "cat": "인문사회", "title": "지식e 수업", "subtitle": "한 장의 자료와 질문으로 세상과 연결되는 교양 탐구", "theme": "시사·인문·과학 쟁점의 입체적 이해", "subjects": ["사회·역사·지리", "국어·문학", "경제·정치·법"]},
+  {"id": 139, "cat": "인문사회", "title": "박물관에서 온 편지", "subtitle": "유물 속에 숨겨진 조상들의 삶과 기술, 마음을 읽다", "theme": "문화재와 유물로 만나는 우리 역사의 숨결", "subjects": ["사회·역사·지리", "미술·예술·진로", "국어·문학"]},
+  {"id": 140, "cat": "인문사회", "title": "한 권으로 읽는 한국사", "subtitle": "선사부터 현대까지 한국사의 큰 흐름을 한눈에 꿰뚫다", "theme": "한국사 주요 사건의 인과관계와 시대정신", "subjects": ["사회·역사·지리", "국어·문학"]},
+  {"id": 141, "cat": "과학", "title": "코스모스", "subtitle": "광활한 우주와 그 속의 작은 푸른 점 지구에 대한 경외", "theme": "우주 진화와 과학적 탐구 정신의 연대기", "subjects": ["물리·지구과학", "화학·생명과학", "윤리·철학·심리"]},
+  {"id": 142, "cat": "과학", "title": "이기적 유전자", "subtitle": "생명 진화의 단위를 유전자 관점에서 새롭게 해석하다", "theme": "자연선택과 진화생물학의 핵심 원리", "subjects": ["화학·생명과학", "윤리·철학·심리", "사회·역사·지리"]},
+  {"id": 143, "cat": "과학", "title": "침묵의 봄", "subtitle": "무분별한 화학물질 사용이 생태계에 남긴 경고", "theme": "생태계 먹이사슬과 환경 보전의 책임", "subjects": ["화학·생명과학", "사회·역사·지리", "경제·정치·법"]},
+  {"id": 144, "cat": "과학", "title": "과학혁명의 구조", "subtitle": "정상과학과 패러다임 전환으로 읽는 과학 발전의 모습", "theme": "과학 지식의 형성 과정과 패러다임 변화", "subjects": ["물리·지구과학", "윤리·철학·심리", "사회·역사·지리"]},
+  {"id": 145, "cat": "과학", "title": "시간의 역사", "subtitle": "빅뱅과 블랙홀, 시공간을 이해하려는 물리학의 여정", "theme": "상대성이론과 양자역학, 우주론의 기초", "subjects": ["물리·지구과학", "수학"]},
+  {"id": 146, "cat": "과학", "title": "엘러건트 유니버스", "subtitle": "미시 세계와 거시 세계를 하나로 잇는 끈이론 이야기", "theme": "기본 힘의 통합과 현대 이론물리학의 도전", "subjects": ["물리·지구과학", "수학"]},
+  {"id": 147, "cat": "과학", "title": "물리학자는 영화에서 무엇을 보는가", "subtitle": "영화 속 장면들을 뉴턴 역학과 에너지 법칙으로 검증하다", "theme": "일상과 대중매체 속 물리 법칙 탐구", "subjects": ["물리·지구과학", "미술·예술·진로"]},
+  {"id": 148, "cat": "과학", "title": "세상물정의 물리학", "subtitle": "사회·경제·일상의 문제를 물리적 사고로 풀어낸 통찰", "theme": "복잡계와 네트워크로 읽는 사회·자연 현상", "subjects": ["물리·지구과학", "경제·정치·법", "수학"]},
+  {"id": 149, "cat": "과학", "title": "양자역학을 공부할 때 우리가 착각하는 것들", "subtitle": "직관을 흔드는 양자 세계의 원리를 바르게 이해하기", "theme": "확률파·불확정성과 현대 양자기술의 토대", "subjects": ["물리·지구과학", "수학", "정보·AI"]},
+  {"id": 150, "cat": "과학", "title": "원소의 세계", "subtitle": "주기율표 속 원소들이 만들어낸 물질과 문명의 이야기", "theme": "원자 구조, 주기성과 화학 결합의 원리", "subjects": ["화학·생명과학", "물리·지구과학"]},
+  {"id": 151, "cat": "과학", "title": "사라진 스푼", "subtitle": "주기율표 원소들에 얽힌 기상천외한 역사·인물 비화", "theme": "원소의 발견과 화학사 속 흥미로운 사건들", "subjects": ["화학·생명과학", "사회·역사·지리"]},
+  {"id": 152, "cat": "과학", "title": "생명이란 무엇인가", "subtitle": "물리학자의 눈으로 생명 현상의 질서와 유전 정보를 묻다", "theme": "분자생물학과 유전 암호의 선구적 통찰", "subjects": ["화학·생명과학", "물리·지구과학"]},
+  {"id": 153, "cat": "과학", "title": "유전자의 내밀한 역사", "subtitle": "고대 유전학에서 CRISPR 유전자 편집까지 생명의 기록", "theme": "유전학의 발전과 생명윤리적 성찰", "subjects": ["화학·생명과학", "윤리·철학·심리", "사회·역사·지리"]},
+  {"id": 154, "cat": "과학", "title": "총균쇠 이후의 기후와 문명", "subtitle": "기후 변동과 티핑 포인트가 인류사에 남긴 흔적", "theme": "기후 티핑 포인트와 생태·사회 시스템 변화", "subjects": ["물리·지구과학", "사회·역사·지리", "경제·정치·법"]},
+  {"id": 155, "cat": "과학", "title": "지구의 속삭임", "subtitle": "지진·화산·판구조 운동으로 살아 움직이는 지구 시스템", "theme": "지구 내부 에너지와 판구조론의 역동성", "subjects": ["물리·지구과학", "사회·역사·지리"]},
+  {"id": 156, "cat": "과학", "title": "날씨의 비밀", "subtitle": "대기 대순환과 기상 현상 속에 숨은 지구과학 원리", "theme": "기압·전선·해류와 이상기후의 과학적 이해", "subjects": ["물리·지구과학", "화학·생명과학"]},
+  {"id": 157, "cat": "과학", "title": "밤하늘 별자리 여행", "subtitle": "계절별 별자리와 천체 관측의 기초를 익히는 안내서", "theme": "천구 좌표, 항성의 일생과 관측 활동", "subjects": ["물리·지구과학", "미술·예술·진로"]},
+  {"id": 158, "cat": "과학", "title": "뇌, 욕망의 비밀을 풀다", "subtitle": "신경과학과 진화심리학으로 바라본 인간의 선택과 감각", "theme": "뇌 신경회로와 의사결정 메커니즘", "subjects": ["화학·생명과학", "윤리·철학·심리"]},
+  {"id": 159, "cat": "과학", "title": "인공지능 시대의 과학 탐구", "subtitle": "데이터와 시뮬레이션으로 확장되는 현대 과학 연구 방법", "theme": "AI 과학 모델링과 연구 윤리·검증", "subjects": ["정보·AI", "물리·지구과학", "화학·생명과학"]},
+  {"id": 160, "cat": "과학", "title": "신소재의 세계", "subtitle": "초전도체·그래핀·자가세정 소재가 여는 기술 혁신", "theme": "나노·신소재 공학과 실생활 응용 사례", "subjects": ["물리·지구과학", "화학·생명과학", "정보·AI"]},
+  {"id": 161, "cat": "과학", "title": "바이러스와 인류", "subtitle": "감염병의 역사와 면역 체계, 공중보건의 교훈", "theme": "병원체 특성과 백신·면역 반응의 원리", "subjects": ["화학·생명과학", "사회·역사·지리"]},
+  {"id": 162, "cat": "과학", "title": "식물의 역습", "subtitle": "움직이지 않는 것처럼 보여도 치열하게 생존하는 식물 전략", "theme": "식물 생리·화학 방어 기작과 생태 공진화", "subjects": ["화학·생명과학", "물리·지구과학"]},
+  {"id": 163, "cat": "과학", "title": "바다의 플라스틱과 생태계", "subtitle": "미세플라스틱 순환과 해양 생태계 보전 방안", "theme": "해양 오염 실태와 순환경제 전환", "subjects": ["화학·생명과학", "물리·지구과학", "경제·정치·법"]},
+  {"id": 164, "cat": "과학", "title": "태양광과 미래 에너지", "subtitle": "신재생 에너지 전환과 에너지 저장 기술의 원리", "theme": "에너지 변환 효율과 탄소중립 공학", "subjects": ["물리·지구과학", "화학·생명과학", "경제·정치·법"]},
+  {"id": 165, "cat": "과학", "title": "로봇과 함께 살아가기", "subtitle": "센서·제어·인공지능이 결합한 지능형 로봇의 세계", "theme": "메카트로닉스와 인간-로봇 협업 윤리", "subjects": ["정보·AI", "물리·지구과학", "윤리·철학·심리"]},
+  {"id": 166, "cat": "과학", "title": "알고리즘과 데이터 리터러시", "subtitle": "데이터를 읽고 편향을 걸러내는 디지털 시민 역량", "theme": "데이터 수집·분석·시각화와 알고리즘 편향", "subjects": ["정보·AI", "수학", "사회·역사·지리"]},
+  {"id": 167, "cat": "과학", "title": "빛과 색의 과학", "subtitle": "파동·입자 이중성과 색채 지각의 물리·생물학", "theme": "빛의 굴절·간섭·분산과 시각 원리", "subjects": ["물리·지구과학", "미술·예술·진로", "화학·생명과학"]},
+  {"id": 168, "cat": "과학", "title": "소리의 물리학", "subtitle": "진동과 파동으로 이해하는 음파·공명·음향 설계", "theme": "파동의 성질, 도플러 효과와 음향 원리", "subjects": ["물리·지구과학", "미술·예술·진로"]},
+  {"id": 169, "cat": "과학", "title": "지속가능한 농업과 바이오", "subtitle": "스마트팜과 생명공학으로 식량 안보를 모색하다", "theme": "작물 육종·생태 농업과 미래 식량 기술", "subjects": ["화학·생명과학", "정보·AI", "경제·정치·법"]},
+  {"id": 170, "cat": "과학", "title": "과학 글쓰기 워크북", "subtitle": "관찰과 실험 결과를 논리적인 탐구 보고서로 쓰기", "theme": "가설 설정·근거 제시·결론 도출의 과학 논술", "subjects": ["물리·지구과학", "화학·생명과학", "국어·문학"]},
+  {"id": 171, "cat": "수학", "title": "수학의 정석 대신 읽는 수학 이야기", "subtitle": "공식 암기 너머 수학 개념의 본질과 직관을 만나는 책", "theme": "수학적 추론과 개념 간 연결고리 이해", "subjects": ["수학"]},
+  {"id": 172, "cat": "수학", "title": "기하학 원론 이야기", "subtitle": "공리와 연역적 증명으로 세운 논리학의 기념비", "theme": "유클리드 기하학의 연역적 증명 구조", "subjects": ["수학", "윤리·철학·심리"]},
+  {"id": 173, "cat": "수학", "title": "확률의 신화", "subtitle": "도박과 보험, 양자역학까지 불확실성을 다루는 수학", "theme": "확률 분포, 기댓값과 불확실성 속 판단", "subjects": ["수학", "경제·정치·법", "물리·지구과학"]},
+  {"id": 174, "cat": "수학", "title": "암호의 수학", "subtitle": "소수와 모듈러 연산으로 정보를 지키는 보안 원리", "theme": "정수론·소인수분해와 현대 암호 알고리즘", "subjects": ["수학", "정보·AI"]},
+  {"id": 175, "cat": "수학", "title": "게임이론과 전략적 선택", "subtitle": "상대의 선택에 따라 달라지는 최적 전략의 수학", "theme": "내시 균형, 죄수의 딜레마와 의사결정", "subjects": ["수학", "경제·정치·법", "윤리·철학·심리"]},
+  {"id": 176, "cat": "수학", "title": "행렬과 벡터로 보는 세상", "subtitle": "그래픽·추천 시스템·인공지능을 움직이는 선형대수", "theme": "선형변환, 행렬 연산과 데이터 공간 표현", "subjects": ["수학", "정보·AI", "미술·예술·진로"]},
+  {"id": 177, "cat": "수학", "title": "복소수의 마법", "subtitle": "허수 i의 발견이 수학과 물리학에 열어젖힌 새로운 차원", "theme": "복소평면, 회전 변환과 파동 해석", "subjects": ["수학", "물리·지구과학"]},
+  {"id": 178, "cat": "수학", "title": "프랙탈과 자연의 기하학", "subtitle": "부분이 전체를 닮은 자기유사성으로 보는 자연의 무늬", "theme": "프랙탈 차원, 카오스와 자연 형태 생성", "subjects": ["수학", "미술·예술·진로", "물리·지구과학"]},
+  {"id": 179, "cat": "수학", "title": "최적화의 수학", "subtitle": "최소 비용·최대 효율의 해법을 찾는 미분과 선형계획", "theme": "도함수 활용, 극값과 자원 배분 최적화", "subjects": ["수학", "경제·정치·법", "정보·AI"]},
+  {"id": 180, "cat": "수학", "title": "수열과 규칙성의 발견", "subtitle": "피보나치수열과 점화식으로 읽는 패턴과 성장", "theme": "등차·등비수열, 귀납적 정의와 자연 규칙", "subjects": ["수학", "화학·생명과학", "미술·예술·진로"]},
+  {"id": 181, "cat": "수학", "title": "삼각함수로 보는 파동", "subtitle": "원과 주기 운동에서 출발해 신호와 소리를 설명하다", "theme": "삼각함수 주기성, 푸리에 분해와 파형", "subjects": ["수학", "물리·지구과학", "정보·AI"]},
+  {"id": 182, "cat": "수학", "title": "이차곡선과 천체 궤도", "subtitle": "포물선·타원·쌍곡선 속에 담긴 기하학적 성질과 우주", "theme": "원뿔곡선의 초점 성질과 행성 궤도", "subjects": ["수학", "물리·지구과학"]},
+  {"id": 183, "cat": "수학", "title": "집합과 명제로 키우는 논리력", "subtitle": "참과 거짓을 가르고 반례를 찾는 엄밀한 사고 훈련", "theme": "필요조건·충분조건, 귀류법과 논리 구조", "subjects": ["수학", "윤리·철학·심리", "정보·AI"]},
+  {"id": 184, "cat": "수학", "title": "그래프 이론 입문", "subtitle": "점과 선으로 연결된 네트워크와 최단 경로 문제", "theme": "오일러 경로, 최단거리 알고리즘과 연결망", "subjects": ["수학", "정보·AI", "사회·역사·지리"]},
+  {"id": 185, "cat": "수학", "title": "통계로 읽는 우리 사회", "subtitle": "인구·고용·소득·환경 지표를 비판적으로 해석하기", "theme": "상관과 인과, 표본조사와 통계 지표 분석", "subjects": ["수학", "사회·역사·지리", "경제·정치·법"]},
+  {"id": 186, "cat": "수학", "title": "금융수학의 첫걸음", "subtitle": "복리·할인율·리스크 관리로 이해하는 돈의 시간가치", "theme": "지수함수·로그와 이자·투자 수리 기초", "subjects": ["수학", "경제·정치·법"]},
+  {"id": 187, "cat": "수학", "title": "건축과 수학의 만남", "subtitle": "아치·트러스·테셀레이션 등 구조와 미학의 기하학", "theme": "공간도형, 대칭·쪽맞춤과 건축 구조 원리", "subjects": ["수학", "미술·예술·진로", "물리·지구과학"]},
+  {"id": 188, "cat": "수학", "title": "음악 속의 수학적 비율", "subtitle": "음계·화음·리듬 속에 숨어 있는 분수와 배음의 조화", "theme": "분수 비례, 진동수 비와 음악 화성 원리", "subjects": ["수학", "미술·예술·진로", "물리·지구과학"]},
+  {"id": 189, "cat": "수학", "title": "스포츠 통계와 승률의 과학", "subtitle": "기록과 확률 분포로 야구·축구·농구 전략을 분석하다", "theme": "기댓값, 회귀분석과 스포츠 데이터 활용", "subjects": ["수학", "정보·AI", "미술·예술·진로"]},
+  {"id": 190, "cat": "수학", "title": "무한을 다룬 수학자들", "subtitle": "무한대의 크기를 비교한 칸토어와 극한 개념의 역사", "theme": "무한집합, 극한과 수학적 추상화 발전", "subjects": ["수학", "윤리·철학·심리"]},
+  {"id": 191, "cat": "수학", "title": "알고리즘 사고와 수학적 모델링", "subtitle": "현실의 문제를 수식과 절차로 바꾸는 문제해결법", "theme": "모델링 과정, 점근적 분석과 효율성", "subjects": ["수학", "정보·AI"]},
+  {"id": 192, "cat": "수학", "title": "확률과 통계로 보는 의료 검사", "subtitle": "양성 판정의 진짜 확률을 베이즈 정리로 이해하기", "theme": "조건부확률, 베이즈 정리와 의사결정 오류", "subjects": ["수학", "화학·생명과학", "정보·AI"]},
+  {"id": 193, "cat": "수학", "title": "대칭의 수학, 군론 이야기", "subtitle": "회전과 반사 대칭이 모여 이루는 아름다운 구조의 세계", "theme": "대칭군, 결정 구조와 자연 법칙의 대칭성", "subjects": ["수학", "물리·지구과학", "화학·생명과학", "미술·예술·진로"]},
+  {"id": 194, "cat": "수학", "title": "지도로 보는 수학과 공간", "subtitle": "투영법·등고선·최단항로로 읽는 지구 표면의 기하학", "theme": "구면기하, 지도 투영과 공간 정보 원리", "subjects": ["수학", "사회·역사·지리", "물리·지구과학"]},
+  {"id": 195, "cat": "수학", "title": "천문학 속의 수학 계산", "subtitle": "케플러 법칙과 시차, 별까지의 거리를 재는 수학", "theme": "비례식·삼각비·로그와 천문 거리 측정", "subjects": ["수학", "물리·지구과학"]},
+  {"id": 196, "cat": "수학", "title": "일상 속 역설과 논리 퍼즐", "subtitle": "직관을 배반하는 역설을 통해 사고의 함정을 피하기", "theme": "확률·무한·논리 역설과 비판적 추론", "subjects": ["수학", "윤리·철학·심리", "국어·문학"]},
+  {"id": 197, "cat": "수학", "title": "데이터 시각화의 원리", "subtitle": "그래프의 축·척도·색채가 전달하는 정보와 왜곡", "theme": "분포·추세 시각화와 데이터 표현 윤리", "subjects": ["수학", "정보·AI", "미술·예술·진로"]},
+  {"id": 198, "cat": "수학", "title": "생명 현상을 설명하는 미분방정식", "subtitle": "개체군 증감과 감염병 확산 속도를 수식으로 추적하다", "theme": "변화율 모델링과 생태·역학 시뮬레이션", "subjects": ["수학", "화학·생명과학", "정보·AI"]},
+  {"id": 199, "cat": "수학", "title": "고전 속 수학과 과학의 흔적", "subtitle": "동서양 고전 문헌에 스며든 도량형·역법·측량 지혜", "theme": "역법·측량·도량형과 고전 인문·수리 융합", "subjects": ["수학", "사회·역사·지리", "중국어·세계문화"]},
+  {"id": 200, "cat": "수학", "title": "스스로 탐구하는 수학 세특 프로젝트", "subtitle": "교과 개념에서 출발해 나만의 탐구 주제를 완성하는 길", "theme": "주제 선정·탐구 설계·메타포 성찰의 통합", "subjects": ["수학", "미술·예술·진로", "정보·AI"]}
+];
+
+
+function normalizeSearchText(str) {
+  return String(str || "").toLowerCase().replace(/[\s·.,'"“”‘’《》『』()\-_]/g, "");
+}
+
+function bookMatchesQuery(book, rawKw) {
+  if (!rawKw) return true;
+  const kwLower = String(rawKw).trim().toLowerCase();
+  const kwNorm = normalizeSearchText(rawKw);
+  const fields = [
+    book.title,
+    book.subtitle,
+    book.theme,
+    book.teacherName,
+    book.cat,
+    (book.subjects || []).join(" ")
+  ];
+  for (let i = 0; i < fields.length; i++) {
+    const f = String(fields[i] || "");
+    if (f.toLowerCase().indexOf(kwLower) >= 0) return true;
+    if (kwNorm && normalizeSearchText(f).indexOf(kwNorm) >= 0) return true;
+  }
+  return false;
+}
+
+let ALL_BOOKS = [];
+let currentIndex = 0;
+let currentFilter = "ALL";
+
+let bookGridShowAll = false;
+
+window.addEventListener("DOMContentLoaded", function() {
+  try {
+    getActiveGasUrl();
+    loadBooks();
+    populateBookSelect();
+    renderOnePage(0);
+    renderBookGrid();
+    applyUrlMode();
+    syncSharedBooksFromServer(false);
+  } catch (e) {
+    console.error("초기화 중 오류:", e);
+  }
+});
+
+const SHARED_SEED_BOOKS = [
+  {
+    id: 201,
+    isCustom: true,
+    cat: "인문사회",
+    teacherName: "교사 추천",
+    title: "열하일기",
+    subtitle: "우리나라를 대표하는 조선 대표 여행기",
+    theme: "중국 탐구, 편견 극복, 쇄국에서 개방으로",
+    customSummary: "박지원이 청나라 열하를 다녀오며 기록한 기행문으로, 쇄국과 편견을 넘어 실학과 개방적 시각으로 조선의 현실과 발전 방향을 성찰한 대표 고전입니다.",
+    subjects: ["사회·역사·지리", "국어·문학", "중국어·세계문화"],
+    ratingCount: 1,
+    ratingSum: 4
+  }
+];
+
+function normalizePeerBookRecord(raw, idxFallback) {
+  if (!raw || typeof raw !== "object") return null;
+  const title = String(raw.title || raw.bookTitle || raw.name || "").replace(/[《》『』]/g, "").trim();
+  if (!title) return null;
+  const rawCat = String(raw.cat || raw.category || "인문사회").trim();
+  const cat = (rawCat === "과학" || rawCat === "수학" || rawCat === "인문사회") ? rawCat : "인문사회";
+  const subjList = Array.isArray(raw.subjects) && raw.subjects.length
+    ? raw.subjects
+    : (typeof raw.subjects === "string" && raw.subjects.trim()
+        ? raw.subjects.split(/[,·/]/).map(function(s) { return s.trim(); }).filter(Boolean)
+        : ["국어·문학"]);
+
+  return {
+    id: Number(raw.id || (201 + idxFallback)),
+    isCustom: true,
+    cat: cat,
+    teacherName: String(raw.teacherName || raw.teacher || "타교사 추천").trim(),
+    title: title,
+    subtitle: String(raw.subtitle || raw.subTitle || raw.theme || "교과 연계 추천 도서").trim(),
+    theme: String(raw.theme || raw.topic || raw.subtitle || title).trim(),
+    customSummary: String(raw.customSummary || raw.summary || "").trim(),
+    customImageUrl: String(raw.customImageUrl || raw.imageUrl || "").trim(),
+    subjects: subjList,
+    ratingCount: Number(raw.ratingCount || 0),
+    ratingSum: Number(raw.ratingSum || 0)
+  };
+}
+
+function mergeCustomBooksList(rawList) {
+  const normalizedIncoming = (Array.isArray(rawList) ? rawList : [])
+    .map(function(item, i) { return normalizePeerBookRecord(item, i + 1); })
+    .filter(Boolean);
+
+  const combined = SHARED_SEED_BOOKS.concat(normalizedIncoming);
+  const byTitle = {};
+  combined.forEach(function(item) {
+    const key = String(item.title || "").trim();
+    if (!key) return;
+    const c = Number(item.ratingCount || 0);
+    const s = Number(item.ratingSum || 0);
+    if (c >= 10 && (s / c) <= 2.5) return;
+
+    if (!byTitle[key]) {
+      byTitle[key] = Object.assign({}, item, { ratingCount: c, ratingSum: s });
+    } else {
+      const existing = byTitle[key];
+      const bestC = Math.max(Number(existing.ratingCount || 0), c);
+      const bestS = Math.max(Number(existing.ratingSum || 0), s);
+      byTitle[key] = Object.assign({}, existing, item, {
+        id: existing.id || item.id,
+        ratingCount: bestC,
+        ratingSum: bestS
+      });
+    }
+  });
+  return Object.keys(byTitle).map(function(k) { return byTitle[k]; });
+}
+
+async function syncSharedBooksFromServer(shouldRenderModal) {
+  const gasUrl = getActiveGasUrl();
+  const statusEl = document.getElementById("sharedSyncStatus");
+  const syncBtn = document.getElementById("syncSharedBtn");
+
+  if (syncBtn) {
+    syncBtn.disabled = true;
+    syncBtn.textContent = "⏳ 동기화 중...";
+  }
+  if (statusEl) {
+    statusEl.style.color = "#0284c7";
+    statusEl.textContent = "공유 추천도서 목록을 불러오는 중입니다...";
+  }
+
+  let syncedBooks = null;
+
+  if (gasUrl) {
+    try {
+      const res = await fetch(gasUrl, {
+        method: "POST",
+        headers: { "Content-Type": "text/plain;charset=utf-8" },
+        body: JSON.stringify({ action: "get_shared_books" })
+      });
+      const data = await res.json();
+      if (data && data.status === "success") {
+        if (data.imageMap && typeof data.imageMap === "object") {
+          const curMap = JSON.parse(localStorage.getItem("customBookImageUrls") || "{}");
+          Object.keys(data.imageMap).forEach(function(k) {
+            if (data.imageMap[k]) curMap[k] = data.imageMap[k];
+          });
+          localStorage.setItem("customBookImageUrls", JSON.stringify(curMap));
+        }
+        if (Array.isArray(data.books)) {
+          syncedBooks = data.books;
+        }
+      }
+    } catch (e) {}
+
+    if (!syncedBooks) {
+      try {
+        const sep = gasUrl.indexOf("?") >= 0 ? "&" : "?";
+        const getRes = await fetch(gasUrl + sep + "action=get_shared_books");
+        const getData = await getRes.json();
+        if (getData && getData.status === "success") {
+          if (getData.imageMap && typeof getData.imageMap === "object") {
+            const curMap2 = JSON.parse(localStorage.getItem("customBookImageUrls") || "{}");
+            Object.keys(getData.imageMap).forEach(function(k) {
+              if (getData.imageMap[k]) curMap2[k] = getData.imageMap[k];
+            });
+            localStorage.setItem("customBookImageUrls", JSON.stringify(curMap2));
+          }
+          if (Array.isArray(getData.books)) {
+            syncedBooks = getData.books;
+          }
+        }
+      } catch (e2) {}
+    }
+  }
+
+  if (Array.isArray(syncedBooks)) {
+    const merged = mergeCustomBooksList(syncedBooks);
+    localStorage.setItem("teacherCustomBooks", JSON.stringify(merged));
+    loadBooks();
+    populateBookSelect();
+    renderOnePage(currentIndex);
+    renderBookGrid();
+    if (shouldRenderModal) {
+      renderSharedBooksList();
+    }
+    if (statusEl) {
+      statusEl.style.color = "#059669";
+      statusEl.textContent = "동기화 완료! 총 " + merged.length + "권의 교사 추천도서 및 공유 이미지가 반영되었습니다.";
+    }
+  } else {
+    loadBooks();
+    populateBookSelect();
+    renderBookGrid();
+    if (shouldRenderModal) {
+      renderSharedBooksList();
+    }
+    if (statusEl) {
+      statusEl.style.color = "#b45309";
+      statusEl.textContent = "서버 응답을 받지 못해 기본/저장된 공유 도서 목록(" + getAllCustomBooks().length + "권)을 표시합니다. Apps Script 웹 앱 [새 배포 → 모든 사용자]를 확인해 주세요.";
+    }
+  }
+
+  if (syncBtn) {
+    syncBtn.disabled = false;
+    syncBtn.textContent = "🔄 공유목록 동기화";
+  }
+}
+
+function getAllCustomBooks() {
+  const saved = JSON.parse(localStorage.getItem("teacherCustomBooks") || "[]");
+  const merged = mergeCustomBooksList(saved);
+  localStorage.setItem("teacherCustomBooks", JSON.stringify(merged));
+  return merged;
+}
+
+function loadBooks() {
+  const custom = getAllCustomBooks();
+  const imgMap = JSON.parse(localStorage.getItem("customBookImageUrls") || "{}");
+  ALL_BOOKS = DEFAULT_BOOKS_DATA.concat(custom).map(function(b) {
+    if (imgMap[b.title]) {
+      return Object.assign({}, b, { customImageUrl: imgMap[b.title] });
+    }
+    return b;
+  });
+}
+
+async function setOnePageImageUrl(idx) {
+  const book = ALL_BOOKS[idx];
+  if (!book) return;
+  const currentUrl = book.customImageUrl || "";
+  const inputUrl = prompt(
+    "인터넷에서 검색해 [이미지 주소 복사]한 그림 주소를 붙여넣어 주세요.\n(저장 시 다른 교사들의 화면에도 자동으로 공유됩니다. 비우고 확인하면 기본 일러스트로 돌아갑니다.)",
+    currentUrl
+  );
+  if (inputUrl === null) return;
+  const trimmed = inputUrl.trim();
+  book.customImageUrl = trimmed;
+
+  const imgMap = JSON.parse(localStorage.getItem("customBookImageUrls") || "{}");
+  if (trimmed) {
+    imgMap[book.title] = trimmed;
+  } else {
+    delete imgMap[book.title];
+  }
+  localStorage.setItem("customBookImageUrls", JSON.stringify(imgMap));
+
+  if (book.isCustom) {
+    const custom = getAllCustomBooks().map(function(item) {
+      if (item.title === book.title) {
+        return Object.assign({}, item, { customImageUrl: trimmed });
+      }
+      return item;
+    });
+    localStorage.setItem("teacherCustomBooks", JSON.stringify(custom));
+  }
+
+  renderOnePage(idx);
+  renderBookGrid();
+
+  // 모든 교사 화면에도 반영되도록 중앙 서버에 도서 이미지 URL 공유 저장
+  try {
+    const gasUrl = getActiveGasUrl();
+    if (gasUrl) {
+      await fetch(gasUrl, {
+        method: "POST",
+        headers: { "Content-Type": "text/plain;charset=utf-8" },
+        body: JSON.stringify({
+          action: "save_book_image",
+          title: book.title,
+          imageUrl: trimmed
+        })
+      });
+    }
+  } catch (err) {}
+}
+
+function goHomeMain() {
+  document.querySelectorAll(".modal.open").forEach(function(m) {
+    m.classList.remove("open");
+  });
+  switchTab("viewer");
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+function switchTab(name) {
+  document.querySelectorAll(".section").forEach(function(el) {
+    el.classList.remove("active");
+    el.style.display = "none";
+  });
+  document.querySelectorAll(".btn-tab").forEach(function(el) {
+    el.classList.remove("active");
+  });
+  const sec = document.getElementById("tab-" + name);
+  const nav = document.getElementById("nav-" + name);
+  if (sec) { sec.classList.add("active"); sec.style.display = "block"; }
+  if (nav) { nav.classList.add("active"); }
+  if (name === "viewer") {
+    renderOnePage(currentIndex);
+    renderBookGrid();
+  } else if (name === "submit") {
+    renderVisualPickerCards();
+  }
+}
+
+function buildEditorialArtwork(book, c) {
+  const id = Number(book.id || 1);
+  const title = String(book.title || "");
+  const subtitle = String(book.subtitle || "");
+  const theme = String(book.theme || "");
+  const cat = String(book.cat || "인문사회");
+  const combined = (title + " " + subtitle + " " + theme).toLowerCase();
+
+  // 1. 도서별 핵심 상징 일러스트 (제목·부제·주제 기반)
+  if (combined.indexOf("몰입") >= 0) {
+    return (
+      '<circle cx="160" cy="172" r="78" fill="none" stroke="' + c[2] + '" stroke-width="1.5" stroke-dasharray="5,5" opacity="0.55"/>' +
+      '<circle cx="160" cy="172" r="56" fill="none" stroke="' + c[3] + '" stroke-width="2.5" opacity="0.8"/>' +
+      '<path d="M96 206 C118 134, 154 114, 160 114 C166 114, 202 134, 224 206" fill="none" stroke="#ffffff" stroke-width="3.5" stroke-linecap="round"/>' +
+      '<circle cx="160" cy="172" r="24" fill="' + c[3] + '" fill-opacity="0.25" stroke="' + c[3] + '" stroke-width="3"/>' +
+      '<circle cx="160" cy="172" r="9" fill="#ffffff"/>' +
+      '<text x="160" y="246" font-size="11" font-weight="800" fill="' + c[2] + '" text-anchor="middle">FLOW · 자발적 몰입</text>'
+    );
+  }
+  if (combined.indexOf("언어") >= 0 || combined.indexOf("말하기") >= 0 || combined.indexOf("글쓰기") >= 0 || combined.indexOf("문해") >= 0) {
+    return (
+      '<rect x="156" y="114" width="8" height="132" rx="4" fill="#cbd5e1"/>' +
+      '<rect x="114" y="244" width="92" height="8" rx="4" fill="#94a3b8"/>' +
+      '<line x1="78" y1="142" x2="242" y2="132" stroke="#ffffff" stroke-width="4" stroke-linecap="round"/>' +
+      '<rect x="58" y="158" width="66" height="26" rx="13" fill="' + c[2] + '"/>' +
+      '<text x="91" y="175" font-size="10.5" font-weight="900" fill="#0f172a" text-anchor="middle">의미·맥락</text>' +
+      '<rect x="196" y="150" width="66" height="26" rx="13" fill="' + c[3] + '"/>' +
+      '<text x="229" y="167" font-size="10.5" font-weight="900" fill="#0f172a" text-anchor="middle">프레임·힘</text>' +
+      '<circle cx="160" cy="102" r="14" fill="#ffffff" stroke="' + c[3] + '" stroke-width="3"/>' +
+      '<text x="160" y="106" font-size="10" font-weight="900" fill="#0f172a" text-anchor="middle">語</text>'
+    );
+  }
+  if (combined.indexOf("페스트") >= 0 || combined.indexOf("재난") >= 0 || combined.indexOf("존엄") >= 0 || combined.indexOf("연대") >= 0) {
+    return (
+      '<circle cx="160" cy="172" r="64" fill="#ffffff" fill-opacity="0.06" stroke="' + c[2] + '" stroke-width="1.5"/>' +
+      '<circle cx="122" cy="178" r="26" fill="' + c[2] + '" fill-opacity="0.28" stroke="#ffffff" stroke-width="2.5"/>' +
+      '<circle cx="198" cy="178" r="26" fill="' + c[3] + '" fill-opacity="0.28" stroke="#ffffff" stroke-width="2.5"/>' +
+      '<circle cx="160" cy="136" r="26" fill="' + c[3] + '" fill-opacity="0.35" stroke="' + c[3] + '" stroke-width="2.5"/>' +
+      '<line x1="122" y1="178" x2="198" y2="178" stroke="#ffffff" stroke-width="2.5"/>' +
+      '<line x1="122" y1="178" x2="160" y2="136" stroke="#ffffff" stroke-width="2.5"/>' +
+      '<line x1="198" y1="178" x2="160" y2="136" stroke="#ffffff" stroke-width="2.5"/>' +
+      '<text x="160" y="236" font-size="10.5" font-weight="800" fill="#ffffff" text-anchor="middle">공동체 연대와 존엄</text>'
+    );
+  }
+  if (combined.indexOf("우주") >= 0 || combined.indexOf("천체") >= 0 || combined.indexOf("시간") >= 0 || combined.indexOf("미래") >= 0 || combined.indexOf("ai") >= 0 || combined.indexOf("인공지능") >= 0) {
+    return (
+      '<circle cx="160" cy="172" r="22" fill="' + c[3] + '"/>' +
+      '<ellipse cx="160" cy="172" rx="88" ry="32" transform="rotate(-20 160 172)" fill="none" stroke="' + c[2] + '" stroke-width="2.2"/>' +
+      '<ellipse cx="160" cy="172" rx="88" ry="32" transform="rotate(20 160 172)" fill="none" stroke="#ffffff" stroke-width="1.6" stroke-dasharray="6,4" opacity="0.75"/>' +
+      '<circle cx="234" cy="144" r="7" fill="#ffffff"/>' +
+      '<circle cx="88" cy="196" r="6" fill="' + c[2] + '"/>' +
+      '<circle cx="160" cy="104" r="5" fill="' + c[3] + '"/>'
+    );
+  }
+  if (combined.indexOf("미적분") >= 0 || combined.indexOf("수학") >= 0 || combined.indexOf("통계") >= 0 || combined.indexOf("기하") >= 0) {
+    return (
+      '<rect x="76" y="106" width="168" height="132" rx="10" fill="#020617" fill-opacity="0.45" stroke="' + c[2] + '" stroke-width="1.8"/>' +
+      '<line x1="94" y1="216" x2="226" y2="216" stroke="#94a3b8" stroke-width="1.8"/>' +
+      '<line x1="102" y1="124" x2="102" y2="222" stroke="#94a3b8" stroke-width="1.8"/>' +
+      '<path d="M104 206 C138 204, 152 140, 222 128" fill="none" stroke="' + c[3] + '" stroke-width="4" stroke-linecap="round"/>' +
+      '<line x1="142" y1="184" x2="196" y2="132" stroke="#38bdf8" stroke-width="2.5" stroke-dasharray="4,3"/>' +
+      '<circle cx="168" cy="158" r="6.5" fill="#ffffff" stroke="' + c[3] + '" stroke-width="2.5"/>'
+    );
+  }
+  if (combined.indexOf("기후") >= 0 || combined.indexOf("인류세") >= 0 || combined.indexOf("생태") >= 0 || combined.indexOf("지구") >= 0 || combined.indexOf("유전자") >= 0 || combined.indexOf("화학") >= 0) {
+    return (
+      '<circle cx="160" cy="172" r="60" fill="#ffffff" fill-opacity="0.08" stroke="' + c[2] + '" stroke-width="2.5"/>' +
+      '<path d="M104 166 Q132 144 160 166 T216 166" fill="none" stroke="' + c[2] + '" stroke-width="3"/>' +
+      '<path d="M104 184 Q132 162 160 184 T216 184" fill="none" stroke="' + c[3] + '" stroke-width="3"/>' +
+      '<polygon points="160,104 176,136 144,136" fill="' + c[3] + '"/>' +
+      '<text x="160" y="246" font-size="10.5" font-weight="800" fill="' + c[2] + '" text-anchor="middle">생태·물질·순환 탐구</text>'
+    );
+  }
+
+  // 2. 계열별 고품질 구도
+  if (cat === "수학") {
+    return (
+      '<polygon points="160,106 220,214 100,214" fill="none" stroke="' + c[2] + '" stroke-width="2.5"/>' +
+      '<circle cx="160" cy="178" r="36" fill="none" stroke="' + c[3] + '" stroke-width="2.5"/>' +
+      '<rect x="134" y="152" width="52" height="52" fill="none" stroke="#ffffff" stroke-width="1.5" opacity="0.7"/>' +
+      '<circle cx="160" cy="178" r="7" fill="' + c[3] + '"/>'
+    );
+  }
+  if (cat === "과학") {
+    return (
+      '<circle cx="160" cy="172" r="52" fill="none" stroke="' + c[2] + '" stroke-width="2.2"/>' +
+      '<ellipse cx="160" cy="172" rx="76" ry="26" transform="rotate(-30 160 172)" fill="none" stroke="' + c[3] + '" stroke-width="2.2"/>' +
+      '<ellipse cx="160" cy="172" rx="76" ry="26" transform="rotate(30 160 172)" fill="none" stroke="#ffffff" stroke-width="1.6" opacity="0.8"/>' +
+      '<circle cx="160" cy="172" r="10" fill="' + c[3] + '"/>'
+    );
+  }
+
+  return (
+    '<path d="M84 218 L84 134 Q122 118 160 136 Q198 118 236 134 L236 218 Q198 202 160 220 Q122 202 84 218 Z" fill="#ffffff" fill-opacity="0.14" stroke="#ffffff" stroke-width="2.2"/>' +
+    '<line x1="160" y1="136" x2="160" y2="220" stroke="' + c[2] + '" stroke-width="2"/>' +
+    '<circle cx="160" cy="108" r="14" fill="' + c[3] + '" fill-opacity="0.35" stroke="' + c[3] + '" stroke-width="2.2"/>'
+  );
+}
+
+function generateBookPosterSVG(book) {
+  const palettes = [
+    ["#0f172a", "#1e3a8a", "#7dd3fc", "#fbbf24"],
+    ["#1e1b4b", "#4338ca", "#fde047", "#fb7185"],
+    ["#042f2e", "#0f766e", "#99f6e4", "#f59e0b"],
+    ["#27091b", "#831843", "#fbcfe8", "#34d399"],
+    ["#172554", "#1e40af", "#bae6fd", "#fb923c"],
+    ["#2e1065", "#6d28d9", "#ddd6fe", "#facc15"]
+  ];
+  const idx = (Number(book.id || 1) + String(book.title || "").length) % palettes.length;
+  const c = palettes[idx];
+  const gradId = "hq_grad_" + String(book.id || 0) + "_" + String(book.title || "").replace(/[^a-zA-Z0-9가-힣]/g, "").slice(0, 8);
+  const shortTitle = String(book.title || "").slice(0, 16);
+  const shortTheme = String(book.theme || "").slice(0, 24);
+  const artSvg = buildEditorialArtwork(book, c);
+
+  return (
+    '<svg viewBox="0 0 320 320" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">' +
+      '<defs>' +
+        '<linearGradient id="' + gradId + '" x1="0" y1="0" x2="1" y2="1">' +
+          '<stop offset="0%" stop-color="' + c[0] + '"/>' +
+          '<stop offset="60%" stop-color="' + c[1] + '"/>' +
+          '<stop offset="100%" stop-color="#090d16"/>' +
+        '</linearGradient>' +
+      '</defs>' +
+      '<rect width="320" height="320" rx="14" fill="url(#' + gradId + ')"/>' +
+      '<rect x="10" y="10" width="300" height="300" rx="10" fill="none" stroke="' + c[2] + '" stroke-width="1" opacity="0.35"/>' +
+      '<text x="160" y="36" font-size="16.5" font-weight="900" fill="#ffffff" text-anchor="middle">‘' + shortTitle + '’</text>' +
+      '<text x="160" y="56" font-size="10.5" font-weight="700" fill="' + c[2] + '" text-anchor="middle">' + shortTheme + '</text>' +
+      '<line x1="48" y1="68" x2="272" y2="68" stroke="' + c[2] + '" stroke-width="1" opacity="0.4"/>' +
+      artSvg +
+      '<rect x="18" y="274" width="284" height="26" rx="13" fill="#ffffff"/>' +
+      '<text x="160" y="291" font-size="10.5" font-weight="800" fill="#0f172a" text-anchor="middle">' + shortTheme + '</text>' +
+    '</svg>'
+  );
+}
+
+function renderOnePage(idx) {
+  if (!ALL_BOOKS.length) loadBooks();
+  if (idx < 0) idx = ALL_BOOKS.length - 1;
+  if (idx >= ALL_BOOKS.length) idx = 0;
+  currentIndex = idx;
+  const book = ALL_BOOKS[idx];
+  const summary = book.customSummary || ("『" + book.title + "』은(는) '" + book.subtitle + "'라는 핵심 질문을 중심으로 " + book.theme + "을(를) 탐구하는 " + book.cat + " 계열 도서입니다.");
+  const tags = (book.subjects || []).map(function(s) { return '<span class="subject-tag">#' + s + '</span>'; }).join(" ");
+  const visual = book.customImageUrl
+    ? '<img src="' + book.customImageUrl + '" alt="' + book.title + '" style="max-width:100%; max-height:100%; object-fit:contain;">'
+    : generateBookPosterSVG(book);
+
+  const optionsHtml = ALL_BOOKS.map(function(b, i) {
+    return '<option value="' + i + '"' + (i === idx ? ' selected' : '') + '>' + (i + 1) + '. 《' + b.title + '》</option>';
+  }).join("");
+
+  const c = Number(book.ratingCount || 0);
+  const avgNum = c > 0 ? (Number(book.ratingSum || 0) / c) : 0;
+  const ratingHtml = book.isCustom
+    ? '<div class="star-rating-box"><div style="display:flex;justify-content:space-between;align-items:center;"><span style="font-size:0.8rem;font-weight:700;color:#475569;">타교사 추천 별점 평가</span><span class="rating-badge">★ ' + avgNum.toFixed(1) + ' (' + c + '명)</span></div><div class="star-btns" style="margin-top:4px;">' +
+      [1, 2, 3, 4, 5].map(function(sc) {
+        return '<button type="button" class="star-btn ' + (sc <= Math.round(avgNum) ? 'filled' : '') + '" data-idx="' + idx + '" data-score="' + sc + '" onclick="rateCurrentOnePage(this)">★</button>';
+      }).join("") + '</div></div>'
+    : "";
+
+  document.getElementById("onePageContainer").innerHTML =
+    '<div class="badge-row"><span class="page-badge">' + (book.isCustom ? "교사 추천 도서" : "BOOK " + book.id) + ' · ' + book.cat + '</span>' + tags + '</div>' +
+    '<div class="book-header"><div><h2>《' + book.title + '》</h2><div class="book-subtitle">“' + book.subtitle + '”</div></div>' +
+    '<button type="button" class="btn" style="background:var(--primary);color:white;" id="writeReviewBtn">✍️ 이 책으로 소감문 쓰기</button></div>' +
+    '<div class="one-page-grid">' +
+      '<div>' +
+        '<div class="info-box"><h3>📖 핵심 줄거리 및 내용 요약</h3><p>' + summary + '</p></div>' +
+        '<div class="info-box" style="border-left-color:var(--accent);"><h3>🎯 핵심 주제 및 메타포 팁</h3><p><strong>핵심 주제:</strong> ' + book.theme + '<br><em>"『' + book.title + '』은(는) [사물/현상]이다"</em> 형식으로 메타포를 써보세요.</p></div>' +
+      '</div>' +
+      '<div class="illustration-box"><div style="display:flex;justify-content:space-between;align-items:center;gap:6px;margin-bottom:0.6rem;flex-wrap:wrap;"><h3 style="margin:0;">🖼️ 한 장 그림으로 도서 내용 표현하기</h3><button type="button" class="btn" style="background:#e0f2fe;color:#0369a1;padding:0.25rem 0.55rem;font-size:0.75rem;" onclick="setOnePageImageUrl(' + idx + ')">🔗 인터넷 이미지 주소 넣기</button></div><div class="svg-stage">' + visual + '</div>' + ratingHtml + '</div>' +
+    '</div>' +
+    '<div class="page-nav">' +
+      '<button type="button" class="btn" style="background:#e2e8f0;" onclick="renderOnePage(' + (idx - 1) + ')">◀ 이전 도서</button>' +
+      '<select onchange="renderOnePage(Number(this.value))" style="padding:0.35rem 0.6rem;border-radius:6px;border:1px solid #cbd5e1;">' + optionsHtml + '</select>' +
+      '<button type="button" class="btn" style="background:#e2e8f0;" onclick="renderOnePage(' + (idx + 1) + ')">다음 도서 ▶</button>' +
+    '</div>';
+
+  const writeBtn = document.getElementById("writeReviewBtn");
+  if (writeBtn) {
+    writeBtn.onclick = function() { goSubmitWithBook(book.title); };
+  }
+}
+
+function rateCurrentOnePage(btnEl) {
+  const idx = Number(btnEl.getAttribute("data-idx"));
+  const score = Number(btnEl.getAttribute("data-score"));
+  const book = ALL_BOOKS[idx];
+  if (!book) return;
+  rateBook(book.title, score);
+  renderOnePage(idx);
+}
+
+function filterCategory(cat, btn) {
+  currentFilter = cat;
+  document.querySelectorAll(".filter-btn").forEach(function(b) { b.classList.remove("active"); });
+  if (btn) btn.classList.add("active");
+  const matched = ALL_BOOKS.map(function(b, i) { return { b: b, i: i }; }).filter(function(item) {
+    if (cat === "ALL") return true;
+    if (cat === "교사추가") return Boolean(item.b.isCustom);
+    return item.b.cat === cat;
+  });
+  if (matched.length > 0) renderOnePage(matched[0].i);
+  renderBookGrid();
+}
+
+function renderBookGrid() {
+  const searchEl = document.getElementById("searchInput");
+  const countEl = document.getElementById("bookCountLabel");
+  const grid = document.getElementById("bookGrid");
+  if (!grid || !countEl) return;
+
+  const kw = (searchEl && searchEl.value ? searchEl.value : "").trim();
+  const list = ALL_BOOKS.map(function(b, i) { return { b: b, i: i }; }).filter(function(item) {
+    const b = item.b;
+    const matchCat = currentFilter === "ALL" || (currentFilter === "교사추가" ? Boolean(b.isCustom) : b.cat === currentFilter);
+    const matchKw = bookMatchesQuery(b, kw);
+    return matchCat && matchKw;
+  });
+
+  const limit = (bookGridShowAll || kw) ? list.length : Math.min(list.length, 24);
+  const visibleList = list.slice(0, limit);
+  countEl.textContent = "표시 중: " + visibleList.length + " / " + list.length + "권 (전체 " + ALL_BOOKS.length + "권)";
+
+  let cardsHtml = visibleList.map(function(item) {
+    const b = item.b;
+    const posterHtml = b.customImageUrl
+      ? '<img src="' + b.customImageUrl + '" alt="' + b.title + '" style="width:100%;height:100%;object-fit:contain;">'
+      : generateBookPosterSVG(b);
+    return '<div class="mini-card ' + (b.isCustom ? 'custom-book' : '') + '" data-gidx="' + item.i + '">' +
+      '<div class="mini-poster-wrap">' + posterHtml + '</div>' +
+      '<div class="num">' + (b.isCustom ? '⭐ 교사 추천' : 'BOOK ' + b.id) + ' · ' + b.cat + '</div>' +
+      '<div class="title">《' + b.title + '》</div>' +
+      '<div class="desc">' + b.subtitle + '</div>' +
+      '<div class="tags">' + (b.subjects || []).map(function(s) { return '#' + s; }).join(' ') + '</div></div>';
+  }).join("");
+
+  if (!bookGridShowAll && !kw && list.length > visibleList.length) {
+    cardsHtml += '<div style="grid-column:1/-1;text-align:center;margin-top:0.6rem;">' +
+      '<button type="button" class="btn" style="background:#1e3a8a;color:white;padding:0.65rem 1.4rem;" id="showAllBooksBtn">' +
+      '📚 전체 ' + list.length + '권 그림 목록 모두 펼치기</button></div>';
+  }
+
+  grid.innerHTML = cardsHtml;
+
+  const moreBtn = document.getElementById("showAllBooksBtn");
+  if (moreBtn) {
+    moreBtn.onclick = function() {
+      bookGridShowAll = true;
+      renderBookGrid();
+    };
+  }
+
+  grid.querySelectorAll(".mini-card").forEach(function(card) {
+    card.onclick = function() {
+      renderOnePage(Number(this.getAttribute("data-gidx")));
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    };
+  });
+}
+
+function toggleVisualBookPicker() {
+  const panel = document.getElementById("visualPickerPanel");
+  const willOpen = panel.style.display !== "block";
+  panel.style.display = willOpen ? "block" : "none";
+  if (willOpen) renderVisualPickerCards();
+}
+
+function handleSubjectSelectChange() {
+  const val = document.getElementById("subjectSelect").value;
+  document.getElementById("customSubjectGroup").style.display = val === "CUSTOM_SUBJECT" ? "block" : "none";
+}
+
+function renderVisualPickerCards() {
+  const kw = (document.getElementById("pickerSearchInput")?.value || "").trim();
+  const list = ALL_BOOKS.filter(function(b) {
+    return bookMatchesQuery(b, kw);
+  });
+  const selectedTitle = document.getElementById("bookSelect").value;
+  const pGrid = document.getElementById("visualPickerGrid");
+  pGrid.innerHTML = list.map(function(b, idx) {
+    const posterHtml = b.customImageUrl
+      ? '<img src="' + b.customImageUrl + '" alt="' + b.title + '" style="width:100%;height:100%;object-fit:contain;">'
+      : generateBookPosterSVG(b);
+    const activeCls = selectedTitle === b.title ? " active" : "";
+    return '<div class="pick-card' + activeCls + '" data-pick-idx="' + idx + '">' +
+      '<div class="pick-poster">' + posterHtml + '</div>' +
+      '<div style="font-size:0.82rem;font-weight:800;color:#0f172a;">《' + b.title + '》</div>' +
+      '<div style="font-size:0.71rem;color:#64748b;">' + b.theme + '</div></div>';
+  }).join("");
+
+  pGrid.querySelectorAll(".pick-card").forEach(function(card) {
+    card.onclick = function() {
+      const item = list[Number(this.getAttribute("data-pick-idx"))];
+      if (!item) return;
+      document.getElementById("bookSelect").value = item.title;
+      toggleCustomBook();
+      renderVisualPickerCards();
+    };
+  });
+}
+
+function populateBookSelect() {
+  const sel = document.getElementById("bookSelect");
+  const sorted = ALL_BOOKS.slice().sort(function(a, b) { return a.title.localeCompare(b.title, "ko"); });
+  sel.innerHTML = '<option value="">-- 도서 선택 --</option><option value="CUSTOM">✏️ [직접 입력]</option>' +
+    sorted.map(function(b) { return '<option value="' + b.title + '">' + b.title + ' (' + b.cat + ')</option>'; }).join("");
+}
+
+function toggleCustomBook() {
+  const isCustom = document.getElementById("bookSelect").value === "CUSTOM";
+  document.getElementById("customBookGroup").style.display = isCustom ? "block" : "none";
+}
+
+function goSubmitWithBook(title) {
+  switchTab("submit");
+  document.getElementById("bookSelect").value = title;
+  toggleCustomBook();
+  renderVisualPickerCards();
+}
+
+function openAddBookModal() { document.getElementById("addBookModal").classList.add("open"); }
+function closeAddBookModal() { document.getElementById("addBookModal").classList.remove("open"); }
+
+function handleAddCustomBook(e) {
+  e.preventDefault();
+  const subjects = Array.from(document.querySelectorAll("#newBookSubjects input:checked")).map(function(c) { return c.value; });
+  const custom = getAllCustomBooks();
+  const newBook = {
+    id: 200 + custom.length + 1,
+    isCustom: true,
+    cat: document.getElementById("newBookCat").value,
+    teacherName: (document.getElementById("newBookTeacher").value || "").trim() || "교사 추천",
+    title: document.getElementById("newBookTitle").value.trim(),
+    subtitle: document.getElementById("newBookSubtitle").value.trim(),
+    theme: document.getElementById("newBookTheme").value.trim(),
+    customSummary: document.getElementById("newBookSummary").value.trim(),
+    customImageUrl: document.getElementById("newBookImageUrl").value.trim(),
+    subjects: subjects.length ? subjects : ["국어·문학"],
+    ratingCount: 0,
+    ratingSum: 0
+  };
+  custom.push(newBook);
+  const merged = mergeCustomBooksList(custom);
+  localStorage.setItem("teacherCustomBooks", JSON.stringify(merged));
+  loadBooks();
+  populateBookSelect();
+  renderBookGrid();
+  renderVisualPickerCards();
+  renderOnePage(ALL_BOOKS.length - 1);
+  document.getElementById("addBookForm").reset();
+  closeAddBookModal();
+  switchTab("viewer");
+
+  // 다른 교사들도 함께 볼 수 있도록 서버 시트에도 공유 도서 등록 시도
+  try {
+    const gasUrl = getActiveGasUrl();
+    if (gasUrl) {
+      fetch(gasUrl, {
+        method: "POST",
+        headers: { "Content-Type": "text/plain;charset=utf-8" },
+        body: JSON.stringify({ action: "save_shared_book", book: newBook })
+      }).catch(function() {});
+    }
+  } catch (err) {}
+}
+
+function openSharedBooksModal() {
+  document.getElementById("sharedBooksModal").classList.add("open");
+  renderSharedBooksList();
+  syncSharedBooksFromServer(true);
+}
+function closeSharedBooksModal() { document.getElementById("sharedBooksModal").classList.remove("open"); }
+
+function renderSharedBooksList() {
+  const sub = document.getElementById("sharedSubjectFilter").value;
+  const kw = (document.getElementById("sharedSearchInput").value || "").trim();
+  let custom = getAllCustomBooks();
+
+  const filtered = custom.filter(function(b) {
+    const okSub = sub === "ALL" || (b.subjects && b.subjects.includes(sub));
+    const okKw = bookMatchesQuery(b, kw);
+    return okSub && okKw;
+  });
+
+  const sContainer = document.getElementById("sharedBooksContainer");
+  sContainer.innerHTML = filtered.length ? filtered.map(function(b, idx) {
+    const c = Number(b.ratingCount || 0);
+    const avg = c > 0 ? (Number(b.ratingSum || 0) / c).toFixed(1) : "0.0";
+    const gIdx = ALL_BOOKS.findIndex(function(item) { return item.title === b.title; });
+    const miniPoster = b.customImageUrl
+      ? '<img src="' + b.customImageUrl + '" alt="' + b.title + '" style="width:100%;height:100%;object-fit:contain;">'
+      : generateBookPosterSVG(b);
+    const stars = [1, 2, 3, 4, 5].map(function(sc) {
+      return '<button type="button" class="star-btn ' + (sc <= Math.round(Number(avg)) ? 'filled' : '') + '" data-sidx="' + idx + '" data-sc="' + sc + '">★</button>';
+    }).join("");
+    return '<div class="mini-card custom-book" data-gidx="' + gIdx + '">' +
+      '<div class="mini-poster-wrap">' + miniPoster + '</div>' +
+      '<div style="display:flex;justify-content:space-between;align-items:center;"><span class="num">' + (b.teacherName || '교사 추천') + '</span><span class="rating-badge">★ ' + avg + ' (' + c + '명)</span></div>' +
+      '<div class="title">《' + b.title + '》</div><div class="desc">' + b.subtitle + '</div>' +
+      '<div class="star-rating-box"><div class="star-btns">' + stars + '</div></div></div>';
+  }).join("") : '<p style="grid-column:1/-1;text-align:center;color:#64748b;padding:1.5rem;">등록된 타교사 추천도서가 없습니다. 상단 [➕ 교사 도서 1PAGE 추가]로 도서를 등록해 보세요.</p>';
+
+  sContainer.querySelectorAll(".mini-card").forEach(function(card) {
+    card.onclick = function() {
+      openSharedBookInOnePage(Number(this.getAttribute("data-gidx")));
+    };
+  });
+
+  sContainer.querySelectorAll(".star-btn").forEach(function(btn) {
+    btn.onclick = function(ev) {
+      ev.stopPropagation();
+      const targetBook = filtered[Number(this.getAttribute("data-sidx"))];
+      if (!targetBook) return;
+      rateBook(targetBook.title, Number(this.getAttribute("data-sc")));
+    };
+  });
+}
+
+function openSharedBookInOnePage(gIdx) {
+  closeSharedBooksModal();
+  switchTab("viewer");
+  if (gIdx >= 0) {
+    renderOnePage(gIdx);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+}
+
+function rateBook(title, score) {
+  let custom = getAllCustomBooks();
+  const idx = custom.findIndex(function(b) { return b.title === title; });
+  if (idx === -1) return;
+  const count = Number(custom[idx].ratingCount || 0) + 1;
+  const sum = Number(custom[idx].ratingSum || 0) + score;
+  const avg = sum / count;
+  if (count >= 10 && avg <= 2.5) {
+    custom.splice(idx, 1);
+    alert("《" + title + "》 도서는 10명 이상 평가 평균 2.5점 이하로 자동 삭제되었습니다.");
+  } else {
+    custom[idx].ratingCount = count;
+    custom[idx].ratingSum = sum;
+  }
+  const merged = mergeCustomBooksList(custom);
+  localStorage.setItem("teacherCustomBooks", JSON.stringify(merged));
+  loadBooks();
+  renderSharedBooksList();
+  renderBookGrid();
+
+  try {
+    const gasUrl = getActiveGasUrl();
+    if (gasUrl) {
+      fetch(gasUrl, {
+        method: "POST",
+        headers: { "Content-Type": "text/plain;charset=utf-8" },
+        body: JSON.stringify({
+          action: "rate_shared_book",
+          title: title,
+          score: score,
+          ratingCount: count,
+          ratingSum: sum
+        })
+      }).catch(function() {});
+    }
+  } catch (err) {}
+}
+
 const DEFAULT_GAS_URL = "https://script.google.com/macros/s/AKfycbzo76vciId8xA4MMHDcfX351F3Gxs-1ZErykPuJB4HLKVZuLIoWreVAVhLuIKwdTgol/exec";
 const DEFAULT_SHEET_URL = "https://docs.google.com/spreadsheets/d/1BgMJQ1Gy1JgaLQ7d0aovUNl5P_NGtLtp94Bq7vk6OoA/edit";
+let cachedAiResult = { saenggibu: "", inquiry: "" };
+
+function getActiveGasUrl() {
+  const p = new URLSearchParams(window.location.search);
+  const queryGas = (p.get("gas") || "").trim();
+  if (queryGas) {
+    localStorage.setItem("gasUrl", queryGas);
+    return queryGas;
+  }
+  const currentSaved = (localStorage.getItem("gasUrl") || "").trim();
+  if (!currentSaved || currentSaved !== DEFAULT_GAS_URL) {
+    localStorage.setItem("gasUrl", DEFAULT_GAS_URL);
+  }
+  return DEFAULT_GAS_URL;
+}
+
+function normalizeStudentId(raw) {
+  const digits = String(raw || "").replace(/\D/g, "");
+  if (digits.length === 4) {
+    return digits.charAt(0) + "0" + digits.slice(1);
+  }
+  return digits || String(raw || "").trim();
+}
+
+function getStudentFormPayload() {
+  const sidRaw = document.getElementById("studentId").value.trim();
+  const sname = document.getElementById("studentName").value.trim();
+  const subSel = document.getElementById("subjectSelect").value;
+  const subject = subSel === "CUSTOM_SUBJECT" ? document.getElementById("customSubjectInput").value.trim() : subSel;
+  const bookSel = document.getElementById("bookSelect").value;
+  const bookTitle = bookSel === "CUSTOM" ? document.getElementById("customBookTitle").value.trim() : bookSel;
+  const metaphor = document.getElementById("metaphor").value.trim();
+  const reflection = document.getElementById("reflection").value.trim();
+
+  if (!sidRaw || !sname || !subject || !bookTitle || !metaphor || !reflection) {
+    alert("학번, 이름, 교과, 도서, 메타포, 독서 소감문을 모두 입력해 주세요.");
+    return null;
+  }
+
+  return {
+    studentId: normalizeStudentId(sidRaw),
+    studentName: sname,
+    subject: subject,
+    bookTitle: bookTitle,
+    metaphor: metaphor,
+    reflection: reflection
+  };
+}
+
+function findBookMetaByTitle(title) {
+  const clean = String(title || "").replace(/[《》『』]/g, "").trim();
+  return ALL_BOOKS.find(function(b) {
+    return b.title === clean || clean.indexOf(b.title) >= 0 || b.title.indexOf(clean) >= 0;
+  }) || {
+    title: clean,
+    subtitle: "핵심 문제의식과 가치 탐구",
+    theme: clean + "의 핵심 주제와 시사점",
+    cat: "인문사회"
+  };
+}
+
+function getSubjectInquiryFocus(subject) {
+  const s = String(subject || "");
+  if (s.indexOf("국어") >= 0 || s.indexOf("문학") >= 0) {
+    return "화자의 시점·서술 전략, 상징과 비유, 시대적 맥락과 독자 반응";
+  }
+  if (s.indexOf("사회") >= 0 || s.indexOf("역사") >= 0 || s.indexOf("지리") >= 0) {
+    return "역사적 인과관계와 제도·공간 요인, 지역 간 비교 및 사회 구조 변화";
+  }
+  if (s.indexOf("윤리") >= 0 || s.indexOf("철학") >= 0 || s.indexOf("심리") >= 0) {
+    return "도덕적 딜레마와 가치 기준, 인간 본성과 자아 성찰·공동체 윤리";
+  }
+  if (s.indexOf("경제") >= 0 || s.indexOf("정치") >= 0 || s.indexOf("법") >= 0) {
+    return "희소성과 인센티브, 제도·법치의 역할과 이해관계자 간 갈등 조정";
+  }
+  if (s.indexOf("수학") >= 0) {
+    return "변화율·함수·확률·기하적 구조와 수리적 모델링 및 논증 과정";
+  }
+  if (s.indexOf("물리") >= 0 || s.indexOf("지구") >= 0) {
+    return "힘·에너지·파동·지구시스템 순환과 정량적 실험·관측 근거";
+  }
+  if (s.indexOf("화학") >= 0 || s.indexOf("생명") >= 0) {
+    return "물질의 구조·반응과 생명 현상의 항상성·생태계 상호작용 및 생명윤리";
+  }
+  if (s.indexOf("정보") >= 0 || s.indexOf("AI") >= 0 || s.indexOf("인공지능") >= 0) {
+    return "데이터 패턴과 알고리즘 절차, 모델 한계와 디지털 윤리·책임";
+  }
+  if (s.indexOf("중국어") >= 0 || s.indexOf("세계문화") >= 0) {
+    return "중화권·동아시아 문화 맥락과 언어 표현, 상호문화적 비교 관점";
+  }
+  return s + "의 핵심 개념과 탐구 방법";
+}
+
+function generateBookSpecificInquiry(baseData) {
+  const bookObj = findBookMetaByTitle(baseData.bookTitle);
+  const t = String(bookObj.title || "");
+  const theme = String(bookObj.theme || t);
+  const sub = String(bookObj.subtitle || "");
+  const subj = String(baseData.subject || "교과");
+  const subjFocus = getSubjectInquiryFocus(subj);
+  const metaShort = String(baseData.metaphor || "").split(".")[0].trim().slice(0, 28);
+  const richText = String((baseData.reflection || "") + " " + (baseData.additionalReflection || "")).trim();
+  const isRich = richText.length >= 75;
+
+  if (isRich) {
+    const sentences = richText.split(/[.!?\n]+/).map(function(s) { return s.trim(); }).filter(Boolean);
+    const firstPoint = (sentences[0] || richText).slice(0, 44);
+    const secondPoint = (sentences[1] || sentences[0] || theme).slice(0, 44);
+    return (
+      "1. [교과 심화 연결 - " + subj + "] 학생이 소감문에서 짚은 '" + firstPoint +
+      "' 대목은 " + subj + " 교과의 핵심 탐구 요소(" + subjFocus +
+      ")와 직접 맞닿아 있습니다. 도서 속 '" + theme +
+      "'의 원리나 배경을 해당 교과 개념으로 재해석해 구체적 근거를 정리해 보세요.\n" +
+      "2. [메타포·비판적 확장] '" + metaShort + "' 메타포와 '" + secondPoint +
+      "' 성찰을 바탕으로, 오늘날 현실 문제나 다른 교과 사례에 적용할 때 나타나는 한계점과 대안을 구체적으로 서술해 보세요."
+    );
+  }
+
+  if (t.indexOf("열하일기") >= 0) {
+    return (
+      "1. 《열하일기》에서 박지원이 청나라의 문물과 풍속을 살필 때 단순 모방이 아니라 조선의 실정에 맞는 개혁 시각을 유지한 점은 " +
+      subj + " (" + subjFocus + ") 관점에서 어떤 의미를 지닐까요?\n" +
+      "2. '" + metaShort + "' 메타포를 바탕으로, 선진 풍속·제도의 수용과 조선 발전 염원이 어떻게 연결되는지 추가 성찰을 구체적으로 적어보세요."
+    );
+  }
+  if (t.indexOf("몰입") >= 0) {
+    return (
+      "1. 《몰입의 즐거움》이 말하는 자발적 몰입이 외적 보상이나 의무감과 구별되는 지점은 무엇이며, " +
+      subj + " (" + subjFocus + ") 탐구에서 몰입 상태를 이끄는 조건은 무엇일까요?\n" +
+      "2. '" + metaShort + "' 메타포를 중심으로, 인물이나 작품의 창작·탐구 태도를 비교한 내용을 덧붙여 보세요."
+    );
+  }
+  if (t.indexOf("언어") >= 0) {
+    return (
+      "1. 《언어의 줄다리기》에서 다룬 언어 속 프레임이나 맥락 차이가 " +
+      subj + " (" + subjFocus + ") 탐구에서 어떤 의미 해석을 이끌어낼까요?\n" +
+      "2. '" + metaShort + "' 메타포와 연결하여 구체적인 비교·사례 성찰을 아래에 적어 보세요."
+    );
+  }
+
+  return (
+    "1. 《" + t + "》이(가) '" + sub + "'를 통해 던지는 핵심 주제(" + theme +
+    ")는 " + subj + "의 [" + subjFocus + "] 개념과 어떻게 맞닿아 있을까요?\n" +
+    "2. '" + metaShort + "' 메타포를 바탕으로, 도서의 핵심 내용이나 인물·사례를 비교·분석한 추가 성찰을 덧붙여 보세요."
+  );
+}
+
+function extractFocusKeywords(text) {
+  const raw = String(text || "");
+  const list = [];
+  const candidates = ["열하일기", "풍속", "조선 발전", "개혁", "선진문물", "탐구정신", "이백", "두보", "비교", "성찰", "연대", "존엄", "자유", "책임", "사회", "역사", "문화", "구조", "원리", "분석"];
+  candidates.forEach(function(k) {
+    if (raw.indexOf(k) >= 0 && list.indexOf(k) < 0) list.push(k);
+  });
+  return list.slice(0, 3).join("·");
+}
+
+function composeTailoredSaenggibu(baseData, addText) {
+  const bookObj = findBookMetaByTitle(baseData.bookTitle);
+  const subj = String(baseData.subject || "교과");
+  const subjFocus = getSubjectInquiryFocus(subj).split(",")[0].trim();
+  const metaClause = String(baseData.metaphor || "").split(".")[0].replace(/["']/g, "").trim().slice(0, 20) || (bookObj.title + " 탐구");
+  const cleanAdd = String(addText || "").replace(/\s+/g, " ").replace(/["']/g, "").trim();
+  const cleanBase = String(baseData.reflection || "").replace(/\s+/g, " ").replace(/["']/g, "").trim();
+  const isRich = (cleanBase + " " + cleanAdd).trim().length >= 75;
+  const focusTags = extractFocusKeywords(cleanAdd + " " + cleanBase) || subjFocus;
+
+  let draft = "";
+  if (cleanAdd) {
+    if (cleanAdd.indexOf("열하일기") >= 0 || cleanAdd.indexOf("풍속") >= 0 || cleanAdd.indexOf("조선") >= 0) {
+      draft =
+        "『" + bookObj.title + "』을 '" + metaClause + "' 메타포로 탐구함. " +
+        (isRich ? (subj + "의 " + subjFocus + " 시각을 접목해 ") : "AI 피드백을 반영해 ") +
+        "풍속 수용과 조선 발전 염원을 " + focusTags + " 관점으로 심화하며 주체적 개혁 의지를 성찰함.";
+    } else {
+      const addSnippet = cleanAdd.slice(0, 26).replace(/[다요함임.\s]+$/g, "");
+      draft =
+        "『" + bookObj.title + "』을 '" + metaClause + "' 메타포로 해석함. " +
+        (isRich ? (subj + "의 " + subjFocus + " 관점을 접목해 '") : "AI 피드백을 바탕으로 '") +
+        addSnippet + "' 성찰을 " + focusTags + " 중심으로 구체화하며 " + subj + " 탐구 역량을 확장함.";
+    }
+  } else {
+    const baseSnippet = cleanBase.slice(0, 28).replace(/[다요함임.\s]+$/g, "");
+    draft =
+      "『" + bookObj.title + "』을 '" + metaClause + "' 메타포로 탐구함. " +
+      (isRich ? (subj + "의 " + subjFocus + " 시각을 접목해 '") : "") +
+      (baseSnippet || (bookObj.title + " 핵심 내용")) +
+      (isRich ? "'를 심층 분석하며 " : "을 바탕으로 주제를 분석하고, ") +
+      subj + " 개념과 연계하여 탐구의 깊이를 정립함.";
+  }
+
+  draft = String(draft || "").trim();
+  if (!draft) {
+    draft = "『" + bookTitle + "』을 읽고 핵심 주제를 탐구하며 교과 개념과 연계한 성찰을 정리함.";
+  }
+  if (!/함\.$/.test(draft)) {
+    draft = draft.replace(/[.!?]+$/, "") + "함.";
+  }
+  if (draft.length < 100) {
+    draft = draft.replace(/\.$/, "") + "며 탐구 역량을 심화함.";
+  }
+  if (draft.length > 148) {
+    draft = draft.slice(0, 145).replace(/[ ,·]+$/g, "") + "함.";
+  }
+  return draft;
+}
+
+async function requestAiFeedback() {
+  const baseData = getStudentFormPayload();
+  if (!baseData) return;
+
+  const gasUrl = getActiveGasUrl();
+  const btn = document.getElementById("aiFeedbackBtn");
+  btn.disabled = true;
+  btn.textContent = "⏳ 도서 맞춤형 AI 피드백 및 생기부 초안 생성 중...";
+  document.getElementById("finalCompleteBanner").style.display = "none";
+
+  const localInquiry = generateBookSpecificInquiry(baseData);
+  const localSaenggibu = composeTailoredSaenggibu(baseData, "");
+
+  try {
+    const response = await fetch(gasUrl, {
+      method: "POST",
+      headers: { "Content-Type": "text/plain;charset=utf-8" },
+      body: JSON.stringify(Object.assign({}, baseData, {
+        action: "feedback_only",
+        clientInquiry: localInquiry,
+        clientSaenggibu: localSaenggibu
+      }))
+    });
+    const result = await response.json();
+    if (result.status === "success") {
+      cachedAiResult = {
+        saenggibu: result.saenggibu || localSaenggibu,
+        inquiry: result.inquiry || localInquiry
+      };
+      document.getElementById("resSaenggibu").textContent = cachedAiResult.saenggibu;
+      document.getElementById("resInquiry").textContent = cachedAiResult.inquiry;
+      document.getElementById("aiResultBox").style.display = "block";
+    } else {
+      throw new Error(result.message || "AI 응답 오류");
+    }
+  } catch (err) {
+    cachedAiResult = { saenggibu: localSaenggibu, inquiry: localInquiry };
+    document.getElementById("resSaenggibu").textContent = cachedAiResult.saenggibu;
+    document.getElementById("resInquiry").textContent = cachedAiResult.inquiry;
+    document.getElementById("aiResultBox").style.display = "block";
+  } finally {
+    btn.disabled = false;
+    btn.textContent = "🤖 AI 피드백 먼저 받기";
+  }
+}
+
+async function submitFinalToSheet(withAi) {
+  const baseData = getStudentFormPayload();
+  if (!baseData) return;
+
+  const gasUrl = getActiveGasUrl();
+  const addText = withAi ? (document.getElementById("additionalReflection").value || "").trim() : "";
+  const combinedReflection = addText
+    ? baseData.reflection + "\n\n[AI 피드백 반영 추가 성찰]\n" + addText
+    : baseData.reflection;
+
+  const tailoredSaenggibu = withAi
+    ? composeTailoredSaenggibu(baseData, addText)
+    : composeTailoredSaenggibu(baseData, "");
+
+  document.getElementById("resSaenggibu").textContent = tailoredSaenggibu;
+
+  const activeSheetUrl = (typeof getLinkedSheetUrl === "function") ? getLinkedSheetUrl() : (localStorage.getItem("sheetUrl") || DEFAULT_SHEET_URL);
+  const payload = Object.assign({}, baseData, {
+    reflection: combinedReflection,
+    additionalReflection: addText,
+    action: withAi ? "submit_with_feedback" : "submit_direct",
+    preGeneratedSaenggibu: tailoredSaenggibu,
+    tailoredSaenggibu: tailoredSaenggibu,
+    preGeneratedInquiry: withAi ? cachedAiResult.inquiry : "",
+    sheetUrl: activeSheetUrl
+  });
+
+  const targetBtn = withAi ? document.getElementById("finalSubmitWithAiBtn") : document.getElementById("directSubmitBtn");
+  const origText = targetBtn.textContent;
+  targetBtn.disabled = true;
+  targetBtn.textContent = "⏳ 선생님 구글 시트로 전송 중...";
+
+  try {
+    const response = await fetch(gasUrl, {
+      method: "POST",
+      headers: { "Content-Type": "text/plain;charset=utf-8" },
+      body: JSON.stringify(payload)
+    });
+    const result = await response.json();
+    if (result.status === "success") {
+      const finalDraft = (result.saenggibu && result.saenggibu.length >= 100) ? result.saenggibu : tailoredSaenggibu;
+      document.getElementById("resSaenggibu").textContent = finalDraft;
+      const sheetInfo = result.classSheetName ? " [" + result.classSheetName + " / 전체수합] 시트에 " : " 구글 시트에 ";
+      document.getElementById("finalCompleteMsg").textContent =
+        baseData.studentName + "(" + (result.normalizedId || baseData.studentId) + ") 학생의 소감문과 반영된 생기부 문구(" + finalDraft.length + "자)가" + sheetInfo + "성공적으로 저장되었습니다!";
+      document.getElementById("finalCompleteBanner").style.display = "block";
+      document.getElementById("finalCompleteBanner").scrollIntoView({ behavior: "smooth" });
+    } else {
+      alert("구글 시트 저장 오류: " + (result.message || "알 수 없는 오류"));
+    }
+  } catch (err) {
+    alert("구글 시트(Apps Script) 연결에 실패했습니다.\n[⚙️ 교사 설정]에서 Apps Script 웹 앱 URL이 올바른지 확인해 주세요.\n(" + err + ")");
+  } finally {
+    targetBtn.disabled = false;
+    targetBtn.textContent = origText;
+  }
+}
+
+function openQrModal() {
+  const base = window.location.href.split("?")[0].startsWith("file://") ? "https://nchina9.github.io/dushu/" : window.location.href.split("?")[0];
+  const gasUrl = getActiveGasUrl();
+  const sheetUrl = (typeof getLinkedSheetUrl === "function") ? getLinkedSheetUrl() : (localStorage.getItem("sheetUrl") || DEFAULT_SHEET_URL);
+  const params = new URLSearchParams();
+  params.set("mode", "student");
+  if (gasUrl) params.set("gas", gasUrl);
+  if (sheetUrl) params.set("sheet", sheetUrl);
+  document.getElementById("qrTargetUrl").value = base + "?" + params.toString();
+  updateQrImage();
+  document.getElementById("qrModal").classList.add("open");
+}
+function closeQrModal() { document.getElementById("qrModal").classList.remove("open"); }
+function updateQrImage() {
+  const u = document.getElementById("qrTargetUrl").value.trim();
+  document.getElementById("qrCodeImg").src = "https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=" + encodeURIComponent(u);
+  const linkEl = document.getElementById("studentDirectLink");
+  if (linkEl) {
+    linkEl.href = u;
+    linkEl.textContent = u;
+  }
+}
+
+function openSettings() {
+  document.getElementById("gasUrlInput").value = getActiveGasUrl();
+  document.getElementById("sheetUrlInput").value = localStorage.getItem("sheetUrl") || DEFAULT_SHEET_URL;
+  document.getElementById("settingsModal").classList.add("open");
+}
+function closeSettings() { document.getElementById("settingsModal").classList.remove("open"); }
+function saveSettings() {
+  localStorage.setItem("gasUrl", document.getElementById("gasUrlInput").value.trim());
+  localStorage.setItem("sheetUrl", document.getElementById("sheetUrlInput").value.trim());
+  alert("구글 시트 및 Apps Script 연동 주소가 저장되었습니다!");
+  closeSettings();
+}
+function getLinkedSheetUrl() {
+  const p = new URLSearchParams(window.location.search);
+  if (p.get("sheet")) {
+    const fromParam = p.get("sheet").trim().replace(/\/copy.*$/, "/edit");
+    localStorage.setItem("myPeerSheetUrl", fromParam);
+    localStorage.setItem("sheetUrl", fromParam);
+    return fromParam;
+  }
+  const peerSaved = (localStorage.getItem("myPeerSheetUrl") || "").trim();
+  const saved = (localStorage.getItem("sheetUrl") || "").trim();
+  return peerSaved || saved || DEFAULT_SHEET_URL;
+}
+
+function copyTeacherSheet() {
+  localStorage.removeItem("myPeerSheetUrl");
+  const baseSheet = DEFAULT_SHEET_URL.replace(/\/(edit|view|copy).*$/, "");
+  const copyUrl = baseSheet + "/copy";
+  window.open(copyUrl, "_blank");
+  openMySheetConnectModal(true);
+}
+
+function openMySheet() {
+  const savedMySheet = (localStorage.getItem("myPeerSheetUrl") || localStorage.getItem("sheetUrl") || "").trim();
+  if (!savedMySheet) {
+    openMySheetConnectModal(false);
+    return;
+  }
+  window.open(savedMySheet.replace(/\/copy.*$/, "/edit"), "_blank");
+}
+
+function openMySheetConnectModal(fromCopy) {
+  const modal = document.getElementById("mySheetConnectModal");
+  const titleEl = document.getElementById("mySheetModalTitle");
+  const descEl = document.getElementById("mySheetModalDesc");
+  if (fromCopy) {
+    titleEl.textContent = "📑 시트 사본 만들기 → 내 시트 즉시 연결";
+    descEl.textContent = "새 탭에서 사본을 만든 뒤, 내 구글 시트 주소를 붙여넣고 [저장 및 내 시트 바로 열기]를 누르세요. 저장 즉시 [📊 내 시트 가기]와 학생 QR 코드가 내 시트에 연결됩니다.";
+  } else {
+    titleEl.textContent = "📊 내 사본 시트 연결";
+    descEl.textContent = "사본으로 복사한 내 구글 시트 주소를 연결하면 [📊 내 시트 가기] 및 학생 QR 제출이 내 시트로 바로 연결됩니다.";
+  }
+  document.getElementById("peerSheetUrlInput").value = localStorage.getItem("myPeerSheetUrl") || "";
+  const gasInput = document.getElementById("peerGasUrlInput");
+  if (gasInput) {
+    gasInput.value = localStorage.getItem("myPeerGasUrl") || "";
+  }
+  modal.classList.add("open");
+}
+
+function closeMySheetConnectModal() {
+  document.getElementById("mySheetConnectModal").classList.remove("open");
+}
+
+function saveAndOpenMySheet() {
+  const sheetInput = document.getElementById("peerSheetUrlInput").value.trim();
+  if (!sheetInput) {
+    alert("사본으로 만든 내 구글 시트 주소를 붙여넣어 주세요.");
+    return;
+  }
+  const cleanSheetUrl = sheetInput.replace(/\/copy.*$/, "/edit");
+  localStorage.setItem("myPeerSheetUrl", cleanSheetUrl);
+  localStorage.setItem("sheetUrl", cleanSheetUrl);
+  closeMySheetConnectModal();
+  window.open(cleanSheetUrl, "_blank");
+}
+
+function applyUrlMode() {
+  const p = new URLSearchParams(window.location.search);
+  if (p.get("gas")) {
+    localStorage.setItem("gasUrl", p.get("gas").trim());
+  }
+  if (p.get("sheet")) {
+    const cleanSheet = p.get("sheet").trim().replace(/\/copy.*$/, "/edit");
+    localStorage.setItem("sheetUrl", cleanSheet);
+    localStorage.setItem("myPeerSheetUrl", cleanSheet);
+  }
+  if (p.get("mode") === "student") {
+    document.body.classList.add("student-mode");
+    switchTab("submit");
+  } else if (p.get("admin") !== "1" && window.location.protocol !== "file:") {
+    document.body.classList.add("peer-teacher-mode");
+  }
+}
+
 </script>
 </body>
 </html>
