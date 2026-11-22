@@ -837,8 +837,24 @@ let currentFilter = "ALL";
 
 let bookGridShowAll = false;
 
+function purgeStalePeerSheetLinks() {
+  const staleId = "1RUMtCSuoPfSKm5t_EiO6G5WOqE25ZpclgwMSibw4R90";
+  const s1 = (localStorage.getItem("sheetUrl") || "");
+  const s2 = (localStorage.getItem("myPeerSheetUrl") || "");
+  if (s1.indexOf(staleId) >= 0) {
+    localStorage.setItem("sheetUrl", DEFAULT_SHEET_URL);
+  }
+  if (s2.indexOf(staleId) >= 0) {
+    localStorage.removeItem("myPeerSheetUrl");
+  }
+  if (!localStorage.getItem("sheetUrl")) {
+    localStorage.setItem("sheetUrl", DEFAULT_SHEET_URL);
+  }
+}
+
 window.addEventListener("DOMContentLoaded", function() {
   try {
+    purgeStalePeerSheetLinks();
     getActiveGasUrl();
     loadBooks();
     populateBookSelect();
@@ -1933,19 +1949,22 @@ function saveSettings() {
   closeSettings();
 }
 function getLinkedSheetUrl() {
+  const staleId = "1RUMtCSuoPfSKm5t_EiO6G5WOqE25ZpclgwMSibw4R90";
   const p = new URLSearchParams(window.location.search);
   if (p.get("sheet")) {
     const fromParam = p.get("sheet").trim().replace(/\/copy.*$/, "/edit");
-    localStorage.setItem("myPeerSheetUrl", fromParam);
-    localStorage.setItem("sheetUrl", fromParam);
-    return fromParam;
+    if (fromParam.indexOf(staleId) < 0) {
+      localStorage.setItem("myPeerSheetUrl", fromParam);
+      localStorage.setItem("sheetUrl", fromParam);
+      return fromParam;
+    }
   }
   const peerSaved = (localStorage.getItem("myPeerSheetUrl") || "").trim();
   const saved = (localStorage.getItem("sheetUrl") || "").trim();
-  if (saved.indexOf("gid=539063873") >= 0) {
+  if (saved.indexOf("gid=539063873") >= 0 || saved.indexOf(staleId) >= 0) {
     localStorage.setItem("sheetUrl", DEFAULT_SHEET_URL);
   }
-  if (peerSaved.indexOf("gid=539063873") >= 0) {
+  if (peerSaved.indexOf("gid=539063873") >= 0 || peerSaved.indexOf(staleId) >= 0) {
     localStorage.removeItem("myPeerSheetUrl");
     return DEFAULT_SHEET_URL;
   }
@@ -1961,12 +1980,8 @@ function copyTeacherSheet() {
 }
 
 function openMySheet() {
-  const savedMySheet = (localStorage.getItem("myPeerSheetUrl") || localStorage.getItem("sheetUrl") || "").trim();
-  if (!savedMySheet) {
-    openMySheetConnectModal(false);
-    return;
-  }
-  window.open(savedMySheet.replace(/\/copy.*$/, "/edit"), "_blank");
+  const targetSheet = getLinkedSheetUrl();
+  window.open(targetSheet.replace(/\/copy.*$/, "/edit"), "_blank");
 }
 
 function openMySheetConnectModal(fromCopy) {
