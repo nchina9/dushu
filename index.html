@@ -1841,6 +1841,7 @@ async function submitFinalToSheet(withAi) {
   if (!baseData) return;
 
   const gasUrl = getActiveGasUrl();
+  const effectiveStudentId = withAi ? baseData.studentId : "90999";
   const addText = withAi ? (document.getElementById("additionalReflection").value || "").trim() : "";
   const combinedReflection = addText
     ? baseData.reflection + "\n\n[AI 피드백 반영 추가 성찰]\n" + addText
@@ -1854,6 +1855,7 @@ async function submitFinalToSheet(withAi) {
 
   const activeSheetUrl = (typeof getLinkedSheetUrl === "function") ? getLinkedSheetUrl() : (localStorage.getItem("sheetUrl") || DEFAULT_SHEET_URL);
   const payload = Object.assign({}, baseData, {
+    studentId: effectiveStudentId,
     reflection: combinedReflection,
     additionalReflection: addText,
     action: withAi ? "submit_with_feedback" : "submit_direct",
@@ -1877,10 +1879,11 @@ async function submitFinalToSheet(withAi) {
     const result = await response.json();
     if (result.status === "success") {
       const finalDraft = (result.saenggibu && result.saenggibu.length >= 100) ? result.saenggibu : tailoredSaenggibu;
+      const recordedId = result.normalizedId || effectiveStudentId;
       document.getElementById("resSaenggibu").textContent = finalDraft;
       const sheetInfo = result.classSheetName ? " [" + result.classSheetName + " / 전체수합] 시트에 " : " 구글 시트에 ";
       document.getElementById("finalCompleteMsg").textContent =
-        baseData.studentName + "(" + (result.normalizedId || baseData.studentId) + ") 학생의 소감문과 반영된 생기부 문구(" + finalDraft.length + "자)가" + sheetInfo + "성공적으로 저장되었습니다!";
+        baseData.studentName + "(" + recordedId + ") 학생의 소감문과 반영된 생기부 문구(" + finalDraft.length + "자)가" + sheetInfo + "성공적으로 저장되었습니다!";
       document.getElementById("finalCompleteBanner").style.display = "block";
       document.getElementById("finalCompleteBanner").scrollIntoView({ behavior: "smooth" });
     } else {
