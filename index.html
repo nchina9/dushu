@@ -1742,28 +1742,30 @@ function composeTailoredSaenggibu(baseData, addText) {
   const bookObj = findBookMetaByTitle(baseData.bookTitle);
   const subj = String(baseData.subject || "교과");
   const subjFocus = getSubjectInquiryFocus(subj).split(",")[0].trim();
-  const metaClause = String(baseData.metaphor || "").split(".")[0].replace(/["']/g, "").trim().slice(0, 20) || (bookObj.title + " 탐구");
+  const metaRaw = String(baseData.metaphor || "").trim();
+  const metaClause = metaRaw.split(".")[0].replace(/["']/g, "").trim().slice(0, 24) || (bookObj.title + " 탐구");
   const cleanAdd = String(addText || "").replace(/\s+/g, " ").replace(/["']/g, "").trim();
   const cleanBase = String(baseData.reflection || "").replace(/\s+/g, " ").replace(/["']/g, "").trim();
-  const isRich = (cleanBase + " " + cleanAdd).trim().length >= 75;
-  const focusTags = extractFocusKeywords(cleanAdd + " " + cleanBase) || subjFocus;
+  const combinedRich = (cleanBase + " " + cleanAdd).trim();
+  const isRich = combinedRich.length >= 75;
+  const focusTags = extractFocusKeywords(combinedRich) || subjFocus;
 
   let draft = "";
   if (cleanAdd) {
+    const addSnippet = cleanAdd.slice(0, 28).replace(/[다요함임.\s]+$/g, "");
     if (cleanAdd.indexOf("열하일기") >= 0 || cleanAdd.indexOf("풍속") >= 0 || cleanAdd.indexOf("조선") >= 0) {
       draft =
         "『" + bookObj.title + "』을 '" + metaClause + "' 메타포로 탐구함. " +
         (isRich ? (subj + "의 " + subjFocus + " 시각을 접목해 ") : "AI 피드백을 반영해 ") +
         "풍속 수용과 조선 발전 염원을 " + focusTags + " 관점으로 심화하며 주체적 개혁 의지를 성찰함.";
     } else {
-      const addSnippet = cleanAdd.slice(0, 26).replace(/[다요함임.\s]+$/g, "");
       draft =
         "『" + bookObj.title + "』을 '" + metaClause + "' 메타포로 해석함. " +
         (isRich ? (subj + "의 " + subjFocus + " 관점을 접목해 '") : "AI 피드백을 바탕으로 '") +
         addSnippet + "' 성찰을 " + focusTags + " 중심으로 구체화하며 " + subj + " 탐구 역량을 확장함.";
     }
   } else {
-    const baseSnippet = cleanBase.slice(0, 28).replace(/[다요함임.\s]+$/g, "");
+    const baseSnippet = cleanBase.slice(0, 30).replace(/[다요함임.\s]+$/g, "");
     draft =
       "『" + bookObj.title + "』을 '" + metaClause + "' 메타포로 탐구함. " +
       (isRich ? (subj + "의 " + subjFocus + " 시각을 접목해 '") : "") +
@@ -1774,13 +1776,13 @@ function composeTailoredSaenggibu(baseData, addText) {
 
   draft = String(draft || "").trim();
   if (!draft) {
-    draft = "『" + bookTitle + "』을 읽고 핵심 주제를 탐구하며 교과 개념과 연계한 성찰을 정리함.";
+    draft = "『" + bookObj.title + "』을 읽고 핵심 주제를 탐구하며 " + subj + " 개념과 연계한 성찰을 정리함.";
   }
   if (!/함\.$/.test(draft)) {
     draft = draft.replace(/[.!?]+$/, "") + "함.";
   }
   if (draft.length < 100) {
-    draft = draft.replace(/\.$/, "") + "며 탐구 역량을 심화함.";
+    draft = draft.replace(/\.$/, "") + "며 교과 연계 탐구 역량을 심화함.";
   }
   if (draft.length > 148) {
     draft = draft.slice(0, 145).replace(/[ ,·]+$/g, "") + "함.";
