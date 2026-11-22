@@ -1642,65 +1642,96 @@ function findBookMetaByTitle(title) {
   };
 }
 
+function getSubjectInquiryFocus(subject) {
+  const s = String(subject || "");
+  if (s.indexOf("국어") >= 0 || s.indexOf("문학") >= 0) {
+    return "화자의 시점·서술 전략, 상징과 비유, 시대적 맥락과 독자 반응";
+  }
+  if (s.indexOf("사회") >= 0 || s.indexOf("역사") >= 0 || s.indexOf("지리") >= 0) {
+    return "역사적 인과관계와 제도·공간 요인, 지역 간 비교 및 사회 구조 변화";
+  }
+  if (s.indexOf("윤리") >= 0 || s.indexOf("철학") >= 0 || s.indexOf("심리") >= 0) {
+    return "도덕적 딜레마와 가치 기준, 인간 본성과 자아 성찰·공동체 윤리";
+  }
+  if (s.indexOf("경제") >= 0 || s.indexOf("정치") >= 0 || s.indexOf("법") >= 0) {
+    return "희소성과 인센티브, 제도·법치의 역할과 이해관계자 간 갈등 조정";
+  }
+  if (s.indexOf("수학") >= 0) {
+    return "변화율·함수·확률·기하적 구조와 수리적 모델링 및 논증 과정";
+  }
+  if (s.indexOf("물리") >= 0 || s.indexOf("지구") >= 0) {
+    return "힘·에너지·파동·지구시스템 순환과 정량적 실험·관측 근거";
+  }
+  if (s.indexOf("화학") >= 0 || s.indexOf("생명") >= 0) {
+    return "물질의 구조·반응과 생명 현상의 항상성·생태계 상호작용 및 생명윤리";
+  }
+  if (s.indexOf("정보") >= 0 || s.indexOf("AI") >= 0 || s.indexOf("인공지능") >= 0) {
+    return "데이터 패턴과 알고리즘 절차, 모델 한계와 디지털 윤리·책임";
+  }
+  if (s.indexOf("중국어") >= 0 || s.indexOf("세계문화") >= 0) {
+    return "중화권·동아시아 문화 맥락과 언어 표현, 상호문화적 비교 관점";
+  }
+  return s + "의 핵심 개념과 탐구 방법";
+}
+
 function generateBookSpecificInquiry(baseData) {
   const bookObj = findBookMetaByTitle(baseData.bookTitle);
   const t = String(bookObj.title || "");
   const theme = String(bookObj.theme || t);
   const sub = String(bookObj.subtitle || "");
   const subj = String(baseData.subject || "교과");
-  const metaShort = String(baseData.metaphor || "").split(".")[0].trim().slice(0, 26);
+  const subjFocus = getSubjectInquiryFocus(subj);
+  const metaShort = String(baseData.metaphor || "").split(".")[0].trim().slice(0, 28);
+  const richText = String((baseData.reflection || "") + " " + (baseData.additionalReflection || "")).trim();
+  const isRich = richText.length >= 75;
+
+  if (isRich) {
+    const sentences = richText.split(/[.!?\n]+/).map(function(s) { return s.trim(); }).filter(Boolean);
+    const firstPoint = (sentences[0] || richText).slice(0, 44);
+    const secondPoint = (sentences[1] || sentences[0] || theme).slice(0, 44);
+    return (
+      "1. [교과 심화 연결 - " + subj + "] 학생이 소감문에서 짚은 '" + firstPoint +
+      "' 대목은 " + subj + " 교과의 핵심 탐구 요소(" + subjFocus +
+      ")와 직접 맞닿아 있습니다. 도서 속 '" + theme +
+      "'의 원리나 배경을 해당 교과 개념으로 재해석해 구체적 근거를 정리해 보세요.\n" +
+      "2. [메타포·비판적 확장] '" + metaShort + "' 메타포와 '" + secondPoint +
+      "' 성찰을 바탕으로, 오늘날 현실 문제나 다른 교과 사례에 적용할 때 나타나는 한계점과 대안을 구체적으로 서술해 보세요."
+    );
+  }
 
   if (t.indexOf("열하일기") >= 0) {
     return (
       "1. 《열하일기》에서 박지원이 청나라의 문물과 풍속을 살필 때 단순 모방이 아니라 조선의 실정에 맞는 개혁 시각을 유지한 점은 " +
-      subj +
-      " 관점에서 어떤 의미를 지닐까요?\n" +
-      "2. '" +
-      metaShort +
-      "' 메타포를 바탕으로, 선진 풍속·제도의 수용과 조선 발전 염원이 어떻게 연결되는지 추가 성찰을 구체적으로 적어보세요."
+      subj + " (" + subjFocus + ") 관점에서 어떤 의미를 지닐까요?\n" +
+      "2. '" + metaShort + "' 메타포를 바탕으로, 선진 풍속·제도의 수용과 조선 발전 염원이 어떻게 연결되는지 추가 성찰을 구체적으로 적어보세요."
     );
   }
   if (t.indexOf("몰입") >= 0) {
     return (
       "1. 《몰입의 즐거움》이 말하는 자발적 몰입이 외적 보상이나 의무감과 구별되는 지점은 무엇이며, " +
-      subj +
-      " 탐구에서 몰입 상태를 이끄는 조건은 무엇일까요?\n" +
-      "2. '" +
-      metaShort +
-      "' 메타포를 중심으로, 인물이나 작품의 창작·탐구 태도를 비교한 내용을 덧붙여 보세요."
+      subj + " (" + subjFocus + ") 탐구에서 몰입 상태를 이끄는 조건은 무엇일까요?\n" +
+      "2. '" + metaShort + "' 메타포를 중심으로, 인물이나 작품의 창작·탐구 태도를 비교한 내용을 덧붙여 보세요."
     );
   }
   if (t.indexOf("언어") >= 0) {
     return (
       "1. 《언어의 줄다리기》에서 다룬 언어 속 프레임이나 맥락 차이가 " +
-      subj +
-      " 탐구에서 어떤 의미 해석을 이끌어낼까요?\n" +
-      "2. '" +
-      metaShort +
-      "' 메타포와 연결하여 구체적인 비교·사례 성찰을 아래에 적어 보세요."
+      subj + " (" + subjFocus + ") 탐구에서 어떤 의미 해석을 이끌어낼까요?\n" +
+      "2. '" + metaShort + "' 메타포와 연결하여 구체적인 비교·사례 성찰을 아래에 적어 보세요."
     );
   }
 
   return (
-    "1. 《" +
-    t +
-    "》이(가) '" +
-    sub +
-    "'를 통해 던지는 핵심 주제(" +
-    theme +
-    ")는 " +
-    subj +
-    " 개념과 어떻게 맞닿아 있을까요?\n" +
-    "2. '" +
-    metaShort +
-    "' 메타포를 바탕으로, 도서의 핵심 내용이나 인물·사례를 비교·분석한 추가 성찰을 덧붙여 보세요."
+    "1. 《" + t + "》이(가) '" + sub + "'를 통해 던지는 핵심 주제(" + theme +
+    ")는 " + subj + "의 [" + subjFocus + "] 개념과 어떻게 맞닿아 있을까요?\n" +
+    "2. '" + metaShort + "' 메타포를 바탕으로, 도서의 핵심 내용이나 인물·사례를 비교·분석한 추가 성찰을 덧붙여 보세요."
   );
 }
 
 function extractFocusKeywords(text) {
   const raw = String(text || "");
   const list = [];
-  const candidates = ["열하일기", "풍속", "조선 발전", "개혁", "선진문물", "탐구정신", "이백", "두보", "비교", "성찰", "연대", "존엄", "자유", "책임", "사회", "역사", "문화"];
+  const candidates = ["열하일기", "풍속", "조선 발전", "개혁", "선진문물", "탐구정신", "이백", "두보", "비교", "성찰", "연대", "존엄", "자유", "책임", "사회", "역사", "문화", "구조", "원리", "분석"];
   candidates.forEach(function(k) {
     if (raw.indexOf(k) >= 0 && list.indexOf(k) < 0) list.push(k);
   });
@@ -1710,55 +1741,39 @@ function extractFocusKeywords(text) {
 function composeTailoredSaenggibu(baseData, addText) {
   const bookObj = findBookMetaByTitle(baseData.bookTitle);
   const subj = String(baseData.subject || "교과");
+  const subjFocus = getSubjectInquiryFocus(subj).split(",")[0].trim();
   const metaClause = String(baseData.metaphor || "").split(".")[0].replace(/["']/g, "").trim().slice(0, 20) || (bookObj.title + " 탐구");
   const cleanAdd = String(addText || "").replace(/\s+/g, " ").replace(/["']/g, "").trim();
   const cleanBase = String(baseData.reflection || "").replace(/\s+/g, " ").replace(/["']/g, "").trim();
-  const focusTags = extractFocusKeywords(cleanAdd + " " + cleanBase) || "핵심 주제 탐구";
+  const isRich = (cleanBase + " " + cleanAdd).trim().length >= 75;
+  const focusTags = extractFocusKeywords(cleanAdd + " " + cleanBase) || subjFocus;
 
   let draft = "";
   if (cleanAdd) {
     if (cleanAdd.indexOf("열하일기") >= 0 || cleanAdd.indexOf("풍속") >= 0 || cleanAdd.indexOf("조선") >= 0) {
       draft =
-        "『" +
-        bookObj.title +
-        "』을 '" +
-        metaClause +
-        "' 메타포로 탐구함. AI 피드백을 반영해 풍속 수용과 조선 발전 염원을 " +
-        focusTags +
-        " 관점으로 심화하고, " +
-        subj +
-        " 개념과 연계하여 주체적 개혁 의지를 성찰함.";
+        "『" + bookObj.title + "』을 '" + metaClause + "' 메타포로 탐구함. " +
+        (isRich ? (subj + "의 " + subjFocus + " 시각을 접목해 ") : "AI 피드백을 반영해 ") +
+        "풍속 수용과 조선 발전 염원을 " + focusTags + " 관점으로 심화하며 주체적 개혁 의지를 성찰함.";
     } else {
       const addSnippet = cleanAdd.slice(0, 26).replace(/[다요함임.\s]+$/g, "");
       draft =
-        "『" +
-        bookObj.title +
-        "』을 '" +
-        metaClause +
-        "' 메타포로 해석함. AI 피드백을 바탕으로 '" +
-        addSnippet +
-        "' 성찰을 " +
-        focusTags +
-        " 시각에서 비교·고찰하며 " +
-        subj +
-        " 탐구의 깊이를 확장함.";
+        "『" + bookObj.title + "』을 '" + metaClause + "' 메타포로 해석함. " +
+        (isRich ? (subj + "의 " + subjFocus + " 관점을 접목해 '") : "AI 피드백을 바탕으로 '") +
+        addSnippet + "' 성찰을 " + focusTags + " 중심으로 구체화하며 " + subj + " 탐구 역량을 확장함.";
     }
   } else {
-    const baseSnippet = cleanBase.slice(0, 26).replace(/[다요함임.\s]+$/g, "");
+    const baseSnippet = cleanBase.slice(0, 28).replace(/[다요함임.\s]+$/g, "");
     draft =
-      "『" +
-      bookObj.title +
-      "』을 '" +
-      metaClause +
-      "' 메타포로 탐구함. " +
+      "『" + bookObj.title + "』을 '" + metaClause + "' 메타포로 탐구함. " +
+      (isRich ? (subj + "의 " + subjFocus + " 시각을 접목해 '") : "") +
       (baseSnippet || (bookObj.title + " 핵심 내용")) +
-      "을 바탕으로 주제를 분석하고, " +
-      subj +
-      " 개념과 연결하여 비판적이고 주체적인 시각을 정립함.";
+      (isRich ? "'를 심층 분석하며 " : "을 바탕으로 주제를 분석하고, ") +
+      subj + " 개념과 연계하여 탐구의 깊이를 정립함.";
   }
 
   if (draft.length < 110) {
-    draft = draft.replace(/\.$/, "") + "며 탐구 역량을 심화함.";
+    draft = draft.replace(/\.$/, "") + "며 교과 연계 탐구 역량을 심화함.";
   }
   if (draft.length > 148) {
     draft = draft.slice(0, 145).replace(/[ ,·]+$/g, "") + "함.";
