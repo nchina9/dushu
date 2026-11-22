@@ -1579,7 +1579,7 @@ function rateBook(title, score) {
   } catch (err) {}
 }
 
-const DEFAULT_GAS_URL = "https://script.google.com/macros/s/AKfycby_4vRbstq_hnRLqlnruWyLt2jzgj_6pbEoKDx6y1N4jT9JnJ0_zihCgAw5eELCwwiX/exec";
+const DEFAULT_GAS_URL = "https://script.google.com/macros/s/AKfycbzo76vciId8xA4MMHDcfX351F3Gxs-1ZErykPuJB4HLKVZuLIoWreVAVhLuIKwdTgol/exec";
 const DEFAULT_SHEET_URL = "https://docs.google.com/spreadsheets/d/1BgMJQ1Gy1JgaLQ7d0aovUNl5P_NGtLtp94Bq7vk6OoA/edit";
 let cachedAiResult = { saenggibu: "", inquiry: "" };
 
@@ -1772,8 +1772,15 @@ function composeTailoredSaenggibu(baseData, addText) {
       subj + " 개념과 연계하여 탐구의 깊이를 정립함.";
   }
 
-  if (draft.length < 110) {
-    draft = draft.replace(/\.$/, "") + "며 교과 연계 탐구 역량을 심화함.";
+  draft = String(draft || "").trim();
+  if (!draft) {
+    draft = "『" + bookTitle + "』을 읽고 핵심 주제를 탐구하며 교과 개념과 연계한 성찰을 정리함.";
+  }
+  if (!/함\.$/.test(draft)) {
+    draft = draft.replace(/[.!?]+$/, "") + "함.";
+  }
+  if (draft.length < 100) {
+    draft = draft.replace(/\.$/, "") + "며 탐구 역량을 심화함.";
   }
   if (draft.length > 148) {
     draft = draft.slice(0, 145).replace(/[ ,·]+$/g, "") + "함.";
@@ -1934,7 +1941,8 @@ function getLinkedSheetUrl() {
 }
 
 function copyTeacherSheet() {
-  const baseSheet = getLinkedSheetUrl().replace(/\/(edit|view|copy).*$/, "");
+  localStorage.removeItem("myPeerSheetUrl");
+  const baseSheet = DEFAULT_SHEET_URL.replace(/\/(edit|view|copy).*$/, "");
   const copyUrl = baseSheet + "/copy";
   window.open(copyUrl, "_blank");
   openMySheetConnectModal(true);
