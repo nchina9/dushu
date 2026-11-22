@@ -1580,7 +1580,7 @@ function rateBook(title, score) {
 }
 
 const DEFAULT_GAS_URL = "https://script.google.com/macros/s/AKfycbxd28AmzalybHNRoMElKWxXBhbE3KYoRPQtr94KIawqayQ0LoS867FadDEobFtUZx7y/exec";
-const DEFAULT_SHEET_URL = "https://docs.google.com/spreadsheets/d/1BgMJQ1Gy1JgaLQ7d0aovUNl5P_NGtLtp94Bq7vk6OoA/edit?gid=539063873#gid=539063873";
+const DEFAULT_SHEET_URL = "https://docs.google.com/spreadsheets/d/1BgMJQ1Gy1JgaLQ7d0aovUNl5P_NGtLtp94Bq7vk6OoA/edit?usp=sharing";
 let cachedAiResult = { saenggibu: "", inquiry: "" };
 
 function getActiveGasUrl() {
@@ -1942,7 +1942,14 @@ function getLinkedSheetUrl() {
   }
   const peerSaved = (localStorage.getItem("myPeerSheetUrl") || "").trim();
   const saved = (localStorage.getItem("sheetUrl") || "").trim();
-  return peerSaved || saved || DEFAULT_SHEET_URL;
+  if (saved.indexOf("gid=539063873") >= 0) {
+    localStorage.setItem("sheetUrl", DEFAULT_SHEET_URL);
+  }
+  if (peerSaved.indexOf("gid=539063873") >= 0) {
+    localStorage.removeItem("myPeerSheetUrl");
+    return DEFAULT_SHEET_URL;
+  }
+  return peerSaved || (localStorage.getItem("sheetUrl") || "").trim() || DEFAULT_SHEET_URL;
 }
 
 function copyTeacherSheet() {
